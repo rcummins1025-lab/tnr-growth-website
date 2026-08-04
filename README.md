@@ -50,17 +50,29 @@ This site is ready to deploy on GitHub Pages when you choose to. Nothing here
 pushes, deploys, or configures DNS automatically — these are manual steps for
 later.
 
-1. Create a new GitHub repository and push this project to it:
+> **Current branch state:** This repository's work lives on the review branch
+> `tnr-minimal-compliance-site`; there is no `main` branch yet. After review and
+> immediately before publication, rename the approved branch to `main`, then add
+> the remote and push. Do not run these steps until the site has been reviewed
+> and you are ready to publish.
+
+1. Once the branch is approved, rename it to `main`:
+
+   ```bash
+   git branch -M main
+   ```
+
+2. Create a new GitHub repository, then add the remote and push `main`:
 
    ```bash
    git remote add origin https://github.com/<your-account>/<your-repo>.git
    git push -u origin main
    ```
 
-2. In the repository on GitHub, open **Settings → Pages**.
-3. Under **Build and deployment**, set **Source** to *Deploy from a branch*,
+3. In the repository on GitHub, open **Settings → Pages**.
+4. Under **Build and deployment**, set **Source** to *Deploy from a branch*,
    choose the `main` branch and the `/ (root)` folder, then **Save**.
-4. GitHub will publish the site at
+5. GitHub will publish the site at
    `https://<your-account>.github.io/<your-repo>/`.
 
 ### Using the custom domain (optional, later)
