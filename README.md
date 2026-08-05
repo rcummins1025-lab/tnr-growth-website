@@ -7,7 +7,7 @@ standard business/compliance verification.
 
 - **Legal business name:** T&R Growth LLC
 - **Intended domain:** https://tnrgrowthagency.com
-- **Contact email:** ryan@tnrgrowthagency.com
+- **Contact email:** hello@tnrgrowthagency.com
 - **Region:** United States
 
 ## Pages
