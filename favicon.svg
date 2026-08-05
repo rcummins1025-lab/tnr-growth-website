@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="T&amp;R Growth">
+  <title>T&amp;R Growth</title>
+  <rect width="64" height="64" rx="13" fill="#0e2140"/>
+  <g transform="translate(32,32) scale(0.31) translate(-72,-80)">
+    <path fill="none" stroke="#d4a537" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"
+      d="M 86 104 C 86 122, 58 130, 44 116 C 26 98, 42 74, 60 70 C 74 67, 74 46, 60 42 C 48 38, 36 48, 42 64 C 50 86, 82 100, 100 66"/>
+    <path fill="#d4a537" d="M 84 54 L 116 44 L 108 76 Z"/>
+  </g>
+</svg>

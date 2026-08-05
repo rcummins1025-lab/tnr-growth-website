@@ -7,18 +7,38 @@ standard business/compliance verification.
 
 - **Legal business name:** T&R Growth LLC
 - **Intended domain:** https://tnrgrowthagency.com
-- **Contact email:** ryan@tnrgrowthagency.com
+- **Contact email:** hello@tnrgrowthagency.com
 - **Region:** United States
 
 ## Pages
 
-| File           | Page            |
-| -------------- | --------------- |
-| `index.html`   | Home            |
-| `privacy.html` | Privacy Policy  |
-| `terms.html`   | Terms of Service|
-| `contact.html` | Contact         |
-| `styles.css`   | Shared styles   |
+| File           | Page             |
+| -------------- | ---------------- |
+| `index.html`   | Home             |
+| `privacy.html` | Privacy Policy   |
+| `terms.html`   | Terms of Service |
+| `contact.html` | Contact          |
+| `styles.css`   | Shared styles    |
+| `favicon.svg`  | Browser-tab icon |
+
+## Brand assets
+
+The logo system is hand-built, production-quality SVG (semantic, lightweight,
+no embedded raster images, no external fonts, no scripts). The wordmark uses a
+bold system sans; the ampersand-and-upward-arrow is a single custom vector
+symbol in refined gold on deep navy.
+
+| File                                   | Use                                    |
+| -------------------------------------- | -------------------------------------- |
+| `assets/logo-stacked-light.svg`        | Full stacked logo, for light/white backgrounds |
+| `assets/logo-stacked-reversed.svg`     | Full stacked logo, for dark backgrounds |
+| `assets/logo-horizontal-light.svg`     | Compact horizontal lockup, light backgrounds |
+| `assets/logo-horizontal-reversed.svg`  | Compact horizontal lockup, dark backgrounds (used in the site nav/footer) |
+| `assets/brandmark.svg`                 | Square brand mark (symbol on a navy tile) |
+| `favicon.svg`                          | Favicon (square brand mark, tab icon)  |
+
+Palette: deep navy `#13294d` / charcoal foundation `#0a1424`, refined gold
+`#d4a537`, electric blue `#4f8cff`, subtle mint `#5ee0c0`.
 
 ## What this site does and does not do
 
@@ -27,6 +47,8 @@ standard business/compliance verification.
   integrations.
 - **No** SMS signup or customer texting.
 - The only way to contact the business is the `mailto:` email link.
+- Responsive from small phones (320px) to desktop; respects
+  `prefers-reduced-motion`; keyboard-navigable with visible focus states.
 
 ## Local preview
 
