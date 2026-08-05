@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" role="img" aria-label="T&amp;R Growth">
+  <title>T&amp;R Growth</title>
+  <g fill="#13294d" font-family="Arial, 'Helvetica Neue', Helvetica, system-ui, sans-serif" font-weight="700">
+    <text x="54" y="134" font-size="150" text-anchor="middle">T</text>
+    <text x="286" y="134" font-size="150" text-anchor="middle">R</text>
+    <text x="170" y="197" font-size="40" letter-spacing="15" text-anchor="middle">GROWTH</text>
+  </g>
+  <g transform="translate(96,8)">
+    <path fill="none" stroke="#d4a537" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"
+      d="M 86 104 C 86 122, 58 130, 44 116 C 26 98, 42 74, 60 70 C 74 67, 74 46, 60 42 C 48 38, 36 48, 42 64 C 50 86, 82 100, 100 66"/>
+    <path fill="#d4a537" d="M 84 54 L 116 44 L 108 76 Z"/>
+  </g>
+</svg>
