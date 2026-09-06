@@ -113,48 +113,99 @@
           </div>
 
           <!-- Layered composition: public site -> private pipeline -> due for
-               service, tied together by the amber pathway. Every panel is drawn
-               and deliberately empty of real records. -->
-          <div class="stack" aria-hidden="true">
-            <svg class="stack-path" viewBox="0 0 560 460" preserveAspectRatio="none">
-              <path d="M120 150 C 260 150, 250 250, 380 250" />
-              <path d="M360 300 C 300 340, 260 330, 190 360" />
-              <circle cx="120" cy="150" r="5" style="--i:0" />
-              <circle cx="380" cy="250" r="5" style="--i:1" />
-              <circle cx="190" cy="360" r="5" style="--i:2" />
+               service, tied together by the amber pathway.
+
+               Every record below is invented for demonstration. The <figcaption>
+               says so in visible text, deliberately not in a tooltip, a title
+               attribute, or an aria-label. The panes are exposed to assistive
+               technology because the sample records carry information the
+               surrounding copy does not; only the drawn pathway is decorative.
+
+               js/motion.js walks one fictional journey through these panes on
+               first view. Everything it reveals is already in this markup, so
+               with JavaScript blocked, motion.js missing, or reduced motion in
+               effect, the populated state is simply what renders. -->
+          <figure class="stack">
+            <!-- Decorative pathway only. It leaves the request confirmation,
+                 tucks under the pipeline pane, and re-emerges heading for the
+                 due-for-service view. The viewBox matches the composition's
+                 pixel box, so these coordinates sit in the gaps between panes
+                 rather than across any record. -->
+            <svg class="stack-path" viewBox="0 0 560 670" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M147 282 C 187 282, 198 306, 246 312" />
+              <path d="M246 344 C 198 356, 167 352, 100 350" />
+              <circle cx="147" cy="282" r="5" style="--i:0" />
+              <circle cx="246" cy="344" r="5" style="--i:1" />
+              <circle cx="100" cy="350" r="5" style="--i:2" />
             </svg>
 
             <div class="pane pane-site">
               <div class="pane-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><b>Your public website</b></div>
               <div class="site-hero">
-                <span class="kick">Local service</span>
-                <b>Book your next service</b>
+                <span class="kick">Local heat-pump service</span>
+                <b>Keep your system clean and efficient</b>
                 <span class="cta">Request service</span>
               </div>
               <div class="site-body">
-                <span class="bar w80"></span><span class="bar w62"></span><span class="bar w45"></span>
+                <span class="site-field">Name</span>
+                <span class="site-field">Service needed</span>
+                <span class="site-ok jrn" data-beat="1">Request received</span>
               </div>
             </div>
 
             <div class="pane pane-pipeline">
               <div class="pane-head"><b>Private lead pipeline</b><span class="tag">Sample</span></div>
               <div class="rowset">
-                <div class="rrow"><span class="bar w80"></span><span class="chip new">New</span></div>
-                <div class="rrow"><span class="bar w62"></span><span class="chip booked">Booked</span></div>
-                <div class="rrow"><span class="bar w45"></span><span class="chip done">Done</span></div>
+                <div class="rrow jrn" data-beat="2">
+                  <span class="rec-ico" aria-hidden="true">4</span>
+                  <span class="rec"><b>Property manager</b><span class="rec-sub">4-unit cleaning</span></span>
+                  <span class="chip new">New</span>
+                </div>
+                <div class="rrow jrn" data-beat="3">
+                  <span class="rec-ico" aria-hidden="true">2</span>
+                  <span class="rec"><b>Homeowner</b><span class="rec-sub">2-unit service</span></span>
+                  <span class="chip booked">Booked</span>
+                </div>
+                <div class="rrow jrn" data-beat="4">
+                  <span class="rec-ico" aria-hidden="true">6</span>
+                  <span class="rec"><b>Small office</b><span class="rec-sub">6-unit cleaning</span></span>
+                  <span class="chip done">Done</span>
+                </div>
+              </div>
+              <div class="pane-foot">
+                <span class="note jrn" data-beat="5">Review request ready</span>
+                <span class="note jrn" data-beat="6">Next service date set</span>
               </div>
             </div>
 
             <div class="pane pane-due">
               <div class="pane-head"><b>Due for service</b><span class="tag">Sample</span></div>
               <div class="rowset">
-                <div class="rrow"><span class="bar w80"></span><span class="chip due">Due</span></div>
-                <div class="rrow"><span class="bar w62"></span><span class="chip due">Due</span></div>
+                <div class="rrow jrn" data-beat="7">
+                  <span class="rec-ico" aria-hidden="true">2</span>
+                  <span class="rec"><b>Residential customer</b><span class="rec-sub">2 units</span></span>
+                  <span class="chip due">Due in 14 days</span>
+                </div>
+                <div class="rrow jrn" data-beat="7">
+                  <span class="rec-ico" aria-hidden="true">4</span>
+                  <span class="rec"><b>Property manager</b><span class="rec-sub">4 units</span></span>
+                  <span class="chip due">Due in 30 days</span>
+                </div>
               </div>
             </div>
 
-            <span class="stack-label">Illustrative layout. Not live data.</span>
-          </div>
+            <div class="stack-meter">
+              <span class="meter-label">Example month</span>
+              <div class="meter-cells">
+                <span class="mcell"><b>12</b><span>Leads</span></span>
+                <span class="mcell"><b>7</b><span>Booked</span></span>
+                <span class="mcell"><b>5</b><span>Completed</span></span>
+                <span class="mcell"><b>18</b><span>Due soon</span></span>
+              </div>
+            </div>
+
+            <figcaption class="stack-label">Example dashboard. Demo data, not live customer information.<span class="stack-note">Review requests and reminders are prepared here. A person reviews and sends each one.</span></figcaption>
+          </figure>
         </div>
       </section>
 
@@ -205,24 +256,39 @@
               <h3>Inquiries arrive as tracked leads</h3>
               <p>A conversion-focused site feeds a private pipeline instead of a shared inbox. The right person is notified, and every lead carries a status.</p>
               <p class="pillar-note">Included: custom website, Google Business Profile foundation, connected intake, lead alerts.</p>
-              <span class="illus">Illustrative. Not live data.</span>
             </div>
-            <div class="pillar-visual">
+            <figure class="pillar-visual">
               <div class="pane">
                 <div class="pane-head"><b>Leads</b><span class="tag">Sample</span></div>
                 <div class="rowset">
-                  <div class="rrow"><span class="bar w80"></span><span class="chip new">New</span></div>
-                  <div class="rrow"><span class="bar w62"></span><span class="chip new">New</span></div>
-                  <div class="rrow"><span class="bar w45"></span><span class="chip booked">Booked</span></div>
+                  <div class="rrow">
+                    <span class="rec-ico" aria-hidden="true">4</span>
+                    <span class="rec"><b>Property manager</b><span class="rec-sub">4-unit cleaning</span></span>
+                    <span class="chip new">New</span>
+                  </div>
+                  <div class="rrow">
+                    <span class="rec-ico" aria-hidden="true">2</span>
+                    <span class="rec"><b>Homeowner</b><span class="rec-sub">2-unit service</span></span>
+                    <span class="chip new">New</span>
+                  </div>
+                  <div class="rrow">
+                    <span class="rec-ico" aria-hidden="true">6</span>
+                    <span class="rec"><b>Small office</b><span class="rec-sub">6-unit cleaning</span></span>
+                    <span class="chip booked">Booked</span>
+                  </div>
                 </div>
               </div>
               <div class="pane">
                 <div class="pane-head"><b>Job record</b><span class="tag">Sample</span></div>
-                <div class="site-body">
-                  <span class="bar w80"></span><span class="bar w45"></span>
-                </div>
+                <dl class="fieldset">
+                  <div><dt>Source</dt><dd>Website</dd></div>
+                  <div><dt>Service</dt><dd>4-unit cleaning</dd></div>
+                  <div><dt>Status</dt><dd><span class="chip booked">Booked</span></dd></div>
+                  <div><dt>Next action</dt><dd>Confirm appointment</dd></div>
+                </dl>
               </div>
-            </div>
+              <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
+            </figure>
           </div>
 
           <div class="pillar">
@@ -230,17 +296,34 @@
               <h3>Finished work turns into reputation</h3>
               <p>Mark a job complete and the system prepares a review request. Customer and job history live in one private place, so nothing depends on memory.</p>
               <p class="pillar-note">Included: customer &amp; job records, job-completion and review workflow.</p>
-              <span class="illus">Illustrative. Not live data.</span>
             </div>
-            <div class="pillar-visual">
+            <figure class="pillar-visual">
               <div class="pane">
                 <div class="pane-head"><b>Completed jobs</b><span class="tag">Sample</span></div>
                 <div class="rowset">
-                  <div class="rrow"><span class="bar w80"></span><span class="chip done">Done</span></div>
-                  <div class="rrow"><span class="bar w62"></span><span class="chip done">Done</span></div>
+                  <div class="rrow rrow-wide">
+                    <span class="rec-ico" aria-hidden="true">4</span>
+                    <span class="rec"><b>Property manager</b><span class="rec-sub">4 units</span></span>
+                    <span class="chip done">Done</span>
+                    <span class="note">Review request ready</span>
+                  </div>
+                  <div class="rrow rrow-wide">
+                    <span class="rec-ico" aria-hidden="true">2</span>
+                    <span class="rec"><b>Homeowner</b><span class="rec-sub">2 units</span></span>
+                    <span class="chip done">Done</span>
+                    <span class="note">Review request ready</span>
+                  </div>
+                  <div class="rrow rrow-wide">
+                    <span class="rec-ico" aria-hidden="true">6</span>
+                    <span class="rec"><b>Small office</b><span class="rec-sub">6 units</span></span>
+                    <span class="chip done">Done</span>
+                    <span class="note">Recorded</span>
+                  </div>
                 </div>
+                <p class="pane-caption">Review requests are prepared here. A person reviews and sends each one.</p>
               </div>
-            </div>
+              <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
+            </figure>
           </div>
 
           <div class="pillar">
@@ -248,18 +331,34 @@
               <h3>Past customers come back</h3>
               <p>The system records when a customer is due again and surfaces who is worth reaching. Straightforward reporting connects leads, completed work, reviews, and returns.</p>
               <p class="pillar-note">Included: next-service tracking, reactivation view, reporting.</p>
-              <span class="illus">Illustrative. Not live data.</span>
             </div>
-            <div class="pillar-visual">
+            <figure class="pillar-visual">
               <div class="pane">
                 <div class="pane-head"><b>Due for service</b><span class="tag">Sample</span></div>
                 <div class="rowset">
-                  <div class="rrow"><span class="bar w80"></span><span class="chip due">Due</span></div>
-                  <div class="rrow"><span class="bar w62"></span><span class="chip due">Due</span></div>
-                  <div class="rrow"><span class="bar w45"></span><span class="chip due">Due</span></div>
+                  <div class="rrow rrow-wide">
+                    <span class="rec-ico" aria-hidden="true">2</span>
+                    <span class="rec"><b>Residential customer</b><span class="rec-sub">2 units</span></span>
+                    <span class="chip due">Due in 14 days</span>
+                    <span class="note">Reminder ready</span>
+                  </div>
+                  <div class="rrow rrow-wide">
+                    <span class="rec-ico" aria-hidden="true">4</span>
+                    <span class="rec"><b>Property manager</b><span class="rec-sub">4 units</span></span>
+                    <span class="chip due">Due in 30 days</span>
+                    <span class="note">Reminder ready</span>
+                  </div>
+                  <div class="rrow rrow-wide">
+                    <span class="rec-ico" aria-hidden="true">6</span>
+                    <span class="rec"><b>Small office</b><span class="rec-sub">6 units</span></span>
+                    <span class="chip due">Due in 45 days</span>
+                    <span class="note">Reach out</span>
+                  </div>
                 </div>
+                <p class="pane-caption">Reminders are prepared here. A person reviews and sends each one.</p>
               </div>
-            </div>
+              <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
+            </figure>
           </div>
         </div>
       </section>

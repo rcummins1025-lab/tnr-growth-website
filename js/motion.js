@@ -2,10 +2,10 @@
  *
  * Purpose: make the *system* legible. Each animation stands for something real
  * The connected path through the seven stages, the four lifecycle steps in
- * sequence, an illustrative walk through the dashboard's stages, the case-study
- * timeline growing as milestones are reached. Nothing here invents a statistic,
- * implies live data, hijacks the scroll, or moves anything in the layout: only
- * opacity and transform change.
+ * sequence, one fictional service journey through the hero dashboard, the
+ * case-study timeline growing as milestones are reached. Nothing here invents a
+ * statistic, presents demo records as live data, hijacks the scroll, or moves
+ * anything in the layout: only opacity and transform change.
  *
  * No dependencies. IntersectionObserver only, with no scroll or resize listeners.
  *
@@ -148,56 +148,94 @@
     stripIO.observe(strip);
   }
 
-  /* ---- illustrative dashboard walk-through: New -> Booked -> Done -> Due.
-     A one-pass illustration of the stages a job moves through. It is labelled
-     as a redacted sample in the markup and is NOT live data; it replays only
-     if the visitor scrolls away and comes back. ---- */
-  var mock = document.querySelector(".ui-mock");
-  if (mock) {
-    var rows = all(".ui-row", mock);
-    var timer = null;
-    var running = false;
-    var stop = function () {
-      if (timer) clearTimeout(timer);
-      timer = null;
-      running = false;
+  /* ---- One fictional service journey through the hero composition.
+     Seven beats, in order: the website request is received, the lead appears
+     as New, the next record is Booked, the next is Done, a review request is
+     marked ready, a next-service date is set, and the customer turns up in
+     Due for service.
+
+     It runs ONCE, on first entry, and settles into the finished state. Every
+     element it reveals is already in the markup, so nothing here is required
+     for the information to be readable: styles.css hides the beats only under
+     .motion, and the inline <head> script drops that class when this file
+     never loads or when the visitor asks for reduced motion.
+
+     If the composition leaves the viewport mid-sequence the remaining beats
+     are applied immediately rather than animated off-screen, and the
+     observer is already disconnected, so it never restarts. ---- */
+  var journeyStack = document.querySelector(".stack");
+  if (journeyStack) {
+    var BEATS = 7;
+    var BEAT_MS = 480;
+    var beatEl = function (n) {
+      return all('.jrn[data-beat="' + n + '"]', journeyStack);
     };
-    var settle = function () {
-      rows.forEach(function (r) {
-        r.classList.remove("is-active");
-        r.classList.add("is-settled");
+    var jTimers = [];
+    var jStarted = false;
+    var jSettled = false;
+    var showBeat = function (n) {
+      beatEl(n).forEach(function (el) {
+        el.classList.add("is-on");
       });
-      running = false;
     };
-    var step = function (i) {
-      rows.forEach(function (r, j) {
-        r.classList.toggle("is-active", j === i);
-        if (j <= i) r.classList.add("is-settled");
-      });
-      if (i + 1 < rows.length) {
-        timer = setTimeout(function () {
-          step(i + 1);
-        }, 900);
-      } else {
-        timer = setTimeout(settle, 900);
+    var settleJourney = function () {
+      if (jSettled) return;
+      jSettled = true;
+      jTimers.forEach(clearTimeout);
+      jTimers = [];
+      // The class comes first: it also switches the transition off, so a
+      // settle that skips the sequence is an instant cut, never a fade.
+      journeyStack.classList.add("journey-done"); // stable final state
+      for (var n = 1; n <= BEATS; n++) showBeat(n);
+    };
+    var runJourney = function () {
+      jStarted = true;
+      for (var n = 1; n <= BEATS; n++) {
+        (function (beat) {
+          jTimers.push(
+            setTimeout(function () {
+              showBeat(beat);
+              if (beat === BEATS) {
+                jTimers.push(setTimeout(settleJourney, BEAT_MS));
+              }
+            }, beat * BEAT_MS)
+          );
+        })(n);
       }
     };
-    var mockIO = new IntersectionObserver(
+    var journeyIO = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) {
-            if (!running) {
-              running = true;
-              step(0);
-            }
-          } else {
-            stop(); // never animate off-screen
+            journeyIO.disconnect(); // once only; never replays
+            runJourney();
           }
         });
       },
-      { threshold: 0.35 }
+      { threshold: 0.25 }
     );
-    mockIO.observe(mock);
+    journeyIO.observe(journeyStack);
+    /* Last resort. If the observer never reports an intersection (a background
+       tab that is never brought forward, an engine that stalls it), the
+       records must not sit invisible behind a sequence that never starts.
+       This mirrors the 2.5s fail-open in the inline <head> script. */
+    setTimeout(function () {
+      if (!jStarted) settleJourney();
+    }, 3000);
+    // Once started, leaving the viewport finishes the sequence instead of
+    // animating where nobody can see it.
+    var offscreenIO = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting && jTimers.length) {
+            settleJourney();
+            offscreenIO.disconnect();
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+    offscreenIO.observe(journeyStack);
   }
 
   /* ------------- case-study timeline: grows as its milestones are revealed */

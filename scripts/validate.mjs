@@ -749,19 +749,8 @@ const idxHtml = read("index.html");
 !/operated, in order/.test(idxHtml)
   ? ok('index: "in order" removed from the case study')
   : fail('index: case study still says "in order"');
-// Every drawn interface composition must carry a visible "not live data" label.
-const compositions =
-  (idxHtml.match(/class="stack"/g) || []).length +
-  (idxHtml.match(/class="pillar-visual"/g) || []).length;
-const illusLabels = [...idxHtml.matchAll(/not live data/gi)].length;
-compositions > 0 && illusLabels >= compositions
-  ? ok(`index: ${illusLabels} "not live data" label(s) for ${compositions} drawn interface composition(s)`)
-  : fail(
-      `index: ${compositions} drawn interface composition(s) but only ${illusLabels} "not live data" label(s)`
-    );
-/Illustrative/i.test(idxHtml)
-  ? ok("index: interface visuals are called illustrative")
-  : fail("index: interface visuals must be labelled illustrative");
+// Superseded by the "Populated demo dashboards" section below, which requires
+// the exact demo-data sentence inside every populated composition.
 // No invented statistics, ratings, or revenue anywhere in the marketing copy.
 const invented = [
   [/\b\d+(\.\d+)?\s*%/g, "a percentage figure"],
@@ -776,6 +765,294 @@ invented.length === 0
 /prepared by the system and sent manually|sent <strong>manually<\/strong>/.test(idxHtml)
   ? ok("index: manual-message disclosure preserved")
   : fail("index: manual-message disclosure missing");
+
+console.log("\n== Populated demo dashboards: the disclosure ==");
+// The homepage illustrations now carry invented records. The one thing that
+// must never slip is the statement that they are invented: it has to be
+// visible text inside each composition, not a title, aria-label, or footnote.
+const DEMO_SENTENCE = "Example dashboard. Demo data, not live customer information.";
+const figures = [...idxHtml.matchAll(/<figure class="(stack|pillar-visual)"[\s\S]*?<\/figure>/g)].map(
+  (m) => ({ kind: m[1], html: m[0] })
+);
+figures.length === 4
+  ? ok(`index: 4 populated compositions (1 hero, 3 pillars)`)
+  : fail(`index: ${figures.length} populated compositions, expected 4`);
+const undisclosed = figures.filter((f) => !f.html.includes(DEMO_SENTENCE));
+undisclosed.length === 0
+  ? ok(`index: all ${figures.length} compositions carry the demo-data sentence`)
+  : fail(`index: ${undisclosed.length} composition(s) with no demo-data disclosure`);
+// It must be rendered text, inside a <figcaption>, never an attribute value.
+const captioned = figures.filter((f) => {
+  const cap = (f.html.match(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/) || [])[1] || "";
+  return cap.includes(DEMO_SENTENCE);
+});
+captioned.length === figures.length
+  ? ok("index: every disclosure is visible <figcaption> text")
+  : fail(`index: ${figures.length - captioned.length} disclosure(s) are not visible figcaption text`);
+/(title|aria-label|alt)="[^"]*Demo data/i.test(idxHtml)
+  ? fail("index: the demo-data disclosure is hiding in an attribute")
+  : ok("index: the disclosure is not tucked into a title, alt, or aria-label");
+// And it must not be styled away.
+const hiddenLabel = /\.(illus|stack-label)\b[^{]*\{[^}]*(display:\s*none|visibility:\s*hidden|font-size:\s*0(px|rem|em)?\s*[;}])/.test(
+  read("styles.css")
+);
+hiddenLabel
+  ? fail("styles: a demo-data disclosure is hidden by CSS")
+  : ok("styles: no CSS hides a demo-data disclosure");
+
+console.log("\n== Populated demo dashboards: no personal information ==");
+// Records name a customer TYPE, never a person, and carry nothing that looks
+// like contact details or an appointment.
+const APPROVED_TYPES = [
+  "Property manager",
+  "Homeowner",
+  "Small office",
+  "Local retailer",
+  "Residential customer"
+];
+const recordNames = [
+  ...idxHtml.matchAll(/<span class="rec"><b>([^<]+)<\/b>/g)
+].map((m) => m[1]);
+const offTypes = [...new Set(recordNames)].filter((n) => !APPROVED_TYPES.includes(n));
+recordNames.length > 0 && offTypes.length === 0
+  ? ok(`index: all ${recordNames.length} demo records use a generic customer type`)
+  : fail(`index: non-generic record subject(s): ${offTypes.join(", ") || "none found"}`);
+const PERSONAL = [
+  [/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "an email address", true],
+  [/\(?\b\d{3}\)?[ .-]\d{3}[ .-]\d{4}\b/g, "a phone number"],
+  [/\b\d{1,5}\s+[A-Z][a-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Lane|Ln|Drive|Dr|Court|Ct|Way|Blvd)\b/g, "a street address"],
+  [/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}\b/g, "an appointment date"],
+  [/\bCustomer\s+\d\b|\bLead\s+\d\b|\bClient\s+\d\b|Lorem|placeholder/i, "an unfinished placeholder"]
+];
+let personalHits = 0;
+for (const f of figures) {
+  for (const [re, name] of PERSONAL) {
+    const hits = f.html.match(re);
+    if (hits && hits.length) {
+      personalHits += hits.length;
+      fail(`index: ${f.kind} composition contains ${name} (${hits[0]})`);
+    }
+  }
+}
+personalHits === 0
+  ? ok("index: no email, phone, address, date, or placeholder in any demo record")
+  : fail(`${personalHits} piece(s) of customer-like information in the demo records`);
+
+console.log("\n== Populated demo dashboards: the records themselves ==");
+// The agreed demonstration content, panel by panel.
+const heroFig = (figures.find((f) => f.kind === "stack") || { html: "" }).html;
+const pillarFigs = figures.filter((f) => f.kind === "pillar-visual").map((f) => f.html);
+const REQUIRED = [
+  [heroFig, "hero: public website pane", [
+    "Local heat-pump service",
+    "Keep your system clean and efficient",
+    "Request service",
+    "Request received"
+  ]],
+  [heroFig, "hero: pipeline records", [
+    ">Property manager<", ">4-unit cleaning<", '<span class="chip new">New</span>',
+    ">Homeowner<", ">2-unit service<", '<span class="chip booked">Booked</span>',
+    ">Small office<", ">6-unit cleaning<", '<span class="chip done">Done</span>'
+  ]],
+  [heroFig, "hero: due-for-service records", [
+    ">Residential customer<", ">2 units<", ">Due in 14 days<",
+    ">Property manager<", ">4 units<", ">Due in 30 days<"
+  ]],
+  [heroFig, "hero: example-month totals", [
+    "Example month",
+    "<b>12</b><span>Leads</span>",
+    "<b>7</b><span>Booked</span>",
+    "<b>5</b><span>Completed</span>",
+    "<b>18</b><span>Due soon</span>"
+  ]],
+  [pillarFigs[0] || "", "pillar 1: lead intake", [
+    ">Property manager<", ">4-unit cleaning<",
+    ">Homeowner<", ">2-unit service<",
+    ">Small office<", ">6-unit cleaning<",
+    "<dt>Source</dt><dd>Website</dd>",
+    "<dt>Service</dt><dd>4-unit cleaning</dd>",
+    "<dt>Next action</dt><dd>Confirm appointment</dd>"
+  ]],
+  [pillarFigs[1] || "", "pillar 2: completed work", [
+    ">Property manager<", ">4 units<",
+    ">Homeowner<", ">2 units<",
+    ">Small office<", ">6 units<",
+    ">Review request ready<", ">Recorded<"
+  ]],
+  [pillarFigs[2] || "", "pillar 3: due for service", [
+    ">Residential customer<", ">2 units<", ">Due in 14 days<",
+    ">Property manager<", ">4 units<", ">Due in 30 days<",
+    ">Small office<", ">6 units<", ">Due in 45 days<",
+    ">Reminder ready<", ">Reach out<"
+  ]]
+];
+let missingRecords = 0;
+for (const [html, label, needles] of REQUIRED) {
+  const gone = needles.filter((n) => !html.includes(n));
+  if (gone.length) {
+    missingRecords += gone.length;
+    fail(`index: ${label} missing ${gone.join(", ")}`);
+  } else {
+    ok(`index: ${label} complete`);
+  }
+}
+missingRecords === 0
+  ? ok("index: every agreed demo record and unit count is present")
+  : fail(`index: ${missingRecords} required demo value(s) missing`);
+// "Example month" must sit beside its totals, not somewhere else on the page.
+/<span class="meter-label">Example month<\/span>\s*<div class="meter-cells">/.test(heroFig)
+  ? ok('index: "Example month" labels the four synthetic totals directly')
+  : fail('index: "Example month" must sit immediately beside the totals');
+// Status is text, never colour alone.
+const chips = [...idxHtml.matchAll(/<span class="chip [a-z]+">([^<]*)<\/span>/g)].map((m) => m[1].trim());
+chips.length > 0 && chips.every((t) => t.length > 0)
+  ? ok(`index: all ${chips.length} status chips carry visible text`)
+  : fail("index: a status chip communicates by colour alone");
+
+console.log("\n== Populated demo dashboards: no claim, no automated send ==");
+// Demo numbers must never be dressed up as performance.
+const CLAIMS = [
+  [/real results|actual results|customer results|live data\b(?! ,)/i, "a results claim"],
+  [/\b(revenue|ROI|profit)\b/i, "a revenue claim"],
+  [/conversion rate|close rate|conversion of/i, "a conversion claim"],
+  [/\b\d+\s*(reviews|five[- ]star)/i, "a review-count claim"],
+  [/rank(ed|ing)? (#|no\.?\s*)?\d|top\s+\d\s+(on|in)\s+google/i, "a ranking claim"],
+  [/leads generated|generated \d+ leads|\d+ new customers/i, "a lead-generation claim"],
+  [/guarantee[ds]?\b/i, "a guarantee"]
+];
+let claimHits = 0;
+for (const f of figures) {
+  for (const [re, name] of CLAIMS) {
+    if (re.test(f.html)) {
+      claimHits++;
+      fail(`index: ${f.kind} composition contains ${name}`);
+    }
+  }
+}
+claimHits === 0
+  ? ok("index: no revenue, conversion, review-count, ranking, or lead claim in the demos")
+  : fail(`index: ${claimHits} performance claim(s) inside a demo composition`);
+// The demo records must not be tied to the anonymous real implementation.
+const heroAndPillars = figures.map((f) => f.html).join("\n");
+/Gavin|our client|client results|this customer earned/i.test(heroAndPillars)
+  ? fail("index: a demo composition attributes its records to a real client")
+  : ok("index: no demo record is attributed to a real client");
+
+// Review and reminder messages are PREPARED. A person sends them.
+const AUTOSEND = [
+  /automatically (sent|texted|emailed|messaged)/i,
+  /auto[- ]?(sends?|sent|text|reply)/i,
+  /sends? (the )?(review|reminder)s? for you/i,
+  /review (received|collected)/i,
+  /\bwe texted\b|\btext blast\b/i
+];
+const autoHits = AUTOSEND.filter((re) => re.test(idxHtml));
+autoHits.length === 0
+  ? ok("index: nothing implies a message was sent automatically")
+  : fail(`index: ${autoHits.length} automated-send implication(s) on the homepage`);
+// Each panel that shows prepared messages says who sends them.
+const preparedPanels = figures.filter((f) => /Review request ready|Reminder ready/.test(f.html));
+const explained = preparedPanels.filter((f) =>
+  /A person reviews and sends each one\./.test(f.html)
+);
+preparedPanels.length > 0 && explained.length === preparedPanels.length
+  ? ok(`index: all ${preparedPanels.length} prepared-message panel(s) say a person sends them`)
+  : fail(
+      `index: ${preparedPanels.length - explained.length} prepared-message panel(s) do not say a person sends them`
+    );
+/prepared by the system and sent manually|sent <strong>manually<\/strong>/.test(idxHtml)
+  ? ok("index: the manual-message disclosure is still on the page")
+  : fail("index: the manual-message disclosure has been lost");
+
+console.log("\n== Hero journey animation ==");
+const motionSrc = read("js/motion.js");
+const idxCss = read("styles.css");
+// Everything the animation reveals ships in the markup, hidden only by a
+// .motion rule, so a blocked or failed script leaves nothing invisible.
+const beats = [...idxHtml.matchAll(/class="[^"]*\bjrn\b[^"]*"\s+data-beat="(\d)"/g)].map((m) =>
+  Number(m[1])
+);
+const beatSet = [...new Set(beats)].sort();
+beatSet.join(",") === "1,2,3,4,5,6,7"
+  ? ok(`index: all 7 journey beats present across ${beats.length} elements`)
+  : fail(`index: journey beats are ${beatSet.join(",") || "missing"}, expected 1..7`);
+/\.motion \.stack \.jrn \{[^}]*opacity:\s*0/.test(idxCss)
+  ? ok("styles: the beats are hidden only under .motion")
+  : fail("styles: the journey's hidden state must be scoped to .motion");
+// Comments are stripped first: a brace-free comment block above a rule would
+// otherwise be swallowed into the selector text.
+const cssNoComments = idxCss.replace(/\/\*[\s\S]*?\*\//g, "");
+const jrnSelectors = (cssNoComments.match(/[^{}]*\.jrn[^{}]*(?=\{)/g) || []).map((x) =>
+  x.trim().replace(/\s+/g, " ")
+);
+const unguarded = jrnSelectors.filter(
+  (sel) => !sel.split(",").every((one) => one.includes(".motion"))
+);
+jrnSelectors.length > 0 && unguarded.length === 0
+  ? ok(`styles: all ${jrnSelectors.length} .jrn rule(s) sit behind the .motion gate`)
+  : fail(`styles: unguarded .jrn rule(s): ${unguarded.join(" | ") || "none found"}`);
+/\.motion \.stack \.jrn\.is-on \{[^}]*opacity:\s*1/.test(idxCss) &&
+/\.motion \.stack\.journey-done \.jrn \{[^}]*opacity:\s*1[^}]*transition:\s*none/.test(idxCss)
+  ? ok("styles: the settled state restores every beat, as a cut rather than a fade")
+  : fail("styles: the journey needs a settled state that restores every beat");
+// Reduced motion: the finished state, immediately.
+/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.motion \.stack \.jrn \{[^}]*opacity:\s*1 !important;[^}]*transition:\s*none !important;/.test(
+  idxCss
+)
+  ? ok("styles: reduced motion shows the finished state with no transition")
+  : fail("styles: reduced-motion users must get the finished state immediately");
+// Only the allowed properties move.
+const jrnRules = (idxCss.match(/\.motion \.stack[^{]*\.jrn[^{]*\{[^}]*\}/g) || []).join("\n");
+const jrnProps = [...new Set((jrnRules.match(/^\s*([a-z-]+):/gm) || []))].map((x) =>
+  x.trim().replace(":", "")
+);
+const ALLOWED_JRN = ["opacity", "transform", "transition"];
+jrnProps.every((p) => ALLOWED_JRN.includes(p))
+  ? ok(`journey: animates only ${jrnProps.join(", ")}`)
+  : fail(`journey: animates disallowed propert(ies): ${jrnProps.filter((p) => !ALLOWED_JRN.includes(p)).join(", ")}`);
+
+// It runs once, on entry, via IntersectionObserver, and settles.
+/new IntersectionObserver/.test(motionSrc)
+  ? ok("motion: the journey uses IntersectionObserver")
+  : fail("motion: IntersectionObserver is required");
+/journeyIO\.disconnect\(\);/.test(motionSrc)
+  ? ok("motion: the journey observer disconnects, so it cannot replay")
+  : fail("motion: the journey must disconnect after its first run");
+/journeyStack\.classList\.add\("journey-done"\)/.test(motionSrc)
+  ? ok("motion: the journey settles into a stable final state")
+  : fail("motion: the journey must settle into a final state");
+/if \(!e\.isIntersecting && jTimers\.length\) \{\s*\n\s*settleJourney\(\);/.test(motionSrc)
+  ? ok("motion: leaving the viewport finishes the sequence instead of animating off-screen")
+  : fail("motion: the journey must not keep animating off-screen");
+/if \(!jStarted\) settleJourney\(\);/.test(motionSrc)
+  ? ok("motion: a timeout settles the journey if the observer never fires")
+  : fail("motion: the records must never sit invisible behind a sequence that never starts");
+/setInterval|requestAnimationFrame\([^)]*\bloop\b/.test(motionSrc)
+  ? fail("motion: the journey loops")
+  : ok("motion: no interval or loop drives the journey");
+/addEventListener\(\s*["'](scroll|resize|wheel|touchmove)/.test(motionSrc)
+  ? fail("motion: a scroll or resize listener was added")
+  : ok("motion: still no scroll, resize, wheel, or touchmove listener");
+/\b(import|require)\s*\(?['"]/.test(motionSrc)
+  ? fail("motion: an external dependency was added")
+  : ok("motion: still dependency-free");
+// The fail-open gate must survive.
+/data-motion-ready/.test(motionSrc) && /classList\.remove\("motion"\)/.test(idxHtml)
+  ? ok("motion: the fail-open gate is intact (no script, no hidden content)")
+  : fail("motion: the fail-open motion gate has been broken");
+
+// The retired walk-through must be gone from BOTH the script and the markup.
+const RETIRED_UI = ["ui-mock", "ui-row", "ui-cols", "ui-head", "ui-foot", "pillst"];
+const stillThere = RETIRED_UI.filter(
+  (c) => new RegExp("\\b" + c + "\\b").test(motionSrc + idxCss + htmlFiles.map(read).join(""))
+);
+stillThere.length === 0
+  ? ok(`motion/styles: the retired walk-through is fully removed (${RETIRED_UI.length} selectors)`)
+  : fail(`dead code remains for: ${stillThere.join(", ")}`);
+// The empty placeholder bars are what this change replaced.
+/<span class="bar[ "]/.test(idxHtml)
+  ? fail("index: an empty placeholder bar survived")
+  : ok("index: no empty placeholder bars remain");
 
 console.log("\n== Audit success screen: structure and copy ==");
 // The two-column confirmation that replaces the question stage after a real
