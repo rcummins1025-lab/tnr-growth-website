@@ -3041,7 +3041,12 @@ h4 {
   }
 }
 
-@media (max-width: 860px) {
+/* The full desktop header measures brand 351 + links 558 + CTA 112 + two 16px
+   gaps = 1053px, against a container that stops growing at var(--maxw) 1120px.
+   The row therefore needs a 1120px container to sit in, plus the 24px gutter
+   the centred container only gains from a 1168px viewport up. Anything
+   narrower gets the compact menu instead of a second wrapped line. */
+@media (max-width: 1167px) {
   /* Compact mobile menu replaces the wrapped two-row nav. */
   .nav-toggle {
     display: inline-flex;
@@ -3055,12 +3060,12 @@ h4 {
     flex: 1 1 auto;
     min-width: 0;
   }
-  /* .container's own padding wins over .nav's at narrow widths, which flattens
-     the bar - restore the vertical rhythm with longhands so the horizontal
-     container padding is left alone. */
+  /* .nav's own `padding: 12px 0` beats .container's `0 24px`, so below the
+     container's max width the bar ran flush to both viewport edges. State all
+     four sides here: the gutter is only needed once the container has stopped
+     being centred inside a wider viewport. */
   .site-header .container.nav {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 24px;
   }
   .nav-links {
     position: absolute;
@@ -3105,9 +3110,6 @@ h4 {
     width: 22px;
     bottom: 8px;
   }
-  .nav-cta {
-    display: none;
-  }
   .site-header .container.nav {
     position: static;
   }
@@ -3120,6 +3122,14 @@ h4 {
   }
   .nav {
     position: static;
+  }
+}
+
+/* Below this the brand, the CTA, and the toggle stop fitting on one row, so
+   the CTA steps aside; the menu panel still carries the Contact link. */
+@media (max-width: 860px) {
+  .nav-cta {
+    display: none;
   }
 }
 

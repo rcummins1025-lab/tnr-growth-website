@@ -766,6 +766,104 @@ invented.length === 0
   ? ok("index: manual-message disclosure preserved")
   : fail("index: manual-message disclosure missing");
 
+console.log("\n== Responsive header: one clean row ==");
+// The desktop header wrapped onto a second line because its content is wider
+// than the container ever gets. These checks pin the arithmetic that fixed it,
+// so a longer label or a wider container cannot quietly bring the wrap back.
+const cssHdr = read("styles.css");
+
+// The container's own limits, read from the stylesheet rather than assumed.
+const MAXW = Number((cssHdr.match(/--maxw:\s*(\d+)px/) || [])[1]);
+const GUTTER = Number(
+  (cssHdr.match(/\.container \{[^}]*padding:\s*0\s+(\d+)px/) || [])[1]
+);
+MAXW > 0 && GUTTER > 0
+  ? ok(`styles: container is ${MAXW}px wide with a ${GUTTER}px gutter`)
+  : fail("styles: could not read --maxw / .container padding");
+
+// Measured in the browser at 1168-1440px: brand 351 + links 558 + CTA 112 plus
+// two 16px nav gaps. Kept here so the breakpoint below has something to be
+// checked against.
+const HEADER_ROW_PX = 351 + 558 + 112 + 16 * 2;
+HEADER_ROW_PX === 1053
+  ? ok(`header: full row measures ${HEADER_ROW_PX}px (brand + links + CTA + gaps)`)
+  : fail(`header: row arithmetic changed to ${HEADER_ROW_PX}px`);
+HEADER_ROW_PX <= MAXW
+  ? ok(`header: the row fits the ${MAXW}px container with ${MAXW - HEADER_ROW_PX}px to spare`)
+  : fail(`header: the row needs ${HEADER_ROW_PX}px but the container stops at ${MAXW}px`);
+
+// The compact menu must cover every width where the full row cannot sit in a
+// full-width container with a gutter on both sides.
+const compactBp = Number(
+  (cssHdr.match(/@media \(max-width:\s*(\d+)px\) \{\s*\n\s*\/\* Compact mobile menu/) || [])[1]
+);
+const minFullNavVw = MAXW + GUTTER * 2;
+compactBp
+  ? ok(`styles: the compact menu covers everything up to ${compactBp}px`)
+  : fail("styles: could not find the compact-menu breakpoint");
+compactBp && compactBp + 1 >= minFullNavVw
+  ? ok(
+      `header: the full row only appears from ${compactBp + 1}px, at or above the ${minFullNavVw}px it needs`
+    )
+  : fail(
+      `header: the full row appears from ${compactBp + 1}px but needs ${minFullNavVw}px, so it will wrap`
+    );
+
+// The bar must never be allowed to wrap in the compact range, and must keep a
+// gutter there (the container's padding loses to .nav's shorthand).
+const compactBlock = (cssHdr.match(
+  /@media \(max-width: \d+px\) \{\s*\n\s*\/\* Compact mobile menu[\s\S]*?\n\}/
+) || [""])[0];
+/\.nav \{[^}]*flex-wrap:\s*nowrap/.test(compactBlock)
+  ? ok("styles: the compact bar cannot wrap")
+  : fail("styles: the compact bar must set flex-wrap: nowrap");
+new RegExp(`\\.site-header \\.container\\.nav \\{[^}]*padding:\\s*\\d+px\\s+${GUTTER}px`).test(
+  compactBlock
+)
+  ? ok(`styles: the compact bar keeps its ${GUTTER}px gutter`)
+  : fail("styles: the compact bar must restate its horizontal gutter");
+/\.nav-toggle \{[^}]*display:\s*inline-flex/.test(compactBlock)
+  ? ok("styles: the compact bar shows the menu toggle")
+  : fail("styles: the compact bar must show the menu toggle");
+/\.nav-cta \{\s*display:\s*none/.test(compactBlock)
+  ? fail("styles: the CTA is dropped across the whole compact range")
+  : ok("styles: the CTA stays in the bar through the compact range");
+/@media \(max-width: 860px\) \{\s*\n\s*\.nav-cta \{\s*\n\s*display:\s*none;/.test(cssHdr)
+  ? ok("styles: the CTA steps aside only below 860px, as before")
+  : fail("styles: the narrow-width CTA rule is missing");
+
+// Header labels: short in the bar, full in the hero, and never shrunk.
+const HEADER_CTA = "Start audit";
+const HERO_CTA = "Start your growth audit";
+const navCtaPages = htmlFiles.filter((f) => /class="[^"]*nav-cta/.test(read(f)));
+const badNavCta = navCtaPages.filter(
+  (f) => !new RegExp(`nav-cta"[^>]*>${HEADER_CTA}</a>`).test(read(f))
+);
+navCtaPages.length > 0 && badNavCta.length === 0
+  ? ok(`header: all ${navCtaPages.length} header CTAs read "${HEADER_CTA}"`)
+  : fail(`header: wrong header CTA label in ${badNavCta.join(", ")}`);
+const longNavCta = navCtaPages.filter((f) =>
+  new RegExp(`nav-cta"[^>]*>${HERO_CTA}`).test(read(f))
+);
+longNavCta.length === 0
+  ? ok("header: no header CTA has reverted to the long label")
+  : fail(`header: long CTA label back in ${longNavCta.join(", ")}`);
+new RegExp(`btn-gold btn-lg" href="contact\\.html">${HERO_CTA}</a>`).test(idxHtml)
+  ? ok(`hero: still reads "${HERO_CTA}"`)
+  : fail(`hero: the full "${HERO_CTA}" wording must stay in the hero`);
+
+// Nothing in the header may be shrunk to fit.
+const MIN_HEADER_REM = 0.85;
+const navLinkSize = Number((cssHdr.match(/\.nav-links a \{[^}]*font-size:\s*([\d.]+)rem/) || [])[1]);
+const btnSmSize = Number((cssHdr.match(/\.btn-sm \{[^}]*font-size:\s*([\d.]+)rem/) || [])[1]);
+[["nav links", navLinkSize], ["header CTA", btnSmSize]].every(
+  ([, v]) => v >= MIN_HEADER_REM
+)
+  ? ok(`header: nav ${navLinkSize}rem and CTA ${btnSmSize}rem stay at a readable size`)
+  : fail(
+      `header: text shrunk below ${MIN_HEADER_REM}rem (nav ${navLinkSize}, CTA ${btnSmSize})`
+    );
+
 console.log("\n== Populated demo dashboards: the disclosure ==");
 // The homepage illustrations now carry invented records. The one thing that
 // must never slip is the statement that they are invented: it has to be
