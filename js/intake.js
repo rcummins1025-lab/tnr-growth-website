@@ -42,6 +42,11 @@
   var backBtn = document.getElementById("btn-back");
   var nextBtn = document.getElementById("btn-next");
   var submitBtn = document.getElementById("btn-submit");
+  // Confirmation panel. It ships hidden in contact.html and is only ever
+  // unhidden by succeed(), which only ever runs on a real 2xx response.
+  var successPanel = document.getElementById("audit-success");
+  var successHeading = document.getElementById("audit-success-title");
+  var navWrap = form.querySelector(".wz-nav");
   var current = 0;
 
   var REQUEST_TIMEOUT_MS = 20000;
@@ -400,6 +405,20 @@
       });
   });
 
+  /* Retire a step control for good. `hidden` alone removes it from the tab
+   * order in a current browser, but disabling it and pinning tabindex to -1
+   * means no stale stylesheet, older engine, or restored bfcache page can
+   * leave Back / Continue / Submit focusable behind the confirmation. */
+  function retire(btn) {
+    if (!btn) return;
+    btn.hidden = true;
+    btn.disabled = true;
+    btn.setAttribute("tabindex", "-1");
+  }
+
+  /* Runs ONLY from the res.ok branch of the submit handler. Nothing else in
+   * this file calls it, so the confirmation cannot appear for a failed,
+   * misconfigured, spam-trapped, or unsent submission. */
   function succeed() {
     form.reset();
     syncTiles();
@@ -411,19 +430,32 @@
     });
     var timeHint = form.querySelector(".stepmeta .left");
     if (timeHint) timeHint.hidden = true;
-    if (progressLabel) progressLabel.textContent = "Submitted";
     steps.forEach(function (s) {
       s.hidden = true;
     });
-    backBtn.hidden = true;
-    nextBtn.hidden = true;
-    submitBtn.hidden = true;
+    retire(backBtn);
+    retire(nextBtn);
+    retire(submitBtn);
+    if (navWrap) navWrap.hidden = true;
     if (progressFill) progressFill.style.width = "100%";
     if (progressLabel) progressLabel.textContent = "Submitted";
-    setStatus(
-      "ok",
-      "Thank you. Your Growth System Audit request has been received. We’ll reply by email within a couple of business days."
-    );
+
+    if (successPanel) {
+      // The panel is the confirmation, so the small status box goes away
+      // rather than repeating it.
+      clearStatus();
+      successPanel.hidden = false;
+      // Focus the heading so keyboard and screen-reader users land on the
+      // confirmation instead of at the top of an emptied page.
+      if (successHeading) successHeading.focus();
+    } else {
+      // The panel markup is missing (it never should be). Confirm in the
+      // status region rather than leaving a submitted visitor with nothing.
+      setStatus(
+        "ok",
+        "Thank you. Your Growth System Audit request has been received. We’ll reply by email within a couple of business days."
+      );
+    }
   }
 
   // Initial render only, with no focus movement (see showStep).

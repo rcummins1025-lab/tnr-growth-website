@@ -777,5 +777,166 @@ invented.length === 0
   ? ok("index: manual-message disclosure preserved")
   : fail("index: manual-message disclosure missing");
 
+console.log("\n== Audit success screen ==");
+// The confirmation panel that replaces the old status box after a real
+// submission. Everything here guards one promise: it appears only when the
+// endpoint actually accepted the application, and it claims nothing more.
+const successHtml = (contact.match(
+  /<section id="audit-success"[\s\S]*?<\/section>/
+) || [""])[0];
+successHtml
+  ? ok("contact: success panel markup present")
+  : fail("contact: success panel (#audit-success) is missing");
+
+/<section id="audit-success"[^>]*\bhidden\b/.test(contact)
+  ? ok("contact: success panel ships hidden")
+  : fail("contact: success panel must carry `hidden` in the markup");
+
+const SUCCESS_COPY = [
+  ["Your audit request is in.", "heading"],
+  [
+    "We&rsquo;ll review your answers and take a look at your current\n              website. Expect a personal reply by email within two business\n              days.",
+    "supporting copy"
+  ],
+  ["What happens next", "next-steps heading"],
+  ["We review your answers.", "step 1"],
+  [
+    "We look for gaps across discovery, lead handling, and customer follow-up.",
+    "step 2"
+  ],
+  ["Ryan replies with the clearest next step.", "step 3"],
+  ["Return to website", "primary button label"]
+];
+const missingCopy = SUCCESS_COPY.filter(([t]) => !successHtml.includes(t));
+missingCopy.length === 0
+  ? ok(`contact: all ${SUCCESS_COPY.length} required success strings present`)
+  : fail(
+      `contact: success panel missing ${missingCopy.map(([, n]) => n).join(", ")}`
+    );
+
+/<a class="btn[^"]*" href="index\.html">Return to website<\/a>/.test(successHtml)
+  ? ok("contact: Return to website links to index.html")
+  : fail("contact: primary success button must link to index.html");
+/href="mailto:hello@tnrgrowthagency\.com"/.test(successHtml)
+  ? ok("contact: success panel carries the contact email link")
+  : fail("contact: success panel is missing the hello@ contact line");
+/id="audit-success-title"[^>]*tabindex="-1"|tabindex="-1"[^>]*id="audit-success-title"/.test(
+  successHtml
+)
+  ? ok("contact: success heading is programmatically focusable")
+  : fail('contact: success heading needs tabindex="-1" so focus can move to it');
+
+// Nothing on this screen may promise an outcome we have not agreed to deliver.
+const OVERPROMISE = [
+  [/audit report|full report|written report|your report\b/i, "a promised report"],
+  [/\bguarantee|guaranteed\b/i, "a guarantee"],
+  [/more leads|new leads|generate leads|leads and revenue/i, "a leads promise"],
+  [/\brevenue\b|\bROI\b|\bprofit\b/i, "a revenue promise"],
+  [/\branking|rank higher|\bSEO results\b/i, "a rankings promise"],
+  [/more reviews|five[- ]star|\bratings?\b/i, "a reviews promise"],
+  [/reactivat|win back|\bwe(?:'|&rsquo;)?ll bring back\b/i, "a reactivation promise"],
+  [/immediately|right away|within 24 hours|within an hour|instantly/i, "an immediate-response promise"],
+  [/your score|scored?\s+\d|\bgrade\b|we recommend/i, "a fabricated score or recommendation"]
+].filter(([re]) => re.test(successHtml));
+OVERPROMISE.length === 0
+  ? ok("contact: success copy promises no report, outcome, score, or instant reply")
+  : fail(
+      `contact: success copy contains ${OVERPROMISE.map(([, n]) => n).join(", ")}`
+    );
+
+// The panel and the step controls both need an explicit [hidden] opt-out:
+// each carries a display value that would otherwise beat the UA rule.
+/\.wz-done\[hidden\]\s*\{\s*display:\s*none/.test(cssText)
+  ? ok("styles: .wz-done[hidden] is display:none")
+  : fail("styles: .wz-done[hidden] must be display:none or it shows before submit");
+/\.wz-nav\[hidden\]\s*\{\s*display:\s*none/.test(cssText)
+  ? ok("styles: .wz-nav[hidden] is display:none")
+  : fail("styles: .wz-nav[hidden] must be display:none or the controls survive success");
+
+// No hard-coded colour: the panel must paint from the Forge tokens only.
+const doneCss = (cssText.match(
+  /\/\* Successful submission[\s\S]*?\n\/\* Slim legal footer/
+) || [""])[0];
+const doneHex = doneCss.match(/#[0-9a-fA-F]{3,8}\b/g) || [];
+doneHex.length === 0
+  ? ok("styles: success panel uses palette tokens only, no literal hex")
+  : fail(`styles: success panel hard-codes ${doneHex.join(", ")}`);
+/gradient|@keyframes wz-done|url\(/i.test(doneCss)
+  ? fail("styles: success panel introduces a gradient, animation, or external asset")
+  : ok("styles: success panel adds no gradient, animation, or external asset");
+
+// succeed() must stay reachable from exactly one place: the res.ok branch.
+/if \(res\.ok\) \{\s*\n\s*succeed\(\);/.test(intake)
+  ? ok("intake: succeed() runs only inside the res.ok branch")
+  : fail("intake: the res.ok guard in front of succeed() has changed");
+// Call sites carry the semicolon; the definition and the prose comments do not.
+const succeedCalls = (intake.match(/succeed\(\);/g) || []).length;
+succeedCalls === 1
+  ? ok("intake: exactly one succeed() call site, and it is the res.ok branch")
+  : fail(`intake: ${succeedCalls} succeed() call sites, expected exactly 1`);
+
+/successPanel\.hidden = false;/.test(intake)
+  ? ok("intake: success panel is unhidden on success")
+  : fail("intake: success panel is never unhidden");
+/successHeading\.focus\(\);/.test(intake)
+  ? ok("intake: focus moves to the success heading")
+  : fail("intake: focus must move to the success heading after submission");
+/function retire\(btn\)[\s\S]*?btn\.hidden = true;[\s\S]*?btn\.disabled = true;[\s\S]*?btn\.setAttribute\("tabindex", "-1"\);/.test(
+  intake
+)
+  ? ok("intake: retire() hides, disables, and un-tabs a control")
+  : fail("intake: retire() must hide, disable, and remove a control from the tab order");
+const retired = ["backBtn", "nextBtn", "submitBtn"].filter(
+  (b) => !new RegExp(`retire\\(${b}\\);`).test(intake)
+);
+retired.length === 0
+  ? ok("intake: Back, Continue, and Submit are all retired after success")
+  : fail(`intake: not retired after success: ${retired.join(", ")}`);
+/if \(navWrap\) navWrap\.hidden = true;/.test(intake)
+  ? ok("intake: the whole step-control row is hidden after success")
+  : fail("intake: the step-control row must be hidden after success");
+
+// Behaviour that predates this screen and must survive it.
+/function succeed\(\) \{\s*\n\s*form\.reset\(\);/.test(intake)
+  ? ok("intake: the form is still reset on success")
+  : fail("intake: form.reset() on success has been lost");
+/clearStatus\(\);\s*\n\s*successPanel\.hidden = false;/.test(intake)
+  ? ok("intake: the old status box is cleared, not left beside the panel")
+  : fail("intake: the status box must be cleared when the panel appears");
+
+console.log("\n== Public copy: no em or en dashes ==");
+// Applies to the files a visitor's browser actually loads: every page, the
+// site's JavaScript, and the stylesheet. Dev scripts and internal docs are
+// not public copy and are not covered.
+const DASH_PATTERNS = [
+  [/—/g, "em dash"],
+  [/–/g, "en dash"],
+  [/&mdash;/gi, "&mdash;"],
+  [/&ndash;/gi, "&ndash;"],
+  [/&#8212;|&#x2014;/gi, "&#8212;"],
+  [/&#8211;|&#x2013;/gi, "&#8211;"]
+];
+const PUBLIC_FILES = [
+  ...htmlFiles,
+  ...readdirSync(join(root, "js"))
+    .filter((f) => f.endsWith(".js"))
+    .map((f) => `js/${f}`),
+  "styles.css"
+];
+let dashHits = 0;
+for (const f of PUBLIC_FILES) {
+  const body = read(f);
+  for (const [re, name] of DASH_PATTERNS) {
+    const n = (body.match(re) || []).length;
+    if (n) {
+      dashHits += n;
+      fail(`${f}: ${n} ${name}(s) — use a plain hyphen or reword`);
+    }
+  }
+}
+dashHits === 0
+  ? ok(`public copy: no em or en dashes across ${PUBLIC_FILES.length} shipped files`)
+  : fail(`${dashHits} long dash(es) in public website files`);
+
 console.log(`\n${fails === 0 ? "PASS" : "FAIL"} — ${checks} checks passed, ${fails} failed.\n`);
 process.exit(fails === 0 ? 0 : 1);

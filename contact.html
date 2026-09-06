@@ -190,6 +190,40 @@
             <input id="hp-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
           </div>
 
+          <!-- Successful submission only. This panel ships hidden and is
+               unhidden by js/intake.js ONLY after a real 2xx response from the
+               endpoint (see succeed()). A failed, blocked, unconfigured, or
+               spam-trapped submit never reaches it, so nothing here can be
+               mistaken for a confirmation that did not happen. -->
+          <section id="audit-success" class="wz-done" hidden aria-labelledby="audit-success-title">
+            <span class="wz-done-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
+            </span>
+            <h2 class="wz-done-title" id="audit-success-title" tabindex="-1">Your audit request is in.</h2>
+            <p class="wz-done-lede">
+              We&rsquo;ll review your answers and take a look at your current
+              website. Expect a personal reply by email within two business
+              days.
+            </p>
+            <div class="wz-done-next">
+              <h3 class="wz-done-next-title">What happens next</h3>
+              <!-- list-style is removed for the numbered badges, so role="list"
+                   keeps the list semantics browsers drop when it is. -->
+              <ol class="wz-done-steps" role="list">
+                <li>We review your answers.</li>
+                <li>We look for gaps across discovery, lead handling, and customer follow-up.</li>
+                <li>Ryan replies with the clearest next step.</li>
+              </ol>
+            </div>
+            <div class="wz-done-actions">
+              <a class="btn btn-primary btn-lg" href="index.html">Return to website</a>
+            </div>
+            <p class="wz-done-contact">
+              Anything to add? Email
+              <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>.
+            </p>
+          </section>
+
           <div class="wz-nav form-nav">
             <button type="button" class="btn btn-ghost btn-back" id="btn-back" hidden>Back</button>
             <button type="button" class="btn btn-primary btn-lg" id="btn-next" hidden>Continue</button>
