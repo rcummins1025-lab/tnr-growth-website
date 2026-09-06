@@ -777,39 +777,71 @@ invented.length === 0
   ? ok("index: manual-message disclosure preserved")
   : fail("index: manual-message disclosure missing");
 
-console.log("\n== Audit success screen ==");
-// The confirmation panel that replaces the old status box after a real
-// submission. Everything here guards one promise: it appears only when the
-// endpoint actually accepted the application, and it claims nothing more.
+console.log("\n== Audit success screen: structure and copy ==");
+// The two-column confirmation that replaces the question stage after a real
+// submission. Every check here guards one promise: it appears only when the
+// endpoint actually accepted the application, it claims nothing more than we
+// agreed to, and nothing a visitor typed can reach the page as markup.
 const successHtml = (contact.match(
-  /<section id="audit-success"[\s\S]*?<\/section>/
+  /<section\s+id="audit-success"[\s\S]*?<\/section>/
 ) || [""])[0];
 successHtml
   ? ok("contact: success panel markup present")
   : fail("contact: success panel (#audit-success) is missing");
 
-/<section id="audit-success"[^>]*\bhidden\b/.test(contact)
+/<section\s+id="audit-success"[^>]*\shidden(\s|>)/.test(contact)
   ? ok("contact: success panel ships hidden")
   : fail("contact: success panel must carry `hidden` in the markup");
 
+// Two panes plus the joining rule: the composition the design calls for.
+["wz-done-main", "wz-done-aside"].every((c) =>
+  new RegExp(`class="${c}"`).test(successHtml)
+)
+  ? ok("contact: success panel has both panes")
+  : fail("contact: success panel must have a left and a right pane");
+
+// Status semantics, but silenced: focus moves to the heading instead, so a
+// polite region here would read the panel out and then repeat the heading.
+/role="status"/.test(successHtml)
+  ? ok("contact: success panel carries status semantics")
+  : fail('contact: success panel needs role="status"');
+/aria-live="off"/.test(successHtml)
+  ? ok("contact: success panel will not double-announce over the focus move")
+  : fail('contact: success panel needs aria-live="off" alongside role="status"');
+/aria-labelledby="audit-success-title"/.test(successHtml)
+  ? ok("contact: success panel is labelled by its heading")
+  : fail("contact: success panel needs aria-labelledby on its heading");
+
+// The approved copy, exactly. The heading and the supporting line ship as the
+// no-name / no-business fallbacks; js/intake.js rewrites them when it can.
 const SUCCESS_COPY = [
-  ["Your audit request is in.", "heading"],
+  ["Audit received", "left-pane label"],
+  ["Your audit request is in.", "no-name heading fallback"],
   [
-    "We&rsquo;ll review your answers and take a look at your current\n              website. Expect a personal reply by email within two business\n              days.",
-    "supporting copy"
+    "We have your Growth System Audit request. Ryan will review your answers and look at how your current website and follow-up process connect.",
+    "no-business supporting copy"
+  ],
+  [
+    "Expect a personal reply by email within two business days.",
+    "timing line"
   ],
   ["What happens next", "next-steps heading"],
   ["We review your answers.", "step 1"],
   [
-    "We look for gaps across discovery, lead handling, and customer follow-up.",
+    "We examine the gaps across discovery, lead handling, and customer follow-up.",
     "step 2"
   ],
   ["Ryan replies with the clearest next step.", "step 3"],
-  ["Return to website", "primary button label"]
+  [
+    "No automated recommendation. No generic score. A real person reviews your request.",
+    "reassurance line"
+  ],
+  ["Return to website", "primary button label"],
+  ["Need to add something? Email ", "secondary contact link"]
 ];
 const missingCopy = SUCCESS_COPY.filter(([t]) => !successHtml.includes(t));
 missingCopy.length === 0
-  ? ok(`contact: all ${SUCCESS_COPY.length} required success strings present`)
+  ? ok(`contact: all ${SUCCESS_COPY.length} approved success strings present`)
   : fail(
       `contact: success panel missing ${missingCopy.map(([, n]) => n).join(", ")}`
     );
@@ -817,14 +849,29 @@ missingCopy.length === 0
 /<a class="btn[^"]*" href="index\.html">Return to website<\/a>/.test(successHtml)
   ? ok("contact: Return to website links to index.html")
   : fail("contact: primary success button must link to index.html");
-/href="mailto:hello@tnrgrowthagency\.com"/.test(successHtml)
-  ? ok("contact: success panel carries the contact email link")
-  : fail("contact: success panel is missing the hello@ contact line");
+/<a href="mailto:hello@tnrgrowthagency\.com">hello@tnrgrowthagency\.com<\/a>/.test(
+  successHtml
+)
+  ? ok("contact: secondary link is a mailto to hello@tnrgrowthagency.com")
+  : fail("contact: success panel is missing the hello@ mailto link");
 /id="audit-success-title"[^>]*tabindex="-1"|tabindex="-1"[^>]*id="audit-success-title"/.test(
   successHtml
 )
   ? ok("contact: success heading is programmatically focusable")
   : fail('contact: success heading needs tabindex="-1" so focus can move to it');
+/id="audit-success-lede"/.test(successHtml)
+  ? ok("contact: supporting line is addressable for personalisation")
+  : fail("contact: supporting line needs id=audit-success-lede");
+
+// Nothing that would turn this into a funnel step.
+const UPSELL = [
+  [/calendly|cal\.com|book a call|schedule a call|pick a time/i, "a calendar link"],
+  [/<form\b/i, "another form"],
+  [/pricing|\$\s?\d|per month|upgrade|package/i, "pricing or an upsell"]
+].filter(([re]) => re.test(successHtml));
+UPSELL.length === 0
+  ? ok("contact: success panel adds no calendar, form, pricing, or upsell")
+  : fail(`contact: success panel contains ${UPSELL.map(([, n]) => n).join(", ")}`);
 
 // Nothing on this screen may promise an outcome we have not agreed to deliver.
 const OVERPROMISE = [
@@ -835,8 +882,11 @@ const OVERPROMISE = [
   [/\branking|rank higher|\bSEO results\b/i, "a rankings promise"],
   [/more reviews|five[- ]star|\bratings?\b/i, "a reviews promise"],
   [/reactivat|win back|\bwe(?:'|&rsquo;)?ll bring back\b/i, "a reactivation promise"],
-  [/immediately|right away|within 24 hours|within an hour|instantly/i, "an immediate-response promise"],
-  [/your score|scored?\s+\d|\bgrade\b|we recommend/i, "a fabricated score or recommendation"]
+  [
+    /immediately|right away|within 24 hours|within an hour|instantly/i,
+    "an immediate-response promise"
+  ],
+  [/your score|scored?\s+\d|\bwe recommend\b/i, "a fabricated score or recommendation"]
 ].filter(([re]) => re.test(successHtml));
 OVERPROMISE.length === 0
   ? ok("contact: success copy promises no report, outcome, score, or instant reply")
@@ -844,28 +894,58 @@ OVERPROMISE.length === 0
       `contact: success copy contains ${OVERPROMISE.map(([, n]) => n).join(", ")}`
     );
 
-// The panel and the step controls both need an explicit [hidden] opt-out:
-// each carries a display value that would otherwise beat the UA rule.
-/\.wz-done\[hidden\]\s*\{\s*display:\s*none/.test(cssText)
-  ? ok("styles: .wz-done[hidden] is display:none")
-  : fail("styles: .wz-done[hidden] must be display:none or it shows before submit");
-/\.wz-nav\[hidden\]\s*\{\s*display:\s*none/.test(cssText)
-  ? ok("styles: .wz-nav[hidden] is display:none")
-  : fail("styles: .wz-nav[hidden] must be display:none or the controls survive success");
+console.log("\n== Audit success screen: personalisation is text, never markup ==");
+// Visitor-supplied values reach the page only as text. One innerHTML anywhere
+// near them would turn a submitted business name into executable markup.
+/personalise\(firstName, business\);/.test(intake)
+  ? ok("intake: personalisation runs from succeed()")
+  : fail("intake: succeed() must personalise the panel");
+/successHeading\.textContent = "Thanks, " \+ firstName \+ "\.";/.test(intake)
+  ? ok('intake: heading is set with textContent ("Thanks, <first name>.")')
+  : fail("intake: the personalised heading must be assigned with textContent");
+/strong\.textContent = business;/.test(intake)
+  ? ok("intake: business name is set with textContent")
+  : fail("intake: the business name must be assigned with textContent");
+/successLede\.appendChild\(\s*document\.createTextNode\(/.test(intake)
+  ? ok("intake: supporting copy is rebuilt from text nodes")
+  : fail("intake: supporting copy must be rebuilt from text nodes");
+/\.innerHTML\s*=|\.outerHTML\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(/.test(
+  intake
+)
+  ? fail("intake: an HTML-writing sink appeared near visitor-supplied values")
+  : ok("intake: no innerHTML, outerHTML, insertAdjacentHTML, or document.write");
 
-// No hard-coded colour: the panel must paint from the Forge tokens only.
-const doneCss = (cssText.match(
-  /\/\* Successful submission[\s\S]*?\n\/\* Slim legal footer/
-) || [""])[0];
-const doneHex = doneCss.match(/#[0-9a-fA-F]{3,8}\b/g) || [];
-doneHex.length === 0
-  ? ok("styles: success panel uses palette tokens only, no literal hex")
-  : fail(`styles: success panel hard-codes ${doneHex.join(", ")}`);
-/gradient|@keyframes wz-done|url\(/i.test(doneCss)
-  ? fail("styles: success panel introduces a gradient, animation, or external asset")
-  : ok("styles: success panel adds no gradient, animation, or external asset");
+// Both fallbacks: the static markup is already correct when a value is
+// missing, and the helpers return "" rather than printing something odd.
+/function firstNameOf\(raw\) \{[\s\S]*?if \(!v \|\| v\.indexOf\("@"\) !== -1[\s\S]*?return "";/.test(
+  intake
+)
+  ? ok("intake: an unusable contact name falls back to the generic heading")
+  : fail("intake: firstNameOf must return \"\" for an unusable name");
+/function businessNameOf\(raw\) \{[\s\S]*?if \(!v \|\| v\.length > MAX_BUSINESS\) return "";/.test(
+  intake
+)
+  ? ok("intake: a missing or overlong business name falls back gracefully")
+  : fail("intake: businessNameOf must return \"\" when there is nothing usable");
+/if \(firstName && successHeading\)/.test(intake) &&
+/if \(!business \|\| !successLede\) return;/.test(intake)
+  ? ok("intake: personalisation is skipped entirely when a value is missing")
+  : fail("intake: personalisation must no-op when a value is missing");
+/MAX_FIRST_NAME = \d+/.test(intake) && /MAX_BUSINESS = \d+/.test(intake)
+  ? ok("intake: submitted values are length-capped before they reach the page")
+  : fail("intake: submitted values need a length cap");
+/overflow-wrap: break-word/.test(cssText)
+  ? ok("styles: a long submitted name wraps instead of widening the pane")
+  : fail("styles: the success heading needs a wrapping rule for long names");
 
-// succeed() must stay reachable from exactly one place: the res.ok branch.
+// The values must be read while the fields still hold them.
+/function succeed\(\) \{[\s\S]{0,400}?firstNameOf\(fieldValue\("name"\)\)[\s\S]{0,200}?businessNameOf\(fieldValue\("business_name"\)\)[\s\S]{0,120}?form\.reset\(\);/.test(
+  intake
+)
+  ? ok("intake: both values are captured before form.reset()")
+  : fail("intake: the submitted values must be read before form.reset()");
+
+console.log("\n== Audit success screen: it can only follow a real 2xx ==");
 /if \(res\.ok\) \{\s*\n\s*succeed\(\);/.test(intake)
   ? ok("intake: succeed() runs only inside the res.ok branch")
   : fail("intake: the res.ok guard in front of succeed() has changed");
@@ -874,7 +954,26 @@ const succeedCalls = (intake.match(/succeed\(\);/g) || []).length;
 succeedCalls === 1
   ? ok("intake: exactly one succeed() call site, and it is the res.ok branch")
   : fail(`intake: ${succeedCalls} succeed() call sites, expected exactly 1`);
+// The failure path must reach setStatus, never the panel.
+const catchBlock = (intake.match(/\.catch\(function \(err\) \{[\s\S]*?\}\);/) || [""])[0];
+/successPanel/.test(catchBlock)
+  ? fail("intake: the failure path touches the success panel")
+  : ok("intake: the failure path never touches the success panel");
+/setSending\(false\);/.test(catchBlock) && /setStatus\(\s*\n?\s*"err"/.test(catchBlock)
+  ? ok("intake: a failed send restores the controls and shows an error")
+  : fail("intake: the failure path must restore the controls and show an error");
+// Timeout, honeypot, missing endpoint, and unsafe endpoint all return early.
+/if \(trap && trap\.value\) return;/.test(intake)
+  ? ok("intake: a filled spam trap returns before anything is sent")
+  : fail("intake: the spam trap must return before the request");
+/if \(!endpoint\) \{[\s\S]*?setStatus\(\s*\n?\s*"info"[\s\S]*?return;/.test(intake)
+  ? ok("intake: an unconfigured endpoint reports instead of confirming")
+  : fail("intake: an unconfigured endpoint must not reach the panel");
+/timedOut[\s\S]*?ctrl\.abort\(\)/.test(intake) && /REQUEST_TIMEOUT_MS/.test(intake)
+  ? ok("intake: the request still aborts on timeout")
+  : fail("intake: the request timeout has been lost");
 
+console.log("\n== Audit success screen: controls, focus, and progress ==");
 /successPanel\.hidden = false;/.test(intake)
   ? ok("intake: success panel is unhidden on success")
   : fail("intake: success panel is never unhidden");
@@ -895,14 +994,125 @@ retired.length === 0
 /if \(navWrap\) navWrap\.hidden = true;/.test(intake)
   ? ok("intake: the whole step-control row is hidden after success")
   : fail("intake: the step-control row must be hidden after success");
-
-// Behaviour that predates this screen and must survive it.
-/function succeed\(\) \{\s*\n\s*form\.reset\(\);/.test(intake)
+/progressFill\.style\.width = "100%";/.test(intake)
+  ? ok("intake: the progress bar is filled to 100% on success")
+  : fail("intake: the progress bar must reach 100% on success");
+/progressLabel\.textContent = "Submitted";/.test(intake)
+  ? ok('intake: the step counter reads "Submitted" on success')
+  : fail('intake: the step counter must read "Submitted" on success');
+/function succeed\(\)[\s\S]*?form\.reset\(\);/.test(intake)
   ? ok("intake: the form is still reset on success")
   : fail("intake: form.reset() on success has been lost");
-/clearStatus\(\);\s*\n\s*successPanel\.hidden = false;/.test(intake)
+/clearStatus\(\);\s*\n\s*personalise\(/.test(intake)
   ? ok("intake: the old status box is cleared, not left beside the panel")
   : fail("intake: the status box must be cleared when the panel appears");
+/<footer class="wz-foot">/.test(contact)
+  ? ok("contact: the legal footer is still on the page")
+  : fail("contact: the legal footer must survive the success screen");
+
+console.log("\n== Submit button label matches its own markup ==");
+// A failed send restores the button. It used to restore a label the markup
+// never had, silently renaming the control after any error.
+const markupLabel = (contact.match(
+  /<button[^>]*id="btn-submit"[^>]*>([^<]+)<\/button>/
+) || [])[1];
+const restoredLabel = (intake.match(/SUBMIT_IDLE_LABEL = "([^"]+)"/) || [])[1];
+markupLabel && restoredLabel && markupLabel.trim() === restoredLabel
+  ? ok(`intake: the restored idle label matches contact.html ("${restoredLabel}")`)
+  : fail(
+      `intake: restored label ${JSON.stringify(restoredLabel)} does not match the markup ${JSON.stringify(
+        markupLabel && markupLabel.trim()
+      )}`
+    );
+/submitBtn\.textContent = on \? "Sending…" : SUBMIT_IDLE_LABEL;/.test(intake)
+  ? ok("intake: setSending restores the label from that one constant")
+  : fail("intake: setSending must restore SUBMIT_IDLE_LABEL");
+!/Submit application/.test(intake)
+  ? ok('intake: the stale "Submit application" label is gone')
+  : fail('intake: "Submit application" is still in js/intake.js');
+
+console.log("\n== Audit success screen: styling stays inside the palette ==");
+const doneCss = (cssText.match(
+  /\/\* Successful submission[\s\S]*?\n\/\* Slim legal footer/
+) || [""])[0];
+doneCss
+  ? ok("styles: success panel block found")
+  : fail("styles: the success panel style block is missing");
+/\.wz-done\[hidden\]\s*\{\s*display:\s*none/.test(cssText)
+  ? ok("styles: .wz-done[hidden] is display:none")
+  : fail("styles: .wz-done[hidden] must be display:none or it shows before submit");
+/\.wz-nav\[hidden\]\s*\{\s*display:\s*none/.test(cssText)
+  ? ok("styles: .wz-nav[hidden] is display:none")
+  : fail("styles: .wz-nav[hidden] must be display:none or the controls survive success");
+
+// No hard-coded colour anywhere in the panel, base or responsive.
+const doneHex = doneCss.match(/#[0-9a-fA-F]{3,8}\b/g) || [];
+doneHex.length === 0
+  ? ok("styles: success panel uses palette tokens only, no literal hex")
+  : fail(`styles: success panel hard-codes ${doneHex.join(", ")}`);
+const doneColorTokens = [
+  ...new Set((doneCss.match(/var\((--[a-z0-9-]+)\)/g) || []))
+].map((v) => v.slice(4, -1));
+const undeclaredTokens = doneColorTokens.filter(
+  (t) => !new RegExp(`\\n\\s*${t}:`).test(cssText)
+);
+undeclaredTokens.length === 0
+  ? ok(`styles: all ${doneColorTokens.length} tokens the panel uses are declared`)
+  : fail(`styles: success panel uses undeclared token(s): ${undeclaredTokens.join(", ")}`);
+
+// The requested composition: Forge Black left, light right, Burnt Orange join.
+/\.wz-done-main \{[^}]*background:\s*var\(--forge-black\)/.test(doneCss)
+  ? ok("styles: left pane is Forge Black")
+  : fail("styles: left pane must be Forge Black");
+/\.wz-done-main \{[^}]*color:\s*var\(--forge-canvas\)/.test(doneCss)
+  ? ok("styles: left pane type is Warm Canvas")
+  : fail("styles: left pane type must be Warm Canvas");
+/\.wz-done-aside \{[^}]*background:\s*var\(--wz-surface\)/.test(doneCss) &&
+/\.wz-done-aside \{[^}]*color:\s*var\(--wz-ink\)/.test(doneCss)
+  ? ok("styles: right pane is the light ground with Forge Black type")
+  : fail("styles: right pane must be light with Forge Black type");
+/\.wz-done-aside::before \{[^}]*background:\s*var\(--gold\)/.test(doneCss)
+  ? ok("styles: a Burnt Orange rule joins the two panes")
+  : fail("styles: the two panes need a Burnt Orange joining rule");
+
+// Nothing trendy: no gradient, glass, glow, or external art.
+const DECORATION = [
+  [/gradient/i, "a gradient"],
+  [/backdrop-filter/i, "a glass effect"],
+  [/text-shadow|drop-shadow|box-shadow:\s*0 0 /i, "a glow"],
+  [/url\(/i, "an external asset"]
+].filter(([re]) => re.test(doneCss));
+DECORATION.length === 0
+  ? ok("styles: success panel adds no gradient, glass, glow, or external asset")
+  : fail(`styles: success panel uses ${DECORATION.map(([, n]) => n).join(", ")}`);
+
+// One entrance, opacity and transform only, off for reduced motion.
+const doneKeyframes = (cssText.match(/@keyframes wz-done-in \{[\s\S]*?\n\}/) || [""])[0];
+const animatedProps = [
+  ...new Set((doneKeyframes.match(/^\s{4}([a-z-]+):/gm) || []))
+].map((p) => p.trim().replace(":", ""));
+doneKeyframes &&
+animatedProps.length > 0 &&
+animatedProps.every((p) => p === "opacity" || p === "transform")
+  ? ok(`styles: the entrance animates only ${animatedProps.join(" and ")}`)
+  : fail(
+      `styles: the entrance must animate opacity/transform only, found ${animatedProps.join(", ") || "nothing"}`
+    );
+/@media \(prefers-reduced-motion: reduce\) \{[^}]*\.wz-done \{\s*animation: none/.test(
+  cssText.replace(/\.wz-step\.is-entering,\s*\n\s*/g, "")
+) ||
+/\.wz-step\.is-entering,\s*\n\s*\.wz-done \{\s*\n\s*animation: none !important;/.test(cssText)
+  ? ok("styles: the entrance is switched off under prefers-reduced-motion")
+  : fail("styles: the entrance must be disabled for reduced-motion users");
+
+// The stacked layout, and only with tokens.
+const doneMobile = (doneCss.match(/@media \(max-width: 860px\) \{[\s\S]*?\n\}\n/) || [""])[0];
+/\.wz-done \{[^}]*grid-template-columns:\s*1fr/.test(doneMobile)
+  ? ok("styles: the two panes stack on narrow screens")
+  : fail("styles: the panes must stack on narrow screens");
+/\.wz-done-actions \.btn \{[^}]*width:\s*100%/.test(doneCss)
+  ? ok("styles: the primary button is full width")
+  : fail("styles: the primary button must be full width");
 
 console.log("\n== Public copy: no em or en dashes ==");
 // Applies to the files a visitor's browser actually loads: every page, the

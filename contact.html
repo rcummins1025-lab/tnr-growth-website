@@ -192,36 +192,53 @@
 
           <!-- Successful submission only. This panel ships hidden and is
                unhidden by js/intake.js ONLY after a real 2xx response from the
-               endpoint (see succeed()). A failed, blocked, unconfigured, or
-               spam-trapped submit never reaches it, so nothing here can be
-               mistaken for a confirmation that did not happen. -->
-          <section id="audit-success" class="wz-done" hidden aria-labelledby="audit-success-title">
-            <span class="wz-done-mark" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
-            </span>
-            <h2 class="wz-done-title" id="audit-success-title" tabindex="-1">Your audit request is in.</h2>
-            <p class="wz-done-lede">
-              We&rsquo;ll review your answers and take a look at your current
-              website. Expect a personal reply by email within two business
-              days.
-            </p>
-            <div class="wz-done-next">
+               endpoint (see succeed()). A failed, timed out, blocked,
+               unconfigured, or spam-trapped submit never reaches it, so
+               nothing here can be mistaken for a confirmation that did not
+               happen.
+
+               role="status" gives the section status semantics. aria-live is
+               deliberately "off": focus moves to the heading instead, and a
+               polite live region here would read the whole panel out first and
+               then repeat the heading. ARIA allows an author aria-live value
+               to override the implicit "polite" of role="status".
+
+               The heading and the supporting line carry the no-name and
+               no-business fallback copy as static text. Personalisation only
+               ever rewrites them through textContent, never innerHTML. -->
+          <section
+            id="audit-success"
+            class="wz-done"
+            hidden
+            role="status"
+            aria-live="off"
+            aria-labelledby="audit-success-title"
+          >
+            <div class="wz-done-main">
+              <p class="wz-done-label">Audit received</p>
+              <span class="wz-done-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
+              </span>
+              <h2 class="wz-done-title" id="audit-success-title" tabindex="-1">Your audit request is in.</h2>
+              <p class="wz-done-lede" id="audit-success-lede">We have your Growth System Audit request. Ryan will review your answers and look at how your current website and follow-up process connect.</p>
+              <p class="wz-done-timing">Expect a personal reply by email within two business days.</p>
+            </div>
+
+            <div class="wz-done-aside">
               <h3 class="wz-done-next-title">What happens next</h3>
               <!-- list-style is removed for the numbered badges, so role="list"
                    keeps the list semantics browsers drop when it is. -->
               <ol class="wz-done-steps" role="list">
                 <li>We review your answers.</li>
-                <li>We look for gaps across discovery, lead handling, and customer follow-up.</li>
+                <li>We examine the gaps across discovery, lead handling, and customer follow-up.</li>
                 <li>Ryan replies with the clearest next step.</li>
               </ol>
+              <p class="wz-done-reassure">No automated recommendation. No generic score. A real person reviews your request.</p>
+              <div class="wz-done-actions">
+                <a class="btn btn-primary btn-lg" href="index.html">Return to website</a>
+                <p class="wz-done-contact">Need to add something? Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a></p>
+              </div>
             </div>
-            <div class="wz-done-actions">
-              <a class="btn btn-primary btn-lg" href="index.html">Return to website</a>
-            </div>
-            <p class="wz-done-contact">
-              Anything to add? Email
-              <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>.
-            </p>
           </section>
 
           <div class="wz-nav form-nav">

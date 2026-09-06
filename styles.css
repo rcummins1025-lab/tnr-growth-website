@@ -3599,22 +3599,26 @@ h4 {
 }
 
 /* Successful submission ---------------------------------------------------
-   The confirmation panel that replaces the question stage once the endpoint
-   has actually accepted the submission. It paints only with the wizard tokens
-   above, so a palette change still reaches it. */
+   The two-column confirmation that replaces the question stage once the
+   endpoint has actually accepted the application. Left pane is Forge Black
+   with Warm Canvas type; right pane is white with Forge Black type; a Burnt
+   Orange rule joins them. Every value comes from the wizard tokens or the
+   Forge palette above, so a palette change still reaches it. */
 .wz-done {
   width: 100%;
-  max-width: 560px;
+  max-width: 940px;
   margin: 0 auto;
-  padding: 40px 32px 34px;
-  background: var(--wz-surface);
+  display: grid;
+  grid-template-columns: 1.04fr 0.96fr;
   border: 1px solid var(--wz-line);
   border-radius: var(--wz-radius);
-  box-shadow: var(--shadow-sm);
-  text-align: center;
+  /* Clips both panes to the radius so the two grounds meet cleanly. */
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+  text-align: left;
 }
-/* Same explicit opt-out .form-step[hidden] and .btn[hidden] need: a display
-   value set here would otherwise beat the UA's [hidden] rule and leave the
+/* Same explicit opt-out .form-step[hidden] and .btn[hidden] need: the grid
+   display above would otherwise beat the UA's [hidden] rule and leave the
    confirmation on screen before anything was submitted. */
 .wz-done[hidden] {
   display: none;
@@ -3624,21 +3628,39 @@ h4 {
 .wz-nav[hidden] {
   display: none;
 }
+
+/* Left pane: the confirmation itself, on Forge Black. */
+.wz-done-main {
+  display: flex;
+  flex-direction: column;
+  background: var(--forge-black);
+  color: var(--forge-canvas);
+  padding: 48px 44px 46px;
+}
+.wz-done-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--forge-orange-soft);
+  margin: 0 0 26px;
+}
 .wz-done-mark {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 62px;
-  height: 62px;
-  margin: 0 auto 22px;
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  margin: 0 0 24px;
   border-radius: 50%;
-  background: var(--gold-soft);
+  background: var(--forge-black-2);
   border: 1px solid var(--gold);
-  color: var(--gold-text);
+  color: var(--gold);
 }
 .wz-done-mark svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.4;
@@ -3646,55 +3668,85 @@ h4 {
   stroke-linejoin: round;
 }
 .wz-done-title {
-  font-size: clamp(1.45rem, 1.15rem + 1.3vw, 2rem);
-  line-height: 1.16;
-  letter-spacing: -0.025em;
-  color: var(--wz-ink);
-  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 1.25rem + 1.7vw, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--forge-canvas);
+  margin: 0 0 16px;
+  /* A submitted name can be one very long token. Let it break rather than
+     push the pane wider than its column. */
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .wz-done-title:focus {
   outline: none;
 }
 .wz-done-title:focus-visible {
-  outline: 3px solid var(--ring);
+  outline: 3px solid var(--forge-orange-soft);
   outline-offset: 6px;
   border-radius: 8px;
 }
 .wz-done-lede {
   font-size: 1rem;
-  line-height: 1.6;
-  color: var(--wz-muted);
-  margin: 0 auto 26px;
-  max-width: 32em;
+  line-height: 1.62;
+  color: var(--forge-on-dark);
+  margin: 0 0 22px;
+  overflow-wrap: break-word;
 }
-.wz-done-next {
-  text-align: left;
-  border-top: 1px solid var(--wz-line);
-  padding-top: 22px;
-  margin: 0 0 26px;
+.wz-done-biz {
+  font-weight: 700;
+  color: var(--forge-canvas);
+}
+.wz-done-timing {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--forge-on-dark-muted);
+  border-top: 1px solid var(--forge-line-dark);
+  padding-top: 18px;
+  margin: auto 0 0;
+}
+
+/* Right pane: what happens next, on white. */
+.wz-done-aside {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--wz-surface);
+  color: var(--wz-ink);
+  padding: 48px 44px 46px;
+}
+/* The Burnt Orange rule that joins the two panes. Decorative only. */
+.wz-done-aside::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--gold);
 }
 .wz-done-next-title {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--gold-text);
-  margin: 0 0 14px;
+  margin: 0 0 22px;
 }
 .wz-done-steps {
   list-style: none;
   counter-reset: wz-done-step;
   display: grid;
-  gap: 12px;
-  margin: 0;
+  gap: 16px;
+  margin: 0 0 24px;
   padding: 0;
 }
 .wz-done-steps li {
   counter-increment: wz-done-step;
   position: relative;
-  padding-left: 38px;
-  min-height: 26px;
-  font-size: 0.95rem;
+  padding-left: 42px;
+  min-height: 28px;
+  font-size: 0.97rem;
   line-height: 1.5;
   color: var(--wz-ink);
 }
@@ -3703,45 +3755,94 @@ h4 {
   position: absolute;
   left: 0;
   top: 0;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   background: var(--wz-select-bg);
   border: 1px solid var(--wz-line-strong);
   color: var(--wz-ink);
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 800;
 }
+.wz-done-reassure {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--wz-muted);
+  border-top: 1px solid var(--wz-line);
+  padding-top: 18px;
+  margin: 0 0 24px;
+}
 .wz-done-actions {
-  margin: 0 0 16px;
+  margin: auto 0 0;
 }
 .wz-done-actions .btn {
   width: 100%;
-  max-width: 300px;
 }
 .wz-done-contact {
   font-size: 0.86rem;
   line-height: 1.5;
   color: var(--wz-muted);
-  margin: 0;
+  margin: 14px 0 0;
 }
 .wz-done-contact a {
   color: var(--gold-text);
+  overflow-wrap: anywhere;
 }
 
-@media (max-width: 560px) {
+/* A single restrained entrance. Opacity and transform only, and switched off
+   entirely under a reduced-motion preference (see the query below). */
+.wz-done {
+  animation: wz-done-in 0.4s var(--ease) both;
+}
+@keyframes wz-done-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 860px) {
   .wz-done {
-    padding: 32px 20px 28px;
+    /* Stack the two panes: confirmation first, next steps under it. */
+    grid-template-columns: 1fr;
+    max-width: 560px;
+  }
+  .wz-done-main,
+  .wz-done-aside {
+    padding: 36px 28px 32px;
+  }
+  /* The joining rule turns horizontal and sits on the seam. */
+  .wz-done-aside::before {
+    right: 0;
+    bottom: auto;
+    width: auto;
+    height: 5px;
+  }
+  .wz-done-timing {
+    margin-top: 4px;
+  }
+}
+@media (max-width: 560px) {
+  .wz-done-main,
+  .wz-done-aside {
+    padding: 30px 20px 28px;
+  }
+  .wz-done-label {
+    margin-bottom: 20px;
   }
   .wz-done-mark {
-    width: 54px;
-    height: 54px;
-    margin-bottom: 18px;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
   }
-  .wz-done-actions .btn {
-    max-width: none;
+  .wz-done-steps li {
+    padding-left: 38px;
   }
 }
 
@@ -3855,7 +3956,8 @@ h4 {
   .wz-state {
     transition: none !important;
   }
-  .wz-step.is-entering {
+  .wz-step.is-entering,
+  .wz-done {
     animation: none !important;
   }
 }
