@@ -1,116 +1,164 @@
-# T&R Growth LLC — Public Website
+# ServiceMomentum — website (operated by T&R Growth LLC)
 
-A small, static, dependency-free website for **T&R Growth LLC**, a United
-States performance marketing and lead-response agency for local service
-businesses. The site exists to publicly represent the business and support
-standard business/compliance verification.
+Marketing/acquisition website for **ServiceMomentum**, a connected
+customer-growth system for established local-service businesses. ServiceMomentum
+is the customer-facing product name; **T&R Growth LLC** is the company that
+designs, installs, operates, and supports it.
 
-- **Legal business name:** T&R Growth LLC
-- **Intended domain:** https://tnrgrowthagency.com
-- **Contact email:** hello@tnrgrowthagency.com
-- **Region:** United States
+> **ServiceMomentum is a WORKING product name — not legally finalized.** Domain
+> and trademark checks are required before public launch. See
+> [`docs/BRAND.md`](docs/BRAND.md) and [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md).
 
-## Pages
+- **Operational domain:** https://tnrgrowthagency.com (`CNAME` = `tnrgrowthagency.com`)
+- **Email:** hello@tnrgrowthagency.com
+- **Positioning:** _Turn your website and past customers into a repeatable growth system._
+- **Tagline:** _From first search to next service._
 
-| File           | Page             |
-| -------------- | ---------------- |
-| `index.html`   | Home             |
-| `privacy.html` | Privacy Policy   |
-| `terms.html`   | Terms of Service |
-| `contact.html` | Contact          |
-| `styles.css`   | Shared styles    |
-| `favicon.svg`  | Browser-tab icon |
+## Stack
 
-## Brand assets
+Plain static **HTML + CSS**, deployed as-is from the repo root via **GitHub Pages**.
+The only JavaScript is `js/intake.js` (the multi-step audit form),
+`js/site-config.js` (its config), and `js/motion.js` (the scroll/entry motion
+layer) — self-contained, no libraries, no analytics, no tracking, no cookies. The `package.json` scripts are **dev tooling
+only** (validation + brand rename); they are not required to build or serve.
 
-The logo system is hand-built, production-quality SVG (semantic, lightweight,
-no embedded raster images, no external fonts, no scripts). The wordmark uses a
-bold system sans; the ampersand-and-upward-arrow is a single custom vector
-symbol in refined gold on deep navy.
+## Structure
 
-| File                                   | Use                                    |
-| -------------------------------------- | -------------------------------------- |
-| `assets/logo-stacked-light.svg`        | Full stacked logo, for light/white backgrounds |
-| `assets/logo-stacked-reversed.svg`     | Full stacked logo, for dark backgrounds |
-| `assets/logo-horizontal-light.svg`     | Compact horizontal lockup, light backgrounds |
-| `assets/logo-horizontal-reversed.svg`  | Compact horizontal lockup, dark backgrounds (used in the site nav/footer) |
-| `assets/brandmark.svg`                 | Square brand mark (symbol on a navy tile) |
-| `favicon.svg`                          | Favicon (square brand mark, tab icon)  |
+| Path | Purpose |
+| --- | --- |
+| `index.html` | Homepage (hero, problem, lifecycle, what’s included, system diagram, Gavin pilot, who it’s for, founding offer, FAQ, final CTA) |
+| `contact.html` | "Growth System Audit" multi-step application form |
+| `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages (SMS program wording preserved) |
+| `styles.css` | Forge palette — **all** brand tokens in the `:root` block at the top |
+| `js/site-config.js` | **One place** to set the form `formEndpoint` / `formEndpointMode` |
+| `js/intake.js` | Multi-step form logic + submission |
+| `js/motion.js` | Motion layer (IntersectionObserver only; reduced-motion aware) |
+| `brand.config.json` | **Single source of truth** for the working brand |
+| `scripts/apply-brand.mjs` | Rename the product name in one command |
+| `scripts/brand-lib.mjs` | Shared brand helpers (name slug, approved mark palette) |
+| `scripts/validate.mjs` | Focused checks / tests |
+| `scripts/mock-endpoint.mjs` | Dev-only local stand-in for the lead endpoint |
+| `assets/mark*.svg` | Brand symbol — primary, one-colour, reversed (**provisional**) |
+| `assets/` | T&R Growth logos, favicon, OG image |
+| `robots.txt`, `sitemap.xml` | SEO |
+| `docs/` | Brand, contact-form, launch checklist |
+| `CNAME` | GitHub Pages custom domain (do not change) |
 
-Palette: deep navy `#13294d` / charcoal foundation `#0a1424`, refined gold
-`#d4a537`, electric blue `#4f8cff`, subtle mint `#5ee0c0`.
+## Local development
 
-## What this site does and does not do
-
-- Plain static HTML and CSS. **No** JavaScript, build step, or dependencies.
-- **No** contact forms, cookies, analytics, tracking, advertising, or external
-  integrations.
-- **No** SMS signup or customer texting.
-- The only way to contact the business is the `mailto:` email link.
-- Responsive from small phones (320px) to desktop; respects
-  `prefers-reduced-motion`; keyboard-navigable with visible focus states.
-
-## Local preview
-
-Because the site is plain static files, you can simply open `index.html` in a
-browser. To preview it the way a web server would (recommended, so relative
-links behave identically), run a local server from the project folder:
+No build step. Serve the folder and open it:
 
 ```bash
 python3 -m http.server 8000
+# or: npm run serve
 ```
 
-Then visit <http://localhost:8000> in your browser. Stop the server with
-`Ctrl+C`.
+Then visit <http://localhost:8000>. Check desktop, tablet, and phone widths
+(320 / 390). The contact form needs JavaScript (served files run it directly).
 
-Check both a desktop-width and a mobile-width window (use your browser's device
-toolbar / responsive mode) to confirm the layout.
+## Testing
 
-## Future deployment: GitHub Pages
+```bash
+npm run validate      # or: node scripts/validate.mjs
+```
 
-This site is ready to deploy on GitHub Pages when you choose to. Nothing here
-pushes, deploys, or configures DNS automatically — these are manual steps for
-later.
+Checks structure, internal links + anchors, escaping, email consistency, JSON-LD
+validity, absence of fake rating markup, the Gavin-pilot claim guardrails, the
+SEO assets + `CNAME`, the brand symbol (present, drawn not embedded, approved
+colours, letter-free, labelled provisional, no stale name in any casing), the
+form's submission safeguards (the endpoint matches the approved one, a valid
+`formEndpointMode`, no endpoint mirrored in `brand.config.json`, no focus steal
+on load), and the
+motion layer's reduced-motion and fail-open guarantees. Exits non-zero on failure.
 
-> **Current branch state:** This repository's work lives on the review branch
-> `tnr-minimal-compliance-site`; there is no `main` branch yet. After review and
-> immediately before publication, rename the approved branch to `main`, then add
-> the remote and push. Do not run these steps until the site has been reviewed
-> and you are ready to publish.
+## Change the product name
 
-1. Once the branch is approved, rename it to `main`:
+```bash
+node scripts/apply-brand.mjs --check          # dry run
+node scripts/apply-brand.mjs --to "NewName"   # rename everywhere
+```
 
-   ```bash
-   git branch -M main
-   ```
+The rename covers three name-derived forms — the name, its lowercase slug, and
+its uppercase wordmark (`assets/og-image.svg`) — so nothing is left behind. The
+brand symbol carries no letters, so a rename never touches artwork. See
+[`docs/BRAND.md`](docs/BRAND.md).
 
-2. Create a new GitHub repository, then add the remote and push `main`:
+## Brand symbol
 
-   ```bash
-   git remote add origin https://github.com/<your-account>/<your-repo>.git
-   git push -u origin main
-   ```
+> **The symbol is PROVISIONAL** — approved as a working mark only, until
+> "ServiceMomentum" clears trademark and domain checks. Do not register or use it
+> externally before then.
 
-3. In the repository on GitHub, open **Settings → Pages**.
-4. Under **Build and deployment**, set **Source** to *Deploy from a branch*,
-   choose the `main` branch and the `/ (root)` folder, then **Save**.
-5. GitHub will publish the site at
-   `https://<your-account>.github.io/<your-repo>/`.
+An asymmetric four-stage **open loop**: an organic, varying-radius pathway in
+Forge Black `#171A1F` carrying three stage nodes, ending inside a single Burnt
+Orange `#D9653B` endpoint. Every stage sits **on** the path — it
+starts inside stage 1 and terminates inside the accent — so nothing floats free,
+and the loop never closes. It is a spline rather than a circular arc, so it does
+not read as a loading ring. Hand-constructed SVG geometry — the full polar table
+is written out in each file's `<desc>` — with no traced or embedded raster art,
+no gradients, shadows, glow, arrows, or `<text>`. Variants:
+`assets/mark.svg` (primary), `assets/mark-mono.svg` (one colour, `currentColor`),
+`assets/mark-reversed.svg` (dark surfaces), and `favicon.svg` (reversed on a Forge
+Black tile, optically weighted for 16px). The product wordmark next to it is always
+HTML text, never baked into the artwork. See [`docs/BRAND.md`](docs/BRAND.md).
 
-### Using the custom domain (optional, later)
+## Motion
 
-To serve the site at `tnrgrowthagency.com`:
+`js/motion.js` adds entry and scroll motion that explains the system: the
+connected-system path traces through its seven stages, the four lifecycle steps
+arrive in order, the redacted dashboard sample walks New → Booked → Done → Due
+(labelled as a sample; never presented as live data), and the case-study
+timeline grows as milestones are reached. It is `IntersectionObserver` only —
+no libraries, no scroll listeners, no parallax, no autoplay media, and only
+`opacity`/`transform` change, so there is no layout shift.
 
-1. In **Settings → Pages → Custom domain**, enter `tnrgrowthagency.com` and
-   save. GitHub will add a `CNAME` file to the repository.
-2. At your domain registrar / DNS provider, point the domain to GitHub Pages
-   per GitHub's current DNS instructions (an `ALIAS`/`A` records for the apex
-   domain and/or a `CNAME` for `www`).
-3. Once DNS resolves, enable **Enforce HTTPS** in the Pages settings.
+Motion is gated on `<html class="motion">`, added by a small inline `<head>`
+script **only** when JavaScript runs and `prefers-reduced-motion` is not
+`reduce`. If `js/motion.js` never loads, that script removes the class again,
+so no content can be stranded behind an animation.
 
-> DNS and domain changes are intentionally **not** performed by this project and
-> should be done manually when you are ready.
+## Contact form
 
-## License / ownership
+The audit form posts only to `js/site-config.js` → `formEndpoint`, which is the
+**single source of truth** — the endpoint is deliberately not mirrored anywhere
+else. **The dedicated Formspree endpoint is wired** (`formEndpointMode:
+"formspree"`), and one real local end-to-end submission returned an HTTP success
+response.
+
+**Still to confirm (Ryan):** dashboard receipt and delivery to
+`hello@tnrgrowthagency.com`. **Further live submissions require explicit
+approval** — use the local mock for everything else, and when a mock test is
+finished restore the **real endpoint**, never `""`.
+
+The path around it is finished and tested: `formEndpointMode` picks the encoding
+(`json` or `formspree`), submissions carry non-reserved `meta_*` metadata plus
+`_replyto`/`_subject` for a usable inbox, a hidden `_gotcha` spam trap stops bots
+without transmitting anything, the endpoint is refused unless it is https (and
+never the tenant-scoped client-booking backend), requests time out after 20s
+instead of hanging, and a provider's own error message is shown to the visitor.
+
+Exercise all of it without wiring anything real:
+
+```bash
+npm run mock          # local stand-in on http://localhost:8125/f/test
+```
+
+See [`docs/CONTACT-FORM.md`](docs/CONTACT-FORM.md).
+
+## Deployment (GitHub Pages, from `main` / root)
+
+The site is served statically from `main`. Nothing here pushes, deploys, or
+changes DNS automatically.
+
+1. Open a PR from your working branch into `main`; review.
+2. Merge to `main`; GitHub Pages rebuilds automatically.
+3. In **Settings → Pages**, source is _Deploy from a branch_ → `main` → `/ (root)`.
+4. Verify at https://tnrgrowthagency.com and the `github.io` URL.
+
+Custom domain and DNS are already configured for `tnrgrowthagency.com` — **do not
+change them**. Resolve every item in [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md)
+before deploying the rebrand.
+
+## Ownership
 
 Content and branding are owned by T&R Growth LLC.

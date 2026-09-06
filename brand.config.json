@@ -1,0 +1,43 @@
+{
+  "$comment": "SINGLE SOURCE OF TRUTH for the working product brand. The product name is NOT legally finalized — domain + trademark checks are still required before public launch. To rename the product, edit productName here and run: node scripts/apply-brand.mjs --from \"ServiceMomentum\" --to \"NewName\"  (see docs/BRAND.md). The lowercase slug and uppercase wordmark are derived and rewritten by the same command. The symbol (productMark) carries no letters, so a rename never touches it.",
+  "productName": "ServiceMomentum",
+  "productMark": {
+    "status": "PROVISIONAL — approved as a working symbol only. It stays provisional until the ServiceMomentum name clears trademark and domain checks; final adoption, any registration, and any external use wait on that clearance.",
+    "concept": "An asymmetric four-stage open loop: an organic, varying-radius pathway that carries all four stages on it — the path starts inside stage 1 and ends inside the endpoint stage — and never closes.",
+    "lettersFree": true,
+    "lettersFreeNote": "The symbol carries no letterforms — it does not depend on S, M, or any other initial — so renaming the product never touches the artwork.",
+    "assets": [
+      "assets/mark.svg",
+      "assets/mark-mono.svg",
+      "assets/mark-reversed.svg",
+      "favicon.svg"
+    ],
+    "rules": "Drawn geometry only. No gradients, shadows, glow, arrows, houses, tools, AI motifs, or raster art — and the product wordmark is never baked into the artwork; it stays HTML text in .brand-name. The pathway is a spline, not a circular arc, so the mark does not read as a loading or status ring.",
+    "forgeBlack": "#171A1F",
+    "burntOrange": "#D9653B",
+    "reversedNeutral": "#FFFFFF"
+  },
+  "productTagline": "From first search to next service.",
+  "positioningStatement": "Turn your website and past customers into a repeatable growth system.",
+  "supportingStatement": "We build local-service websites connected to lead tracking, review generation, customer management, and recurring-service follow-up.",
+  "poweredBy": "Powered by T&R Growth",
+  "parentCompanyName": "T&R Growth LLC",
+  "parentCompanyShort": "T&R Growth",
+  "domain": "tnrgrowthagency.com",
+  "siteUrl": "https://tnrgrowthagency.com",
+  "email": "hello@tnrgrowthagency.com",
+  "smsOperationalNumber": "+1 (978) 800-2468",
+  "region": "United States",
+  "endpointConfigNote": "The lead-form endpoint is NOT mirrored here. js/site-config.js is the single source of truth for formEndpoint and formEndpointMode — two copies drifted once and will again. scripts/validate.mjs fails if this file reintroduces an endpoint field.",
+  "brandStatus": "WORKING NAME — not legally finalized. Domain availability and trademark clearance for the product name are still required before any public launch or product-domain purchase.",
+  "theme": {
+    "$comment": "Approved FORGE palette. Mirrored as --forge-* custom properties at the top of styles.css, which is the single source of truth for the site. Change both together.",
+    "forgeBlack": "#171A1F",
+    "warmCanvas": "#F4F0E6",
+    "burntOrange": "#D9653B",
+    "steelBlueGray": "#5E7184",
+    "concrete": "#D8D6CF",
+    "white": "#FFFFFF",
+    "retired": "Service Navy and Momentum Amber are retired. scripts/validate.mjs holds the exact retired values in scripts/brand-lib.mjs and fails if any of them return to a shipped file."
+  }
+}

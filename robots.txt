@@ -1,0 +1,6 @@
+# ServiceMomentum — operated by T&R Growth LLC
+# Allow all reputable crawlers. Nothing here is private.
+User-agent: *
+Allow: /
+
+Sitemap: https://tnrgrowthagency.com/sitemap.xml

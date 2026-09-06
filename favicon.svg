@@ -1,9 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="T&amp;R Growth">
-  <title>T&amp;R Growth</title>
-  <rect width="64" height="64" rx="13" fill="#0e2140"/>
-  <g transform="translate(32,32) scale(0.31) translate(-72,-80)">
-    <path fill="none" stroke="#d4a537" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"
-      d="M 86 104 C 86 122, 58 130, 44 116 C 26 98, 42 74, 60 70 C 74 67, 74 46, 60 42 C 48 38, 36 48, 42 64 C 50 86, 82 100, 100 66"/>
-    <path fill="#d4a537" d="M 84 54 L 116 44 L 108 76 Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="favicon-title" fill="none">
+  <title id="favicon-title">Open service loop mark on Forge Black (provisional)</title>
+  <desc>PROVISIONAL working mark, reversed on a Forge Black tile. Identical drawn
+  geometry to assets/mark.svg: the same organic open-loop pathway with its four
+  stages on it, scaled to 0.88 to sit inside the tile. No raster art is embedded
+  or traced, and nothing here is a letterform.</desc>
+  <rect width="64" height="64" rx="14" fill="#171A1F"/>
+  <g transform="translate(32,32) scale(0.88) translate(-32,-32)" fill="none">
+    <path d="M41.42 47.64C40.14 48.33 36.82 51.13 33.73 51.77C30.65 52.41 25.85 52.28 22.92 51.5C20 50.73 18.06 49.12 16.19 47.11C14.31 45.1 12.47 42.35 11.67 39.43C10.87 36.52 10.73 32.69 11.38 29.61C12.02 26.52 13.41 23.39 15.53 20.94C17.65 18.5 21.47 16.15 24.12 14.95C26.77 13.75 29.27 13.8 31.42 13.72C33.58 13.65 34.9 13.84 37.07 14.52C39.23 15.2 42.39 16.53 44.42 17.83C46.44 19.12 47.86 20.66 49.23 22.29C50.6 23.92 52.06 26.73 52.63 27.62" stroke="#FFFFFF" stroke-width="6.4" stroke-linecap="round"/>
+    <circle cx="41.42" cy="47.64" r="6.0" fill="#FFFFFF"/>
+    <circle cx="11.67" cy="39.43" r="6.9" fill="#FFFFFF"/>
+    <circle cx="37.07" cy="14.52" r="5.9" fill="#FFFFFF"/>
+    <circle cx="52.63" cy="27.62" r="6.6" fill="#D9653B"/>
   </g>
 </svg>

@@ -3,283 +3,443 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>T&amp;R Growth LLC — Turn Local Demand Into Booked Work</title>
+    <title>ServiceMomentum | Turn your website and past customers into a repeatable growth system</title>
     <meta
       name="description"
-      content="T&amp;R Growth LLC is a U.S. performance marketing and lead-response agency that helps local service businesses capture more inquiries and respond to them fast."
+      content="ServiceMomentum, by T&amp;R Growth, builds local-service websites connected to lead tracking, review generation, customer management, and recurring-service follow-up. From first search to next service."
     />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#0a1424" />
+    <meta name="theme-color" content="#171A1F" />
     <link rel="canonical" href="https://tnrgrowthagency.com/" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
+
+    <!-- Motion gate. Adds the hook ONLY when JS runs and the visitor has not
+         asked for reduced motion; drops it again if js/motion.js never loads,
+         so nothing can be left hidden behind an animation. -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        var mq = window.matchMedia
+          ? window.matchMedia("(prefers-reduced-motion: reduce)")
+          : null;
+        if (mq ? mq.matches : false) return;
+        d.classList.add("motion");
+        setTimeout(function () {
+          if (d.getAttribute("data-motion-ready") !== "1")
+            d.classList.remove("motion");
+        }, 2500);
+      })();
+    </script>
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ServiceMomentum" />
+    <meta property="og:title" content="ServiceMomentum | A connected customer-growth system for local-service businesses" />
+    <meta property="og:description" content="Websites connected to lead tracking, review generation, customer management, and recurring-service follow-up. From first search to next service. Powered by T&amp;R Growth." />
+    <meta property="og:url" content="https://tnrgrowthagency.com/" />
+    <meta property="og:image" content="https://tnrgrowthagency.com/assets/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ServiceMomentum | From first search to next service" />
+    <meta name="twitter:description" content="A connected customer-growth system for local-service businesses. Powered by T&amp;R Growth." />
+    <meta name="twitter:image" content="https://tnrgrowthagency.com/assets/og-image.svg" />
+
+    <!-- Organization structured data for T&amp;R Growth LLC (accurate; no reviews/ratings) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "T\u0026R Growth LLC",
+        "alternateName": "ServiceMomentum",
+        "url": "https://tnrgrowthagency.com/",
+        "email": "hello@tnrgrowthagency.com",
+        "logo": "https://tnrgrowthagency.com/assets/logo-horizontal-light.svg",
+        "description": "T\u0026R Growth LLC designs, installs, and operates ServiceMomentum, a connected customer-growth system for established local-service businesses in the United States.",
+        "areaServed": "US",
+        "slogan": "From first search to next service."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ServiceMomentum",
+        "url": "https://tnrgrowthagency.com/",
+        "publisher": { "@type": "Organization", "name": "T\u0026R Growth LLC" }
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
 
     <header class="site-header">
       <div class="container nav">
-        <a class="nav-brand" href="index.html" aria-label="T&amp;R Growth — home">
-          <img src="assets/logo-horizontal-reversed.svg" alt="T&amp;R Growth" />
+        <a class="nav-brand" href="index.html" aria-label="ServiceMomentum home">
+          <span class="wordmark"><img class="brand-mark" src="assets/mark.svg" width="38" height="38" alt="" aria-hidden="true" /><span class="brand-name" data-brand="product">ServiceMomentum</span></span>
+          <span class="brand-sub">by T&amp;R Growth</span>
         </a>
-        <ul class="nav-links">
-          <li><a href="index.html" aria-current="page">Home</a></li>
-          <li><a href="index.html#services">What we do</a></li>
-          <li><a href="index.html#process">How it works</a></li>
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+          <span class="bars" aria-hidden="true"></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#system">The System</a></li>
+          <li><a href="#case-study">Working System</a></li>
+          <li><a href="#fit">Who It&rsquo;s For</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
-        <a class="btn btn-primary btn-sm nav-cta" href="mailto:hello@tnrgrowthagency.com"
-          >Get in touch</a
-        >
+        <a class="btn btn-primary btn-sm nav-cta" href="contact.html">Start your growth audit</a>
       </div>
     </header>
 
     <main id="main">
-      <!-- ============ HERO ============ -->
-      <section class="hero container">
-        <div class="hero-grid">
-          <div>
-            <p class="eyebrow rise">Growth operating system</p>
-            <h1 class="rise rise-2">
-              Turn local demand into <span class="accent">booked work</span>.
-            </h1>
-            <p class="hero-lead rise rise-2">
-              T&amp;R Growth LLC helps U.S. local service businesses capture more
-              inquiries and respond to them fast — so the demand you generate
-              becomes booked opportunities instead of missed calls.
+      <!-- ============================ HERO ============================ -->
+      <section class="hero-v3">
+        <div class="container">
+          <div class="hero-copy">
+            <p class="eyebrow">Customer growth system for local service businesses</p>
+            <h1>Get found. Get booked. <span class="amber">Bring customers back.</span></h1>
+            <p class="hero-sub">
+              T&amp;R Growth connects your website, lead pipeline, customer
+              records, reviews, and next-service follow-up into one system,
+              installed and run for you, not handed over as software.
             </p>
-            <div class="hero-actions rise rise-3">
-              <a class="btn btn-primary" href="mailto:hello@tnrgrowthagency.com">
-                Get in touch
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-              <a class="btn btn-ghost" href="#process">See how it works</a>
+            <p class="hero-tagline">From first search to next service.</p>
+            <div class="hero-actions-v3">
+              <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
+              <a class="btn btn-outline-light btn-lg" href="#how">See how the system works</a>
             </div>
-            <p class="hero-note rise rise-3">
-              Every engagement is arranged directly with the business owner or
-              their team.
-            </p>
+            <p class="hero-note">Built by a hands-on team &middot; no guaranteed outcomes, just a system we install and stand behind.</p>
           </div>
 
-          <!-- Visual explanation: demand → capture → response → booked -->
-          <div class="os-card rise rise-3" aria-label="How a lead moves through the system">
-            <div class="os-card-title"><span class="os-dot"></span> Lead pipeline</div>
-            <div class="flow">
-              <div class="flow-node">
-                <span class="flow-ico ico-blue">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.3"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg>
-                </span>
-                <span class="flow-txt"><strong>Ads &amp; demand</strong><span>Reach nearby buyers who are searching</span></span>
+          <!-- Layered composition: public site -> private pipeline -> due for
+               service, tied together by the amber pathway. Every panel is drawn
+               and deliberately empty of real records. -->
+          <div class="stack" aria-hidden="true">
+            <svg class="stack-path" viewBox="0 0 560 460" preserveAspectRatio="none">
+              <path d="M120 150 C 260 150, 250 250, 380 250" />
+              <path d="M360 300 C 300 340, 260 330, 190 360" />
+              <circle cx="120" cy="150" r="5" style="--i:0" />
+              <circle cx="380" cy="250" r="5" style="--i:1" />
+              <circle cx="190" cy="360" r="5" style="--i:2" />
+            </svg>
+
+            <div class="pane pane-site">
+              <div class="pane-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><b>Your public website</b></div>
+              <div class="site-hero">
+                <span class="kick">Local service</span>
+                <b>Book your next service</b>
+                <span class="cta">Request service</span>
               </div>
-              <div class="flow-link" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-              </div>
-              <div class="flow-node">
-                <span class="flow-ico ico-blue">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.2V19l-4 2v-7.8L3 5z"/></svg>
-                </span>
-                <span class="flow-txt"><strong>Lead capture</strong><span>Turn interest into contact details</span></span>
-              </div>
-              <div class="flow-link" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-              </div>
-              <div class="flow-node">
-                <span class="flow-ico ico-gold">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-                </span>
-                <span class="flow-txt"><strong>Rapid response</strong><span>Follow up while intent is high</span></span>
-              </div>
-              <div class="flow-link" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-              </div>
-              <div class="flow-node">
-                <span class="flow-ico ico-mint">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.2h18M8 2.5v4M16 2.5v4M8.8 14l2.2 2.2 4.2-4.4"/></svg>
-                </span>
-                <span class="flow-txt"><strong>Booked work</strong><span>Opportunities land on the calendar</span></span>
+              <div class="site-body">
+                <span class="bar w80"></span><span class="bar w62"></span><span class="bar w45"></span>
               </div>
             </div>
+
+            <div class="pane pane-pipeline">
+              <div class="pane-head"><b>Private lead pipeline</b><span class="tag">Sample</span></div>
+              <div class="rowset">
+                <div class="rrow"><span class="bar w80"></span><span class="chip new">New</span></div>
+                <div class="rrow"><span class="bar w62"></span><span class="chip booked">Booked</span></div>
+                <div class="rrow"><span class="bar w45"></span><span class="chip done">Done</span></div>
+              </div>
+            </div>
+
+            <div class="pane pane-due">
+              <div class="pane-head"><b>Due for service</b><span class="tag">Sample</span></div>
+              <div class="rowset">
+                <div class="rrow"><span class="bar w80"></span><span class="chip due">Due</span></div>
+                <div class="rrow"><span class="bar w62"></span><span class="chip due">Due</span></div>
+              </div>
+            </div>
+
+            <span class="stack-label">Illustrative layout. Not live data.</span>
           </div>
         </div>
       </section>
 
-      <!-- ============ SERVICES ============ -->
-      <section class="section" id="services">
+      <!-- ======================= OUTCOME FLOW ========================= -->
+      <section class="band band-warm" id="how">
         <div class="container">
-          <p class="eyebrow">Capabilities</p>
-          <h2>A complete system for local demand</h2>
-          <p class="section-intro">
-            We focus on the parts of growth that decide whether local demand
-            becomes revenue: generating qualified interest, capturing it cleanly,
-            and responding before it cools.
-          </p>
-          <div class="cards">
-            <article class="card">
-              <span class="card-ico">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.3"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg>
-              </span>
-              <h3>Demand generation</h3>
-              <p>
-                We plan and run marketing campaigns built to reach local
-                customers who are actively looking for the services you offer.
-              </p>
-            </article>
-            <article class="card">
-              <span class="card-ico">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.2V19l-4 2v-7.8L3 5z"/></svg>
-              </span>
-              <h3>Lead capture</h3>
-              <p>
-                We set up clear landing pages and capture steps so an interested
-                visitor becomes a contactable inquiry instead of a bounce.
-              </p>
-            </article>
-            <article class="card">
-              <span class="card-ico ico-gold">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-              </span>
-              <h3>Rapid lead response</h3>
-              <p>
-                We help you follow up with new inquiries quickly and
-                consistently, so a prospect is less likely to move on before they
-                hear back.
-              </p>
-            </article>
-            <article class="card">
-              <span class="card-ico ico-mint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7" rx="1"/><rect x="12.5" y="7" width="3" height="11" rx="1"/><rect x="18" y="14" width="3" height="4" rx="1"/></svg>
-              </span>
-              <h3>Measurement &amp; tuning</h3>
-              <p>
-                We track which campaigns and follow-ups actually produce booked
-                work, and adjust based on what the numbers show.
-              </p>
-            </article>
+          <div class="band-head">
+            <p class="eyebrow">How it works</p>
+            <h2>Turn your website and past customers into a repeatable growth system.</h2>
+            <p>One connected path a customer travels, instead of five disconnected tools that lose them along the way.</p>
           </div>
-        </div>
-      </section>
-
-      <!-- ============ PROCESS ============ -->
-      <section class="section band" id="process">
-        <div class="container">
-          <p class="eyebrow">The process</p>
-          <h2>Three steps, one outcome</h2>
-          <p class="section-intro">
-            A straightforward path from attention to booked work — with no
-            wasted motion in between.
-          </p>
-          <div class="steps">
-            <article class="step">
-              <span class="step-num"></span>
-              <h3>Generate demand</h3>
-              <p>
-                Put your services in front of nearby customers at the moment
-                they're searching for help.
-              </p>
-            </article>
-            <article class="step">
-              <span class="step-num"></span>
-              <h3>Capture inquiries</h3>
-              <p>
-                Turn that attention into real contact details through focused
-                pages and clear calls to action.
-              </p>
-            </article>
-            <article class="step">
-              <span class="step-num"></span>
-              <h3>Respond quickly</h3>
-              <p>
-                Reach out fast and follow up consistently, so more conversations
-                turn into booked jobs.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ AUDIENCE ============ -->
-      <section class="section">
-        <div class="container band-grid">
-          <div>
-            <p class="eyebrow">Who it's for</p>
-            <h2>Built for U.S. local-service businesses</h2>
-            <p class="section-intro" style="margin-bottom: 20px">
-              We focus on local service businesses in the United States that want
-              a dependable, measurable approach to reaching and responding to new
-              customers. Every engagement is arranged directly with the business
-              owner or their team.
-            </p>
-            <div class="chips">
-              <span class="chip">Home services</span>
-              <span class="chip">Trades &amp; contractors</span>
-              <span class="chip">Repair &amp; maintenance</span>
-              <span class="chip">Appointment-based services</span>
+          <div class="flow">
+            <div class="flow-step">
+              <div class="dotnum">01</div>
+              <h3>Get found</h3>
+              <p>Website, Google Business Profile, local and AI search.</p>
+            </div>
+            <div class="flow-step">
+              <div class="dotnum">02</div>
+              <h3>Get booked</h3>
+              <p>Connected intake, lead alerts, and a private pipeline.</p>
+            </div>
+            <div class="flow-step">
+              <div class="dotnum">03</div>
+              <h3>Get reviewed</h3>
+              <p>Completed-job review requests that build reputation.</p>
+            </div>
+            <div class="flow-step">
+              <div class="dotnum">04</div>
+              <h3>Get rebooked</h3>
+              <p>Records, next-service tracking, and reactivation.</p>
             </div>
           </div>
-          <div class="card" style="align-self: stretch">
-            <h3 style="margin-bottom: 16px; font-size: 1.16rem; font-weight: 700">
-              What we keep front and center
-            </h3>
-            <ul class="focus-list">
-              <li>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-                Local, intent-driven marketing
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-                Fast, consistent lead response
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-                A clear view of what's working
-              </li>
-              <li>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-                Direct communication with your team
-              </li>
-            </ul>
+        </div>
+      </section>
+
+      <!-- ========================= THE SYSTEM ========================= -->
+      <section class="band band-dark" id="system">
+        <div class="container">
+          <div class="band-head">
+            <p class="eyebrow">The system</p>
+            <h2>A public front, connected to a private back.</h2>
+            <p>Your website is the acquisition layer. Behind it, a private dashboard tracks leads, jobs, reviews, and who&rsquo;s due for service. We install and connect all of it.</p>
+          </div>
+
+          <div class="pillar">
+            <div>
+              <h3>Inquiries arrive as tracked leads</h3>
+              <p>A conversion-focused site feeds a private pipeline instead of a shared inbox. The right person is notified, and every lead carries a status.</p>
+              <p class="pillar-note">Included: custom website, Google Business Profile foundation, connected intake, lead alerts.</p>
+              <span class="illus">Illustrative. Not live data.</span>
+            </div>
+            <div class="pillar-visual">
+              <div class="pane">
+                <div class="pane-head"><b>Leads</b><span class="tag">Sample</span></div>
+                <div class="rowset">
+                  <div class="rrow"><span class="bar w80"></span><span class="chip new">New</span></div>
+                  <div class="rrow"><span class="bar w62"></span><span class="chip new">New</span></div>
+                  <div class="rrow"><span class="bar w45"></span><span class="chip booked">Booked</span></div>
+                </div>
+              </div>
+              <div class="pane">
+                <div class="pane-head"><b>Job record</b><span class="tag">Sample</span></div>
+                <div class="site-body">
+                  <span class="bar w80"></span><span class="bar w45"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pillar">
+            <div>
+              <h3>Finished work turns into reputation</h3>
+              <p>Mark a job complete and the system prepares a review request. Customer and job history live in one private place, so nothing depends on memory.</p>
+              <p class="pillar-note">Included: customer &amp; job records, job-completion and review workflow.</p>
+              <span class="illus">Illustrative. Not live data.</span>
+            </div>
+            <div class="pillar-visual">
+              <div class="pane">
+                <div class="pane-head"><b>Completed jobs</b><span class="tag">Sample</span></div>
+                <div class="rowset">
+                  <div class="rrow"><span class="bar w80"></span><span class="chip done">Done</span></div>
+                  <div class="rrow"><span class="bar w62"></span><span class="chip done">Done</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pillar">
+            <div>
+              <h3>Past customers come back</h3>
+              <p>The system records when a customer is due again and surfaces who is worth reaching. Straightforward reporting connects leads, completed work, reviews, and returns.</p>
+              <p class="pillar-note">Included: next-service tracking, reactivation view, reporting.</p>
+              <span class="illus">Illustrative. Not live data.</span>
+            </div>
+            <div class="pillar-visual">
+              <div class="pane">
+                <div class="pane-head"><b>Due for service</b><span class="tag">Sample</span></div>
+                <div class="rowset">
+                  <div class="rrow"><span class="bar w80"></span><span class="chip due">Due</span></div>
+                  <div class="rrow"><span class="bar w62"></span><span class="chip due">Due</span></div>
+                  <div class="rrow"><span class="bar w45"></span><span class="chip due">Due</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ============ CONTACT CTA ============ -->
-      <section class="section-tight">
+      <!-- ==================== HOW MESSAGES GO OUT ===================== -->
+      <section class="band band-light">
         <div class="container">
-          <div class="cta">
-            <p class="eyebrow" style="justify-content: center; display: inline-flex">Contact</p>
-            <h2>Let's talk about your pipeline</h2>
+          <div class="band-head">
+            <p class="eyebrow">Straight about messaging</p>
+            <h2>The system drafts it. Your team sends it.</h2>
             <p>
-              Tell us a bit about your business and what you'd like to improve.
-              The best way to reach us is by email, and we'll take it from there.
+              Review and reminder messages are prepared by the system and
+              reviewed and sent by your team. <strong>Nothing goes out to
+              customers automatically.</strong> Compliant automated customer
+              messaging can be added separately later. It is an add-on,
+              not part of the base system.
             </p>
-            <div class="cta-actions">
-              <a class="btn btn-primary" href="mailto:hello@tnrgrowthagency.com"
-                >Email hello@tnrgrowthagency.com</a
-              >
-              <a class="btn btn-ghost" href="contact.html">Contact details</a>
+          </div>
+          <div class="note-callout">
+            <b>Separately:</b> T&amp;R Growth runs an opt-in operational SMS
+            lead-alert program for authorized business recipients only. See
+            our <a href="sms-consent.html">SMS Consent</a> page. Your customers are
+            never enrolled or messaged.
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== WORKING SYSTEM ======================= -->
+      <section class="band band-dark" id="case-study">
+        <div class="container">
+          <div class="band-head">
+            <p class="eyebrow">Built and operating</p>
+            <h2>A real HVAC service-business implementation</h2>
+            <p>
+              A working implementation connecting discovery, lead handling,
+              completed service, and follow-up. Here&rsquo;s what has actually
+              been built and operated.
+            </p>
+          </div>
+          <div class="cs-wrap">
+            <ol class="timeline" aria-label="Implementation milestones">
+              <li><span class="tnum">1</span><b>Built a focused public website</b><p>A focused site for a local mini-split cleaning company, built to be found and to turn visits into inquiries.</p></li>
+              <li><span class="tnum">2</span><b>Connected lead intake to a private pipeline</b><p>Website inquiries flow into a private lead pipeline instead of a shared inbox.</p></li>
+              <li><span class="tnum">3</span><b>Added customer and job tracking</b><p>Customers and jobs are recorded in one place, each with a status.</p></li>
+              <li><span class="tnum">4</span><b>Added job-completion and manual review-request workflows</b><p>When a job is marked complete, the system prepares a review request. It is currently reviewed and sent manually.</p></li>
+              <li><span class="tnum">5</span><b>Added next-service tracking and reactivation views</b><p>The system tracks when a customer is due again and surfaces past customers to reactivate.</p></li>
+              <li class="discovery"><span class="tnum">6</span><b>A commercial customer reported discovering the business through Gemini</b><p>The customer said they found the company after asking Gemini for a local mini-split cleaning service.</p></li>
+              <li><span class="tnum">7</span><b>The contractor completed an eight-unit commercial cleaning job</b><p>The work was completed and recorded through the connected operating workflow.</p></li>
+            </ol>
+            <div class="cs-side">
+              <div class="note-callout">
+                <b>How messages are sent today.</b> Customer review and reminder
+                messages are currently prepared by the system and sent manually.
+                Automated customer messaging can be added separately when
+                appropriate.
+              </div>
+              <div class="cs-card">
+                <h4>Keeping it accurate</h4>
+                <p class="cs-quals" style="border-top: 0; padding-top: 0; margin-top: 0;">
+                  These are separate events. We don&rsquo;t claim the website
+                  caused the commercial job. In a separate unbranded test, Gemini
+                  displayed the business first and cited its website as the source, but
+                  results vary by query, user, and location. A customer said a
+                  Google review was submitted; we&rsquo;re not treating it as
+                  publicly live until it&rsquo;s verified. Automated customer
+                  texting is not operating.
+                </p>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ========================= WHO IT'S FOR ======================== -->
+      <section class="band band-warm" id="fit">
+        <div class="container">
+          <div class="band-head">
+            <p class="eyebrow">Who it&rsquo;s for</p>
+            <h2>Established local-service businesses with history to work with.</h2>
+            <p>We start with heat-pump and HVAC service businesses, and the system fits other recurring local-service trades too.</p>
+          </div>
+          <div class="fit-grid">
+            <div class="fit">
+              <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--ok)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A strong fit</h3>
+              <ul>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Roughly 2 to 15 technicians and years in business.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Hundreds of past customers and a good real-world reputation.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A weak or disconnected website and no reliable annual follow-up.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Enough job value that recovering one or two jobs justifies the system.</li>
+              </ul>
+            </div>
+            <div class="nofit">
+              <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Not yet</h3>
+              <ul>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Brand-new businesses with no customer base to build on yet.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Companies wanting only ad management, with no interest in retention.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= FAQ ============================ -->
+      <section class="band band-light">
+        <div class="container">
+          <div class="band-head center">
+            <p class="eyebrow" style="justify-content: center;">FAQ</p>
+            <h2>Straight answers</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>Do you replace our existing software?</summary>
+              <p>No. We don&rsquo;t replace your accounting, scheduling, or invoicing tools. ServiceMomentum focuses on getting found, capturing and tracking leads, earning reviews, and bringing past customers back. It connects to how you already work.</p>
+            </details>
+            <details>
+              <summary>Do we need a new website?</summary>
+              <p>Often, yes. A conversion-focused, connected website is usually the cleanest foundation. But it depends on what you have today, which we assess before recommending anything. If your current site is in good shape, we&rsquo;ll assess whether we can connect to it instead of rebuilding.</p>
+            </details>
+            <details>
+              <summary>Is this a CRM?</summary>
+              <p>It includes a private customer database and pipeline, but it is not a full CRM, scheduling, invoicing, or dispatch platform. It&rsquo;s a focused customer-growth and retention system.</p>
+            </details>
+            <details>
+              <summary>Is automated customer texting included?</summary>
+              <p>No. Automated customer texting is <strong>not</strong> part of the core system and is not currently operating. Today, review and reminder messages are prepared by the system and sent <strong>manually</strong> (copy-and-send). Compliant automated customer messaging can be added later as a separate add-on. Separately, T&amp;R Growth runs an opt-in operational SMS lead-alert program for authorized business recipients only. See our <a href="sms-consent.html">SMS Consent</a> page. Your customers are never enrolled or messaged.</p>
+            </details>
+            <details>
+              <summary>Can you guarantee Google or Gemini placement?</summary>
+              <p>No. Anyone who guarantees it is overpromising. We build the foundations that help: accurate business information, useful content, structured data, crawlability, and consistency. Placement in search and AI assistants still varies by query, user, and location.</p>
+            </details>
+            <details>
+              <summary>Who owns the website and customer data?</summary>
+              <p>You do. It&rsquo;s your website and your customer information. We design, install, and operate the system for you.</p>
+            </details>
+            <details>
+              <summary>How long does implementation take?</summary>
+              <p>It depends on scope and typically takes a few weeks. We agree on the timeline with you up front rather than promising a one-size-fits-all number.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================== FINAL CTA ========================= -->
+      <section class="cta-band">
+        <div class="container">
+          <p class="eyebrow" style="justify-content: center; color: var(--gold);">Founding clients</p>
+          <h2>Stop letting completed jobs become forgotten customers.</h2>
+          <p>
+            We&rsquo;re taking on a small number of founding clients so each build
+            gets hands-on attention. Answer a few questions and we&rsquo;ll tell you
+            where recovered jobs are most likely hiding in your business.
+          </p>
+          <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
         </div>
       </section>
     </main>
 
+    <!-- FOOTER -->
     <footer class="site-footer">
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <img src="assets/logo-horizontal-reversed.svg" alt="T&amp;R Growth" />
+            <span class="nav-brand" style="pointer-events:none;">
+              <span class="wordmark"><img class="brand-mark" src="assets/mark.svg" width="38" height="38" alt="" aria-hidden="true" /><span class="brand-name" data-brand="product">ServiceMomentum</span></span>
+            </span>
             <p>
-              Performance marketing and lead response for U.S. local service
+              ServiceMomentum is designed and operated by T&amp;R Growth LLC
+              is a connected customer-growth system for U.S. local-service
               businesses.
             </p>
+            <a class="foot-email" href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>
           </div>
           <nav class="footer-nav" aria-label="Footer">
             <div>
-              <div class="footer-col-title">Company</div>
+              <div class="footer-col-title">System</div>
               <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#services">What we do</a></li>
-                <li><a href="index.html#process">How it works</a></li>
+                <li><a href="index.html#how">How It Works</a></li>
+                <li><a href="index.html#system">The System</a></li>
+                <li><a href="index.html#case-study">Working System</a></li>
+                <li><a href="index.html#fit">Who It&rsquo;s For</a></li>
                 <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
@@ -288,6 +448,7 @@
               <ul>
                 <li><a href="privacy.html">Privacy Policy</a></li>
                 <li><a href="terms.html">Terms of Service</a></li>
+                <li><a href="sms-consent.html">SMS Consent</a></li>
               </ul>
             </div>
           </nav>
@@ -298,5 +459,7 @@
         </div>
       </div>
     </footer>
+    <script src="js/nav.js" defer></script>
+    <script src="js/motion.js" defer></script>
   </body>
 </html>

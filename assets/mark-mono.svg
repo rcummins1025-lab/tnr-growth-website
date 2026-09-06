@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="mark-mono-title" fill="none">
+  <title id="mark-mono-title">Open service loop mark, one colour (provisional)</title>
+  <desc>PROVISIONAL working mark. An asymmetric four-stage OPEN LOOP. The four
+  stages sit ON the pathway itself. The curve starts inside stage 1 and ends
+  inside the accent stage, so no node floats free, and the loop never closes:
+  the opening between the accent stage and stage 1 is the point.
+  Deterministic geometry, constructed from the polar table below and written out
+  as literal coordinates. Nothing here is traced from, or embedded as, raster art.
+  Construction (viewBox 64): loop centre (30.17,31.58), stroke 6.4, round caps. The
+  radius VARIES with angle, so the silhouette is an organic pebble rather than a
+  circle and deliberately not a status or loading ring. Polar samples, in the order
+  the path travels them (angle deg, radius):
+  55/19.6* 80/20.5 110/21.2 132/20.9 157/20.1* 186/18.9 216/18.1 250/17.7
+  274/17.9 292/18.4* 316/19.8 334/21.2 350/22.8*
+  Starred samples carry a stage node: 55deg r 6.0 - 157deg r 6.9 (heaviest) -
+  292deg r 5.9 - 350deg r 6.6 (accent, on the widest radius, closing the path).
+  The curve is a Catmull-Rom spline through those samples, emitted as cubics.
+  One colour: every part inherits currentColor. For single-ink print, stamps, and any surface that cannot carry the accent. The stages stay legible because they sit proud of the stroke, not because of colour.</desc>
+  <path d="M41.42 47.64C40.14 48.33 36.82 51.13 33.73 51.77C30.65 52.41 25.85 52.28 22.92 51.5C20 50.73 18.06 49.12 16.19 47.11C14.31 45.1 12.47 42.35 11.67 39.43C10.87 36.52 10.73 32.69 11.38 29.61C12.02 26.52 13.41 23.39 15.53 20.94C17.65 18.5 21.47 16.15 24.12 14.95C26.77 13.75 29.27 13.8 31.42 13.72C33.58 13.65 34.9 13.84 37.07 14.52C39.23 15.2 42.39 16.53 44.42 17.83C46.44 19.12 47.86 20.66 49.23 22.29C50.6 23.92 52.06 26.73 52.63 27.62" stroke="currentColor" stroke-width="6.4" stroke-linecap="round"/>
+  <circle cx="41.42" cy="47.64" r="6.0" fill="currentColor"/>
+  <circle cx="11.67" cy="39.43" r="6.9" fill="currentColor"/>
+  <circle cx="37.07" cy="14.52" r="5.9" fill="currentColor"/>
+  <circle cx="52.63" cy="27.62" r="6.6" fill="currentColor"/>
+</svg>
