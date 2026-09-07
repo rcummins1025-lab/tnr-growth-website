@@ -83,10 +83,11 @@
         </button>
         <ul class="nav-links" id="nav-links">
           <li><a href="#how">How It Works</a></li>
-          <li><a href="#system">The System</a></li>
-          <li><a href="#case-study">Working System</a></li>
+          <li><a href="#system">See the System</a></li>
           <li><a href="#fit">Who It&rsquo;s For</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <!-- Shown only where the header CTA button is not: the compact menu
+               must still offer the audit. -->
+          <li class="nav-audit"><a href="contact.html">Start Audit</a></li>
         </ul>
         <a class="btn btn-primary btn-sm nav-cta" href="contact.html">Start audit</a>
       </div>
@@ -97,19 +98,18 @@
       <section class="hero-v3">
         <div class="container">
           <div class="hero-copy">
-            <p class="eyebrow">Customer growth system for local service businesses</p>
+            <p class="eyebrow">Customer-growth system for established local-service businesses</p>
             <h1>Get found. Get booked. <span class="amber">Bring customers back.</span></h1>
             <p class="hero-sub">
-              T&amp;R Growth connects your website, lead pipeline, customer
-              records, reviews, and next-service follow-up into one system,
-              installed and run for you, not handed over as software.
+              We connect your website, lead pipeline, customer records,
+              reviews, and next-service follow-up into one system your team
+              can operate.
             </p>
-            <p class="hero-tagline">From first search to next service.</p>
             <div class="hero-actions-v3">
               <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
-              <a class="btn btn-outline-light btn-lg" href="#how">See how the system works</a>
+              <a class="hero-link" href="#system">See the system</a>
             </div>
-            <p class="hero-note">Built by a hands-on team &middot; no guaranteed outcomes, just a system we install and stand behind.</p>
+            <p class="hero-note">Built first for established HVAC and heat-pump service businesses.</p>
           </div>
 
           <!-- Layered composition: public site -> private pipeline -> due for
@@ -214,29 +214,28 @@
         <div class="container">
           <div class="band-head">
             <p class="eyebrow">How it works</p>
-            <h2>Turn your website and past customers into a repeatable growth system.</h2>
-            <p>One connected path a customer travels, instead of five disconnected tools that lose them along the way.</p>
+            <h2>From first search to next service.</h2>
           </div>
           <div class="flow">
             <div class="flow-step">
               <div class="dotnum">01</div>
               <h3>Get found</h3>
-              <p>Website, Google Business Profile, local and AI search.</p>
+              <p>A focused website and strong local-search foundation.</p>
             </div>
             <div class="flow-step">
               <div class="dotnum">02</div>
               <h3>Get booked</h3>
-              <p>Connected intake, lead alerts, and a private pipeline.</p>
+              <p>Website inquiries enter a private lead pipeline.</p>
             </div>
             <div class="flow-step">
               <div class="dotnum">03</div>
               <h3>Get reviewed</h3>
-              <p>Completed-job review requests that build reputation.</p>
+              <p>Completed jobs create a review-request workflow.</p>
             </div>
             <div class="flow-step">
               <div class="dotnum">04</div>
               <h3>Get rebooked</h3>
-              <p>Records, next-service tracking, and reactivation.</p>
+              <p>Next-service dates surface customers who are due again.</p>
             </div>
           </div>
         </div>
@@ -246,16 +245,16 @@
       <section class="band band-dark" id="system">
         <div class="container">
           <div class="band-head">
-            <p class="eyebrow">The system</p>
-            <h2>A public front, connected to a private back.</h2>
-            <p>Your website is the acquisition layer. Behind it, a private dashboard tracks leads, jobs, reviews, and who&rsquo;s due for service. We install and connect all of it.</p>
+            <p class="eyebrow">See the system</p>
+            <h2>See the system at work.</h2>
+            <p>Follow one customer from website inquiry to their next service.</p>
           </div>
 
-          <div class="pillar">
+          <div class="pillar stage">
             <div>
-              <h3>Inquiries arrive as tracked leads</h3>
-              <p>A conversion-focused site feeds a private pipeline instead of a shared inbox. The right person is notified, and every lead carries a status.</p>
-              <p class="pillar-note">Included: custom website, Google Business Profile foundation, connected intake, lead alerts.</p>
+              <p class="stage-step"><span class="stage-num" aria-hidden="true">1</span>Stage 1 of 3</p>
+              <h3>New inquiry</h3>
+              <p>The website request enters the private pipeline with the service needed and its current status.</p>
             </div>
             <figure class="pillar-visual">
               <div class="pane">
@@ -291,11 +290,11 @@
             </figure>
           </div>
 
-          <div class="pillar">
+          <div class="pillar stage">
             <div>
-              <h3>Finished work turns into reputation</h3>
-              <p>Mark a job complete and the system prepares a review request. Customer and job history live in one private place, so nothing depends on memory.</p>
-              <p class="pillar-note">Included: customer &amp; job records, job-completion and review workflow.</p>
+              <p class="stage-step"><span class="stage-num" aria-hidden="true">2</span>Stage 2 of 3</p>
+              <h3>Job completed</h3>
+              <p>The customer and completed work are recorded, and a review request is prepared.</p>
             </div>
             <figure class="pillar-visual">
               <div class="pane">
@@ -326,11 +325,11 @@
             </figure>
           </div>
 
-          <div class="pillar">
+          <div class="pillar stage">
             <div>
-              <h3>Past customers come back</h3>
-              <p>The system records when a customer is due again and surfaces who is worth reaching. Straightforward reporting connects leads, completed work, reviews, and returns.</p>
-              <p class="pillar-note">Included: next-service tracking, reactivation view, reporting.</p>
+              <p class="stage-step"><span class="stage-num" aria-hidden="true">3</span>Stage 3 of 3</p>
+              <h3>Customer due again</h3>
+              <p>The next-service date brings the customer back into view when follow-up is appropriate.</p>
             </div>
             <figure class="pillar-visual">
               <div class="pane">
@@ -360,75 +359,54 @@
               <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
             </figure>
           </div>
+          <p class="demo-note">
+            Messages are prepared for review. Nothing goes out automatically.
+          </p>
         </div>
       </section>
 
-      <!-- ==================== HOW MESSAGES GO OUT ===================== -->
-      <section class="band band-light">
-        <div class="container">
-          <div class="band-head">
-            <p class="eyebrow">Straight about messaging</p>
-            <h2>The system drafts it. Your team sends it.</h2>
-            <p>
-              Review and reminder messages are prepared by the system and
-              reviewed and sent by your team. <strong>Nothing goes out to
-              customers automatically.</strong> Compliant automated customer
-              messaging can be added separately later. It is an add-on,
-              not part of the base system.
-            </p>
-          </div>
-          <div class="note-callout">
-            <b>Separately:</b> T&amp;R Growth runs an opt-in operational SMS
-            lead-alert program for authorized business recipients only. See
-            our <a href="sms-consent.html">SMS Consent</a> page. Your customers are
-            never enrolled or messaged.
-          </div>
-        </div>
-      </section>
-
-      <!-- ====================== WORKING SYSTEM ======================= -->
-      <section class="band band-dark" id="case-study">
+      <!-- ===================== BUILT AND OPERATING ==================== -->
+      <section class="band band-dark" id="built">
         <div class="container">
           <div class="band-head">
             <p class="eyebrow">Built and operating</p>
-            <h2>A real HVAC service-business implementation</h2>
-            <p>
-              A working implementation connecting discovery, lead handling,
-              completed service, and follow-up. Here&rsquo;s what has actually
-              been built and operated.
-            </p>
+            <h2>A working HVAC service-business implementation.</h2>
+            <p>The public website, private workflow and return-service process have been built and used in a real operating business.</p>
           </div>
-          <div class="cs-wrap">
-            <ol class="timeline" aria-label="Implementation milestones">
-              <li><span class="tnum">1</span><b>Built a focused public website</b><p>A focused site for a local mini-split cleaning company, built to be found and to turn visits into inquiries.</p></li>
-              <li><span class="tnum">2</span><b>Connected lead intake to a private pipeline</b><p>Website inquiries flow into a private lead pipeline instead of a shared inbox.</p></li>
-              <li><span class="tnum">3</span><b>Added customer and job tracking</b><p>Customers and jobs are recorded in one place, each with a status.</p></li>
-              <li><span class="tnum">4</span><b>Added job-completion and manual review-request workflows</b><p>When a job is marked complete, the system prepares a review request. It is currently reviewed and sent manually.</p></li>
-              <li><span class="tnum">5</span><b>Added next-service tracking and reactivation views</b><p>The system tracks when a customer is due again and surfaces past customers to reactivate.</p></li>
-              <li class="discovery"><span class="tnum">6</span><b>A commercial customer reported discovering the business through Gemini</b><p>The customer said they found the company after asking Gemini for a local mini-split cleaning service.</p></li>
-              <li><span class="tnum">7</span><b>The contractor completed an eight-unit commercial cleaning job</b><p>The work was completed and recorded through the connected operating workflow.</p></li>
-            </ol>
-            <div class="cs-side">
-              <div class="note-callout">
-                <b>How messages are sent today.</b> Customer review and reminder
-                messages are currently prepared by the system and sent manually.
-                Automated customer messaging can be added separately when
-                appropriate.
-              </div>
-              <div class="cs-card">
-                <h4>Keeping it accurate</h4>
-                <p class="cs-quals" style="border-top: 0; padding-top: 0; margin-top: 0;">
-                  These are separate events. We don&rsquo;t claim the website
-                  caused the commercial job. In a separate unbranded test, Gemini
-                  displayed the business first and cited its website as the source, but
-                  results vary by query, user, and location. A customer said a
-                  Google review was submitted; we&rsquo;re not treating it as
-                  publicly live until it&rsquo;s verified. Automated customer
-                  texting is not operating.
-                </p>
-              </div>
+          <div class="proof-grid">
+            <div class="proof">
+              <h3>Public discovery and lead capture</h3>
+              <p>A focused service-business website and connected intake path were built and put into operation.</p>
+            </div>
+            <div class="proof">
+              <h3>Private operating workflow</h3>
+              <p>Leads, customers, jobs and completed work are tracked in one private workflow.</p>
+            </div>
+            <div class="proof">
+              <h3>Review and return-service process</h3>
+              <p>The operating system prepares review requests, records next-service dates and surfaces customers who are due again.</p>
             </div>
           </div>
+          <p class="proof-note">
+            Results vary, and customer review and reminder messages are
+            currently reviewed and sent manually.
+          </p>
+          <!-- Native <details>: it opens and closes with pointer, touch and
+               keyboard with no script, so every qualification below stays
+               reachable if JavaScript fails. Collapsed by default so the
+               facts are available without interrupting the page. -->
+          <details class="accuracy">
+            <summary>Read the implementation and accuracy notes</summary>
+            <ul>
+              <li>A commercial customer reported discovering the service business through Gemini.</li>
+              <li>In a separate unbranded test, Gemini displayed the business and cited its website.</li>
+              <li>These were separate events, and results vary by query, user and location.</li>
+              <li>We do not claim the website caused a particular job.</li>
+              <li>A customer reported submitting a Google review, but it is not treated as publicly live until verified.</li>
+              <li>Automated customer texting is not operating.</li>
+              <li>T&amp;R Growth&rsquo;s opt-in operational SMS lead alerts are for authorized business recipients only. Customers are never automatically enrolled or messaged. See <a href="sms-consent.html">SMS Consent</a>.</li>
+            </ul>
+          </details>
         </div>
       </section>
 
@@ -437,24 +415,23 @@
         <div class="container">
           <div class="band-head">
             <p class="eyebrow">Who it&rsquo;s for</p>
-            <h2>Established local-service businesses with history to work with.</h2>
-            <p>We start with heat-pump and HVAC service businesses, and the system fits other recurring local-service trades too.</p>
+            <h2>Built for established service businesses with customers worth bringing back.</h2>
           </div>
           <div class="fit-grid">
             <div class="fit">
               <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--ok)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A strong fit</h3>
               <ul>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Roughly 2 to 15 technicians and years in business.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Hundreds of past customers and a good real-world reputation.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A weak or disconnected website and no reliable annual follow-up.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Enough job value that recovering one or two jobs justifies the system.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Established HVAC, heat-pump or recurring local-service company.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Existing customer history and a good offline reputation.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Website, lead handling and follow-up are disconnected.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Recurring cleaning, maintenance or service opportunities.</li>
               </ul>
             </div>
             <div class="nofit">
               <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Not yet</h3>
               <ul>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Brand-new businesses with no customer base to build on yet.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Companies wanting only ad management, with no interest in retention.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Brand-new business with no meaningful customer history.</li>
+                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Company seeking only ad management.</li>
               </ul>
             </div>
           </div>
@@ -470,32 +447,20 @@
           </div>
           <div class="faq">
             <details>
-              <summary>Do you replace our existing software?</summary>
-              <p>No. We don&rsquo;t replace your accounting, scheduling, or invoicing tools. ServiceMomentum focuses on getting found, capturing and tracking leads, earning reviews, and bringing past customers back. It connects to how you already work.</p>
-            </details>
-            <details>
               <summary>Do we need a new website?</summary>
-              <p>Often, yes. A conversion-focused, connected website is usually the cleanest foundation. But it depends on what you have today, which we assess before recommending anything. If your current site is in good shape, we&rsquo;ll assess whether we can connect to it instead of rebuilding.</p>
+              <p>Not always. We recommend a rebuild only when it materially improves the connected system. If your site is in good shape, we assess connecting to it instead.</p>
             </details>
             <details>
-              <summary>Is this a CRM?</summary>
-              <p>It includes a private customer database and pipeline, but it is not a full CRM, scheduling, invoicing, or dispatch platform. It&rsquo;s a focused customer-growth and retention system.</p>
+              <summary>Does this replace our existing software?</summary>
+              <p>No. This is not a ServiceTitan replacement, and it does not replace your accounting, scheduling or invoicing tools. It connects to how you already work.</p>
             </details>
             <details>
               <summary>Is automated customer texting included?</summary>
-              <p>No. Automated customer texting is <strong>not</strong> part of the core system and is not currently operating. Today, review and reminder messages are prepared by the system and sent <strong>manually</strong> (copy-and-send). Compliant automated customer messaging can be added later as a separate add-on. Separately, T&amp;R Growth runs an opt-in operational SMS lead-alert program for authorized business recipients only. See our <a href="sms-consent.html">SMS Consent</a> page. Your customers are never enrolled or messaged.</p>
+              <p>No. It is not part of the current base implementation and is not operating. Review and reminder messages are prepared by the system and sent <strong>manually</strong>. Compliant automated messaging can be added later as a separate add-on.</p>
             </details>
             <details>
-              <summary>Can you guarantee Google or Gemini placement?</summary>
-              <p>No. Anyone who guarantees it is overpromising. We build the foundations that help: accurate business information, useful content, structured data, crawlability, and consistency. Placement in search and AI assistants still varies by query, user, and location.</p>
-            </details>
-            <details>
-              <summary>Who owns the website and customer data?</summary>
-              <p>You do. It&rsquo;s your website and your customer information. We design, install, and operate the system for you.</p>
-            </details>
-            <details>
-              <summary>How long does implementation take?</summary>
-              <p>It depends on scope and typically takes a few weeks. We agree on the timeline with you up front rather than promising a one-size-fits-all number.</p>
+              <summary>Can you guarantee leads, reviews or search rankings?</summary>
+              <p>No. We do not guarantee leads, revenue, reviews, reactivated customers, or placement in Google or AI assistants. We build the foundations that help. Placement still varies by query, user and location.</p>
             </details>
           </div>
         </div>
@@ -504,17 +469,24 @@
       <!-- ========================== FINAL CTA ========================= -->
       <section class="cta-band">
         <div class="container">
-          <p class="eyebrow" style="justify-content: center; color: var(--gold);">Founding clients</p>
-          <h2>Stop letting completed jobs become forgotten customers.</h2>
+          <h2>Find the gaps costing you repeat business.</h2>
           <p>
-            We&rsquo;re taking on a small number of founding clients so each build
-            gets hands-on attention. Answer a few questions and we&rsquo;ll tell you
-            where recovered jobs are most likely hiding in your business.
+            Answer a few questions about how your business handles leads,
+            completed jobs and past customers. We&rsquo;ll review your answers
+            and follow up directly.
           </p>
           <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
         </div>
       </section>
     </main>
+
+    <!-- Sticky audit CTA, phones only. It ships hidden and js/nav.js reveals
+         it once the hero has scrolled away, then hides it again over the
+         footer so it can never sit on top of the legal links. With JavaScript
+         off it simply never appears; nothing on the page depends on it. -->
+    <div class="sticky-cta" id="sticky-cta" hidden>
+      <a class="btn btn-gold" href="contact.html">Start your growth audit</a>
+    </div>
 
     <!-- FOOTER -->
     <footer class="site-footer">
@@ -525,9 +497,9 @@
               <span class="wordmark"><img class="brand-mark" src="assets/mark.svg" width="38" height="38" alt="" aria-hidden="true" /><span class="brand-name" data-brand="product">ServiceMomentum</span></span>
             </span>
             <p>
-              ServiceMomentum is designed and operated by T&amp;R Growth LLC
-              is a connected customer-growth system for U.S. local-service
-              businesses.
+              ServiceMomentum is a connected customer-growth system for U.S.
+              local-service businesses, designed and operated by T&amp;R Growth
+              LLC.
             </p>
             <a class="foot-email" href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>
           </div>
@@ -536,10 +508,9 @@
               <div class="footer-col-title">System</div>
               <ul>
                 <li><a href="index.html#how">How It Works</a></li>
-                <li><a href="index.html#system">The System</a></li>
-                <li><a href="index.html#case-study">Working System</a></li>
+                <li><a href="index.html#system">See the System</a></li>
                 <li><a href="index.html#fit">Who It&rsquo;s For</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="contact.html">Start Audit</a></li>
               </ul>
             </div>
             <div>

@@ -17,6 +17,30 @@
   // treats "_gotcha" this way server-side. This is the client half.
   var HONEYPOT = "_gotcha";
 
+  /* Referral attribution. A link such as contact.html?source=referral records
+   * "referral" alongside the submission so we can tell where an applicant came
+   * from. Deliberately minimal: one query parameter, sanitised, with a plain
+   * "direct" fallback. No cookie, no localStorage, no fingerprinting, no
+   * third-party analytics, and the referring page URL is never read. The value
+   * is only ever assigned to a hidden input's .value, never written into the
+   * page as markup. */
+  var REFERRAL_FALLBACK = "direct";
+  var REFERRAL_MAX = 80;
+  var REFERRAL_ALLOWED = /^[A-Za-z0-9 ._-]+$/;
+
+  function referralSource() {
+    var raw = "";
+    try {
+      raw = new URLSearchParams(window.location.search).get("source") || "";
+    } catch (e) {
+      return REFERRAL_FALLBACK; // no URLSearchParams, or a malformed query
+    }
+    var v = String(raw).replace(/\s+/g, " ").trim();
+    if (!v || v.length > REFERRAL_MAX) return REFERRAL_FALLBACK;
+    if (!REFERRAL_ALLOWED.test(v)) return REFERRAL_FALLBACK;
+    return v;
+  }
+
   var MODES = { json: 1, formspree: 1 };
   var mode = String(cfg.formEndpointMode || "json").toLowerCase();
   if (!MODES[mode]) {
@@ -46,7 +70,6 @@
   // unhidden by succeed(), which only ever runs on a real 2xx response.
   var successPanel = document.getElementById("audit-success");
   var successHeading = document.getElementById("audit-success-title");
-  var successLede = document.getElementById("audit-success-lede");
   var navWrap = form.querySelector(".wz-nav");
   var current = 0;
 
@@ -423,69 +446,14 @@
     btn.setAttribute("tabindex", "-1");
   }
 
-  /* Personalisation ------------------------------------------------------
-   * Submitted values are visitor-supplied text. They are only ever placed on
-   * the page through textContent (or a text node), never innerHTML, so no
-   * markup a visitor types can execute or restructure the confirmation.
-   * Both helpers return "" when there is nothing usable, and the static copy
-   * in contact.html is already the correct no-name / no-business fallback. */
-  var MAX_FIRST_NAME = 32;
-  var MAX_BUSINESS = 60;
-
-  function fieldValue(name) {
-    var el = form.querySelector('[name="' + name + '"]');
-    return el && typeof el.value === "string" ? el.value : "";
-  }
-
-  function tidy(raw) {
-    return String(raw || "").replace(/\s+/g, " ").trim();
-  }
-
-  // The greeting takes the first word of the submitted name. An address, a
-  // link, or an implausibly long token falls back to the generic heading
-  // rather than putting something odd in 40px type.
-  function firstNameOf(raw) {
-    var v = tidy(raw);
-    if (!v || v.indexOf("@") !== -1 || /:\/\//.test(v)) return "";
-    var first = v.split(" ")[0];
-    if (!first || first.length > MAX_FIRST_NAME) return "";
-    return first;
-  }
-
-  function businessNameOf(raw) {
-    var v = tidy(raw);
-    if (!v || v.length > MAX_BUSINESS) return "";
-    return v;
-  }
-
-  function personalise(firstName, business) {
-    if (firstName && successHeading) {
-      successHeading.textContent = "Thanks, " + firstName + ".";
-    }
-    if (!business || !successLede) return;
-    // Rebuilt from text nodes so the business name cannot carry markup.
-    successLede.textContent = "";
-    successLede.appendChild(
-      document.createTextNode("We have your Growth System Audit request for ")
-    );
-    var strong = document.createElement("strong");
-    strong.className = "wz-done-biz";
-    strong.textContent = business;
-    successLede.appendChild(strong);
-    successLede.appendChild(
-      document.createTextNode(
-        ". Ryan will review your answers and look at how your current website and follow-up process connect."
-      )
-    );
-  }
+  /* The confirmation copy is fixed text in contact.html. No submitted value
+   * is rendered back to the page at all, so nothing a visitor typed can reach
+   * the confirmation in any form. */
 
   /* Runs ONLY from the res.ok branch of the submit handler. Nothing else in
    * this file calls it, so the confirmation cannot appear for a failed,
    * misconfigured, spam-trapped, or unsent submission. */
   function succeed() {
-    // Read what was submitted BEFORE the reset clears every field.
-    var firstName = firstNameOf(fieldValue("name"));
-    var business = businessNameOf(fieldValue("business_name"));
     form.reset();
     syncTiles();
     // The step meter is finished: fill it, and drop the "how long it takes"
@@ -510,7 +478,6 @@
       // The panel is the confirmation, so the small status box goes away
       // rather than repeating it.
       clearStatus();
-      personalise(firstName, business);
       successPanel.hidden = false;
       // Focus the heading so keyboard and screen-reader users land on the
       // confirmation instead of at the top of an emptied page.
@@ -524,6 +491,10 @@
       );
     }
   }
+
+  // Assigned as a value, never as markup.
+  var referralField = document.getElementById("referral-source");
+  if (referralField) referralField.value = referralSource();
 
   // Initial render only, with no focus movement (see showStep).
   showStep(0, false);

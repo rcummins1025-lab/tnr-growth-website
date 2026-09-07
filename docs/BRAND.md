@@ -169,27 +169,27 @@ footer, with `width`/`height` set on the `<img>` so the space is reserved before
 the file loads and the mark can never shift the layout. Verified legible at 16,
 24, and 32px.
 
-## Case-study claim limitations (Gavin pilot)
+## Claim limitations (pilot implementation)
 
-The Gavin’s Mini Split Cleaning section must only make **currently supported**
+The working-implementation section must only make **currently supported**
 claims. `scripts/validate.mjs` scans for banned phrases, but wording still needs
 human review. Keep it accurate:
 
 **Supported / allowed:**
-- T&R Growth built Gavin’s focused mini-split cleaning website.
+- T&R Growth built the pilot business's focused service website.
 - The website is connected to a private lead-management dashboard that tracks
   leads and job status.
 - A Google review-request workflow has been implemented.
 - Future service dates / due-for-service records can be tracked.
 - An eight-unit commercial mini-split cleaning job was completed.
-- “A commercial customer reported finding Gavin’s Mini Split Cleaning after
-  asking Gemini for a local mini-split cleaning company.”
-- “In a separate unbranded test, Gemini displayed Gavin first and cited the
-  website as its source. Results can vary by query, user, and location.”
+- “A commercial customer reported finding the pilot business after asking
+  Gemini for a local service company of that kind.”
+- “In a separate unbranded test, Gemini displayed the business first and cited
+  the website as its source. Results can vary by query, user, and location.”
 
 **Not allowed (do not claim):**
-- That T&R Growth scaled Gavin’s revenue, or any specific revenue figure.
-- That Gavin always ranks first in Gemini, or that placement is guaranteed.
+- That T&R Growth scaled the pilot business's revenue, or any revenue figure.
+- That the business always ranks first in Gemini, or that placement is guaranteed.
 - That the website definitively caused the commercial job (keep the Gemini
   discovery and the commercial job as **separate** observations).
 - That the Google review is publicly live before it is verified.

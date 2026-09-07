@@ -73,6 +73,9 @@
   --ring: var(--focus);
 
   --maxw: 1120px;
+  /* Width at which the header collapses to the compact menu. js/nav.js reads
+     this back so the two can never disagree. */
+  --nav-compact-max: 959px;
   --radius: 12px;
   --radius-lg: 18px;
   --shadow-sm: 0 1px 2px rgba(23, 26, 31, 0.07);
@@ -770,6 +773,7 @@ h4 {
   display: grid;
   gap: 12px;
   max-width: 820px;
+  margin: 0 auto; /* the FAQ heading is centred; the list has to match */
 }
 .faq details {
   background: var(--forge-white);
@@ -1809,7 +1813,6 @@ h4 {
     .fit,
     .nofit,
     .faq details,
-    .cs-side > *,
     .finalcta > *,
     .page-head,
     .form-aside
@@ -1829,7 +1832,6 @@ h4 {
     .fit,
     .nofit,
     .faq details,
-    .cs-side > *,
     .finalcta > *,
     .page-head,
     .form-aside
@@ -2046,8 +2048,7 @@ h4 {
       .fit,
       .nofit,
       .faq details,
-        .cs-side > *,
-      .finalcta > *,
+          .finalcta > *,
       .page-head,
       .form-aside,
       .hero-copy > *,
@@ -2533,6 +2534,19 @@ h4 {
   }
   .stack-label {
     text-align: left;
+  }
+  /* Once the panes are stacked full width, the entrance must not carry them
+     sideways: an 18px horizontal offset would hang past the container. Keep
+     the settle vertical only. */
+  .motion .stack .pane-site,
+  .motion .stack .pane-pipeline,
+  .motion .stack .pane-due {
+    transform: translateY(16px);
+  }
+  .motion .stack.is-in .pane-site,
+  .motion .stack.is-in .pane-pipeline,
+  .motion .stack.is-in .pane-due {
+    transform: none;
   }
 }
 
@@ -3041,12 +3055,11 @@ h4 {
   }
 }
 
-/* The full desktop header measures brand 351 + links 558 + CTA 112 + two 16px
-   gaps = 1053px, against a container that stops growing at var(--maxw) 1120px.
-   The row therefore needs a 1120px container to sit in, plus the 24px gutter
-   the centred container only gains from a 1168px viewport up. Anything
-   narrower gets the compact menu instead of a second wrapped line. */
-@media (max-width: 1167px) {
+/* The full desktop header measures brand 351 + links 363 + CTA 112 + two 16px
+   gaps = 858px. With the container's 24px gutter on each side that needs a
+   960px viewport, so the compact menu covers everything below that. Keep this
+   width equal to --nav-compact-max, which js/nav.js reads back. */
+@media (max-width: 959px) {
   /* Compact mobile menu replaces the wrapped two-row nav. */
   .nav-toggle {
     display: inline-flex;
@@ -3197,13 +3210,13 @@ h4 {
 }
 
 /* ---------------- Motion for v3 (still gated on .motion) ---------------- */
-.motion :is(.band-head, .flow-step, .pillar > *, .cta-band > .container > *, .learn li) {
+.motion :is(.band-head, .flow-step, .pillar > *, .cta-band > .container > *, .learn li, .proof, .accuracy) {
   opacity: 0;
   transform: translateY(14px);
   transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
   transition-delay: calc(var(--i, 0) * 80ms);
 }
-.motion :is(.band-head, .flow-step, .pillar > *, .cta-band > .container > *, .learn li).is-in {
+.motion :is(.band-head, .flow-step, .pillar > *, .cta-band > .container > *, .learn li, .proof, .accuracy).is-in {
   opacity: 1;
   transform: none;
 }
@@ -3244,32 +3257,37 @@ h4 {
 .motion .stack.is-in .stack-path circle {
   opacity: 1;
 }
-/* ---- One fictional service journey, walked once when the hero composition
+/* ---- One fictional service journey, traced once when the hero composition
    first enters the viewport: request received, New, Booked, Done, review
    request ready, next service date set, due for service.
 
-   Everything it reveals is already present in index.html. These rules only
-   bite under .motion, which the inline <head> script adds solely when
-   JavaScript is running AND reduced motion is not requested, and removes
-   again if js/motion.js never reports ready. A blocked script, a failed
-   load, or a reduced-motion preference therefore all render the finished
-   populated state with no animation and nothing hidden. Only opacity and
-   transform change, so no row moves in the layout. ---- */
-.motion .stack .jrn {
+   The journey HIGHLIGHTS information that is already on screen. It never
+   creates it. Every row, status, note and total is painted from the static
+   markup at first paint, so the dashboard is complete before any script runs
+   and stays complete if motion.js never loads, if JavaScript is off, and
+   under a reduced-motion preference.
+
+   What animates is a decorative ring that each step borrows for a moment. It
+   is a pseudo-element, it is always in the DOM, and only its opacity changes,
+   so nothing reflows and no content depends on it. ---- */
+.stack .jrn {
+  position: relative;
+}
+.stack .jrn::after {
+  content: "";
+  position: absolute;
+  inset: -4px -6px;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.42s var(--ease), transform 0.42s var(--ease);
+  pointer-events: none;
 }
-.motion .stack .jrn.is-on {
-  opacity: 1;
-  transform: none;
+.motion .stack .jrn::after {
+  transition: opacity 0.3s var(--ease);
 }
-/* The settled state is a cut, not a fade: it is also what a skipped sequence
-   falls back to, and that must never animate. */
-.motion .stack.journey-done .jrn {
+/* The one step currently being traced. */
+.motion .stack .jrn.is-lit::after {
   opacity: 1;
-  transform: none;
-  transition: none;
 }
 
 .motion .flow::before {
@@ -3284,7 +3302,7 @@ h4 {
 @media (prefers-reduced-motion: reduce) {
   .motion :is(
       .band-head, .flow-step, .pillar > *, .cta-band > .container > *,
-      .learn li, .stack .pane
+      .learn li, .stack .pane, .proof, .accuracy
     ) {
     opacity: 1 !important;
     transform: none !important;
@@ -3298,9 +3316,13 @@ h4 {
   .motion .stack-path circle {
     opacity: 1 !important;
   }
-  .motion .stack .jrn {
-    opacity: 1 !important;
-    transform: none !important;
+  /* Reduced motion: the ring never lights, and the dashboard is already
+     complete without it. */
+  .motion .stack .jrn::after {
+    opacity: 0 !important;
+    transition: none !important;
+  }
+  .accuracy summary::before {
     transition: none !important;
   }
   .motion .flow::before {
@@ -3380,6 +3402,238 @@ h4 {
   border-radius: 0;
   box-shadow: none;
   padding: 0;
+}
+
+/* =========================================================================
+   GUIDED HOMEPAGE
+   Hero secondary link, the three-stage demonstration, the proof points, the
+   accuracy disclosure, and the phone-only sticky audit CTA. Everything paints
+   from the Forge tokens declared at the top of this file.
+   ========================================================================= */
+
+/* Secondary hero action: a text link, so the audit button stays the one
+   visually dominant action in the hero. */
+.hero-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--forge-canvas);
+  text-decoration: none;
+  border-bottom: 2px solid var(--gold);
+  padding: 4px 2px;
+}
+.hero-link::after {
+  content: "\2193"; /* downward arrow: the section is further down the page */
+  font-size: 0.95em;
+}
+.hero-link:hover {
+  color: var(--gold);
+}
+.hero-link:focus-visible {
+  outline: 3px solid var(--forge-orange-soft);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Three-stage demonstration ------------------------------------------------
+   The stage label carries a number AND the words "Stage n of 3", so the
+   progression never depends on the numeral's colour alone. */
+.stage-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 12px;
+}
+.stage-num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+}
+.band-dark .stage .pillar-note {
+  color: var(--forge-on-dark-muted);
+}
+/* The one disclosure that closes the demonstration. */
+.demo-note {
+  margin: 34px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--panel-line);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--forge-canvas);
+}
+
+/* Built and operating ---------------------------------------------------- */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.proof {
+  background: var(--navy-panel);
+  border: 1px solid var(--panel-line);
+  border-radius: 14px;
+  padding: 24px 22px;
+}
+.proof h3 {
+  font-size: 1.02rem;
+  line-height: 1.25;
+  margin: 0 0 10px;
+  color: var(--forge-canvas);
+}
+.proof p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--forge-on-dark-muted);
+}
+/* The one qualification that stays on the page unprompted. */
+.proof-note {
+  margin: 20px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--forge-on-dark-muted);
+}
+/* Collapsed accuracy notes. Native <details>, so it needs no script. */
+.accuracy {
+  margin-top: 16px;
+  border: 1px solid var(--panel-line);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  background: var(--forge-black-2);
+}
+.accuracy summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 22px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--forge-canvas);
+}
+.accuracy summary::-webkit-details-marker {
+  display: none;
+}
+/* Open and closed are told apart by a rotating caret and the words that
+   follow it, never by colour alone. */
+.accuracy summary::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  transform: rotate(-45deg);
+  transition: transform 0.2s var(--ease);
+}
+.accuracy[open] summary::before {
+  transform: rotate(45deg);
+}
+.accuracy summary::after {
+  content: "Show";
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--forge-on-dark-muted);
+}
+.accuracy[open] summary::after {
+  content: "Hide";
+}
+.accuracy summary:hover {
+  color: var(--gold);
+}
+.accuracy summary:focus-visible {
+  outline: 3px solid var(--forge-orange-soft);
+  outline-offset: -3px;
+  border-radius: 10px;
+}
+.accuracy ul {
+  margin: 0;
+  padding: 0 22px 20px 42px;
+  display: grid;
+  gap: 8px;
+}
+.accuracy li {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--forge-on-dark-muted);
+}
+.accuracy a {
+  color: var(--gold);
+}
+
+/* Compact-menu-only audit link ------------------------------------------- */
+/* Redundant while the header CTA button is on screen; the compact menu hides
+   that button, so this is how a phone reaches the audit from the menu. */
+.nav-audit {
+  display: none;
+}
+
+/* Phone-only sticky audit CTA -------------------------------------------- */
+/* js/nav.js reveals this only between the hero and the closing CTA band, so
+   it never sits over the real button or the footer's legal links. */
+.sticky-cta {
+  display: none;
+}
+@media (max-width: 720px) {
+  .sticky-cta {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    background: var(--forge-black);
+    border-top: 1px solid var(--panel-line);
+  }
+  /* Higher specificity than the rule above, so `hidden` still wins. */
+  .sticky-cta[hidden] {
+    display: none;
+  }
+  .sticky-cta .btn {
+    width: 100%;
+  }
+}
+
+/* Matches the width at which the header CTA button steps aside. */
+@media (max-width: 860px) {
+  .nav-audit {
+    display: list-item;
+  }
+}
+
+/* On a phone the "BY T&R GROWTH" lockup runs past the wordmark and collides
+   with the menu toggle. The wizard header already drops it at this width;
+   the site header now does the same. */
+@media (max-width: 560px) {
+  .site-header .brand-sub {
+    display: none;
+  }
+}
+
+@media (max-width: 940px) {
+  .proof-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
 /* =========================================================================

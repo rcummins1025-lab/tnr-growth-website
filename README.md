@@ -26,7 +26,7 @@ only** (validation + brand rename); they are not required to build or serve.
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | Homepage (hero, problem, lifecycle, what’s included, system diagram, Gavin pilot, who it’s for, founding offer, FAQ, final CTA) |
+| `index.html` | Homepage (hero, how it works, see the system, built and operating, who it’s for, FAQ, final CTA) |
 | `contact.html` | "Growth System Audit" multi-step application form |
 | `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages (SMS program wording preserved) |
 | `styles.css` | Forge palette — **all** brand tokens in the `:root` block at the top |
@@ -63,7 +63,7 @@ npm run validate      # or: node scripts/validate.mjs
 ```
 
 Checks structure, internal links + anchors, escaping, email consistency, JSON-LD
-validity, absence of fake rating markup, the Gavin-pilot claim guardrails, the
+validity, absence of fake rating markup, the pilot-implementation claim guardrails, the
 SEO assets + `CNAME`, the brand symbol (present, drawn not embedded, approved
 colours, letter-free, labelled provisional, no stale name in any casing), the
 form's submission safeguards (the endpoint matches the approved one, a valid

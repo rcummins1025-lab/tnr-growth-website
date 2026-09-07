@@ -5,7 +5,7 @@
  * No dependencies. Run: npm run validate  (or: node scripts/validate.mjs)
  *
  * Verifies structure, internal links + anchors, escaping, email consistency,
- * JSON-LD validity, absence of fake rating markup, the Gavin-pilot claim
+ * JSON-LD validity, absence of fake rating markup, the pilot-implementation claim
  * guardrails, the brand symbol (present, drawn not embedded, approved colours,
  * no letterforms), the form's submission safeguards, and the motion layer's
  * reduced-motion / fail-open guarantees.
@@ -131,7 +131,7 @@ for (const f of htmlFiles) {
   bad ? fail(`${f}: contains rating markup`) : ok(`${f}: no rating markup`);
 }
 
-console.log("\n== Gavin-pilot claim guardrails ==");
+console.log("\n== Pilot-implementation claim guardrails ==");
 const banned = [
   "cannabis",
   "we guarantee",
@@ -743,9 +743,8 @@ const contact = read("contact.html");
   ? ok("contact: corrected step-5 hint present")
   : fail("contact: corrected step-5 hint missing");
 const idxHtml = read("index.html");
-/A working implementation connecting discovery, lead handling,\s*\n?\s*completed service, and follow-up\./.test(idxHtml)
-  ? ok("index: corrected case-study introduction present")
-  : fail("index: corrected case-study introduction missing");
+// (The case-study introduction it used to check was replaced by the guided
+// "Built and operating" section, which the section below validates.)
 !/operated, in order/.test(idxHtml)
   ? ok('index: "in order" removed from the case study')
   : fail('index: case study still says "in order"');
@@ -766,6 +765,241 @@ invented.length === 0
   ? ok("index: manual-message disclosure preserved")
   : fail("index: manual-message disclosure missing");
 
+console.log("\n== Guided homepage: the five sections and the one action ==");
+// The homepage was reduced to a single guided path. These checks hold that
+// path in place: the sections a visitor walks, the action they are always
+// offered, and the claims that must never creep back in.
+const SECTIONS = [
+  ['id="how"', "How it works"],
+  ['id="system"', "See the system at work"],
+  ['id="built"', "Built and operating"],
+  ['id="fit"', "Who it is for"],
+  ['class="cta-band"', "Closing CTA"]
+];
+const missingSections = SECTIONS.filter(([sel]) => !idxHtml.includes(sel));
+missingSections.length === 0
+  ? ok(`index: all ${SECTIONS.length} guided sections present, in order`)
+  : fail(`index: missing section(s): ${missingSections.map(([, n]) => n).join(", ")}`);
+const sectionOrder = SECTIONS.map(([sel]) => idxHtml.indexOf(sel));
+sectionOrder.every((v, i) => i === 0 || v > sectionOrder[i - 1])
+  ? ok("index: the guided sections appear in the intended reading order")
+  : fail("index: the guided sections are out of order");
+
+// The approved copy for the guided path.
+const GUIDED_COPY = [
+  ["Customer-growth system for established local-service businesses", "hero kicker"],
+  ["Get found. Get booked.", "hero heading"],
+  ["one system your team", "hero supporting copy"],
+  ["Built first for established HVAC and heat-pump service businesses.", "hero fit note"],
+  ["See the system at work.", "demonstration heading"],
+  ["Follow one customer from website inquiry to their next service.", "demonstration lede"],
+  ["New inquiry", "stage 1"],
+  ["Job completed", "stage 2"],
+  ["Customer due again", "stage 3"],
+  ["Messages are prepared for review. Nothing goes out automatically.", "messaging disclosure"],
+  ["A working HVAC service-business implementation.", "proof heading"],
+  ["Public discovery and lead capture", "proof point 1"],
+  ["Private operating workflow", "proof point 2"],
+  ["Review and return-service process", "proof point 3"],
+  ["Read the implementation and accuracy notes", "accuracy disclosure"],
+  ["Built for established service businesses with customers worth bringing back.", "fit heading"],
+  ["Find the gaps costing you repeat business.", "closing heading"]
+];
+const missingGuided = GUIDED_COPY.filter(([t]) => !idxHtml.includes(t));
+missingGuided.length === 0
+  ? ok(`index: all ${GUIDED_COPY.length} guided copy anchors present`)
+  : fail(`index: missing ${missingGuided.map(([, n]) => n).join(", ")}`);
+
+// Four how-it-works stages and four FAQ entries, no more.
+const flowSteps = (idxHtml.match(/<div class="flow-step">/g) || []).length;
+flowSteps === 4
+  ? ok("index: four how-it-works stages")
+  : fail(`index: ${flowSteps} how-it-works stages (expected 4)`);
+const stages = (idxHtml.match(/<div class="pillar stage">/g) || []).length;
+stages === 3
+  ? ok("index: three demonstration stages")
+  : fail(`index: ${stages} demonstration stages (expected 3)`);
+const faqBlock = (idxHtml.match(/<div class="faq">[\s\S]*?\n          <\/div>/) || [""])[0];
+const faqs = (faqBlock.match(/<summary>/g) || []).length;
+faqs === 4
+  ? ok("index: exactly four FAQ entries")
+  : fail(`index: ${faqs} FAQ entries (expected 4)`);
+const proofs = (idxHtml.match(/<div class="proof">/g) || []).length;
+proofs === 3
+  ? ok("index: three proof points")
+  : fail(`index: ${proofs} proof points (expected 3)`);
+
+// The audit is the one action, and every primary CTA reaches it directly.
+const PRIMARY = "Start your growth audit";
+const primaryCtas = [
+  ...idxHtml.matchAll(/<a class="btn[^"]*"\s+href="([^"]+)"[^>]*>([^<]+)<\/a>/g)
+].filter((m) => m[2].trim() === PRIMARY);
+primaryCtas.length >= 2
+  ? ok(`index: ${primaryCtas.length} "${PRIMARY}" buttons (hero, closing, sticky)`)
+  : fail(`index: only ${primaryCtas.length} primary CTA button(s)`);
+primaryCtas.every((m) => m[1] === "contact.html")
+  ? ok("index: every primary CTA links straight to contact.html")
+  : fail("index: a primary CTA does not point at contact.html");
+const audit = read("contact.html");
+/<form id="audit-form"/.test(audit) && /class="wz-step form-step" data-step="1"/.test(audit)
+  ? ok("contact: the audit still begins immediately on the page")
+  : fail("contact: the audit entry point has changed");
+
+// Nothing may hijack the visitor.
+const HIJACK = [
+  [/location\.(replace|assign)\s*\(|location\.href\s*=/, "a scripted redirect"],
+  [/<meta[^>]+http-equiv=["']refresh/i, "a meta refresh"],
+  [/showModal\s*\(|\.modal\s*\(|window\.open\s*\(/, "a popup or modal"],
+  [/setTimeout\([^)]*contact\.html/, "a timed jump to the audit"]
+];
+const hijackJs = idxHtml + read("js/nav.js") + read("js/motion.js");
+const hijacks = HIJACK.filter(([re]) => re.test(hijackJs));
+hijacks.length === 0
+  ? ok("index: no redirect, meta refresh, popup, or timed jump to the audit")
+  : fail(`index: contains ${hijacks.map(([, n]) => n).join(", ")}`);
+
+console.log("\n== Guided homepage: sticky CTA and honest claims ==");
+// The sticky CTA is a phone affordance, never present during the audit.
+/id="sticky-cta"/.test(idxHtml)
+  ? ok("index: the sticky audit CTA is on the homepage")
+  : fail("index: the sticky audit CTA is missing");
+/<div class="sticky-cta" id="sticky-cta" hidden>/.test(idxHtml)
+  ? ok("index: the sticky CTA ships hidden and is only revealed by script")
+  : fail("index: the sticky CTA must ship hidden");
+const stickyPages = htmlFiles.filter((f) => /sticky-cta/.test(read(f)));
+stickyPages.length === 1 && stickyPages[0] === "index.html"
+  ? ok("contact: the audit page carries no sticky CTA over its controls")
+  : fail(`sticky CTA present on: ${stickyPages.join(", ")} (expected index.html only)`);
+const navJs = read("js/nav.js");
+/pastHero && !atClosing/.test(navJs)
+  ? ok("nav: the sticky CTA shows only between the hero and the closing CTA")
+  : fail("nav: the sticky CTA must hide over the hero, the closing CTA, and the footer");
+/new IntersectionObserver/.test(navJs) &&
+!/addEventListener\(\s*["'](scroll|resize|wheel|touchmove)/.test(navJs)
+  ? ok("nav: the sticky CTA uses IntersectionObserver, no scroll listener")
+  : fail("nav: the sticky CTA must not use a scroll listener");
+/@media \(max-width: 720px\) \{[\s\S]*?\.sticky-cta \{[\s\S]*?position:\s*fixed/.test(cssText)
+  ? ok("styles: the sticky CTA is phone-only")
+  : fail("styles: the sticky CTA must be confined to phone widths");
+
+// The pilot customer is never named, and this is never framed as a case study.
+// Built from parts so the pilot customer's own name is never written into
+// this repository, which GitHub Pages serves publicly.
+const PILOT_NAME = ["G", "avin"].join("");
+const NAMED = [new RegExp("\\b" + PILOT_NAME + "\\b", "i"), /case[\s-]?stud(y|ies)/i];
+const namedHits = NAMED.filter((re) => htmlFiles.some((f) => re.test(read(f))));
+namedHits.length === 0
+  ? ok("site: no pilot-customer name and no case-study framing")
+  : fail(`site: found ${namedHits.length} forbidden name/label pattern(s)`);
+// GitHub Pages serves the whole repository, so the name must not survive in a
+// README, a doc, or a dev script either.
+const NAME_SCAN_FILES = [
+  ...htmlFiles,
+  "README.md",
+  "docs/BRAND.md",
+  "docs/CONTACT-FORM.md",
+  "docs/LAUNCH-CHECKLIST.md",
+  "brand.config.json",
+  "js/intake.js",
+  "js/motion.js",
+  "js/nav.js",
+  "styles.css"
+].filter((f) => existsSync(join(root, f)));
+const nameLeaks = NAME_SCAN_FILES.filter((f) =>
+  new RegExp("\\b" + PILOT_NAME + "\\b", "i").test(read(f))
+);
+nameLeaks.length === 0
+  ? ok(`site: the pilot customer is unnamed across all ${NAME_SCAN_FILES.length} published files`)
+  : fail(`site: pilot-customer name present in ${nameLeaks.join(", ")}`);
+
+// No public pricing anywhere on the marketing pages.
+const PRICING = [
+  /\$\s?\d/,
+  /\b\d+\s*(?:usd|dollars)\b/i,
+  /\bper month\b|\bmonthly fee\b|\bstarting at\b|\bpricing\b/i
+];
+const pricingPages = htmlFiles.filter(
+  (f) => f !== "terms.html" && PRICING.some((re) => re.test(read(f)))
+);
+pricingPages.length === 0
+  ? ok("site: no public pricing on the marketing pages")
+  : fail(`site: pricing-like copy on ${pricingPages.join(", ")}`);
+
+// The accuracy disclosure has to keep carrying each fact.
+const accuracy = (idxHtml.match(/<details class="accuracy">[\s\S]*?<\/details>/) || [""])[0];
+const FACTS = [
+  ["reported discovering the service business through Gemini", "the reported discovery"],
+  ["separate unbranded test", "the unbranded test"],
+  ["separate events", "the separation of the two events"],
+  ["do not claim the website caused", "the no-causation statement"],
+  ["not treated as publicly live until verified", "the unverified-review caveat"],
+  ["Automated customer texting is not operating", "the texting status"]
+];
+// Native <details>, collapsed by default, so the facts stay available without
+// interrupting the page and remain reachable with no script at all.
+/<details class="accuracy">/.test(idxHtml)
+  ? ok("index: the accuracy notes are a native <details>")
+  : fail("index: the accuracy notes must be a native <details> element");
+/<details class="accuracy"[^>]*\bopen\b/.test(idxHtml)
+  ? fail("index: the accuracy notes are expanded by default")
+  : ok("index: the accuracy notes are collapsed by default");
+/<summary>Read the implementation and accuracy notes<\/summary>/.test(accuracy)
+  ? ok("index: the accuracy summary carries the agreed label")
+  : fail("index: the accuracy summary label has changed");
+// Open vs closed must not be signalled by colour alone.
+/\.accuracy summary::after \{[^}]*content:\s*"Show"/.test(cssText) &&
+/\.accuracy\[open\] summary::after \{[^}]*content:\s*"Hide"/.test(cssText)
+  ? ok("styles: open and closed are spelled out, not just coloured")
+  : fail("styles: the details control needs a visible text state");
+/\.accuracy summary:focus-visible \{[^}]*outline:/.test(cssText)
+  ? ok("styles: the details control has a visible focus state")
+  : fail("styles: the details control needs a focus outline");
+// The visible note that stays on the page unprompted.
+/Results vary, and customer review and reminder messages are\s*\n?\s*currently reviewed and sent manually\./.test(
+  idxHtml
+)
+  ? ok("index: the visible results-vary and manual-send note is present")
+  : fail("index: the visible proof note is missing or reworded");
+
+const missingFacts = FACTS.filter(([t]) => !accuracy.includes(t));
+missingFacts.length === 0
+  ? ok(`index: the accuracy disclosure keeps all ${FACTS.length} facts`)
+  : fail(`index: accuracy disclosure lost ${missingFacts.map(([, n]) => n).join(", ")}`);
+
+// The corrected footer sentence, on every page that carries the footer.
+const FOOTER_SENTENCE =
+  "ServiceMomentum is a connected customer-growth system for U.S.\n              local-service businesses, designed and operated by T&amp;R Growth\n              LLC.";
+const footerPages = htmlFiles.filter((f) => /class="footer-brand"/.test(read(f)));
+const badFooter = footerPages.filter((f) => !read(f).includes(FOOTER_SENTENCE));
+footerPages.length > 0 && badFooter.length === 0
+  ? ok(`site: the corrected footer sentence is on all ${footerPages.length} pages`)
+  : fail(`site: footer sentence wrong on ${badFooter.join(", ")}`);
+htmlFiles.some((f) => /designed and operated by T&amp;R Growth LLC\s*\n?\s*is a connected/.test(read(f)))
+  ? fail("site: the broken footer sentence is still present")
+  : ok("site: the broken footer sentence is gone");
+
+// Navigation matches the simplified set, and every homepage anchor resolves.
+const navBlock = (idxHtml.match(/<ul class="nav-links"[\s\S]*?<\/ul>/) || [""])[0];
+const navLabels = [...navBlock.matchAll(/>([^<]+)<\/a>/g)].map((m) =>
+  m[1].trim().replace(/&rsquo;/g, "'")
+);
+JSON.stringify(navLabels) ===
+JSON.stringify(["How It Works", "See the System", "Who It's For", "Start Audit"])
+  ? ok(`index: navigation is the simplified set (${navLabels.join(", ")})`)
+  : fail(`index: navigation is ${navLabels.join(", ")}`);
+const anchors = [...idxHtml.matchAll(/href="#([a-z-]+)"/g)].map((m) => m[1]);
+const deadAnchors = anchors.filter((a) => !new RegExp(`id="${a}"`).test(idxHtml));
+deadAnchors.length === 0
+  ? ok(`index: all ${anchors.length} in-page anchors resolve`)
+  : fail(`index: dead anchor(s): ${deadAnchors.join(", ")}`);
+
+// The submission config must not have been touched by any of this.
+const cfgRaw = read("js/site-config.js");
+/formEndpoint: "https:\/\/formspree\.io\/f\/xqpklkny"/.test(cfgRaw) &&
+/formEndpointMode: "formspree"/.test(cfgRaw)
+  ? ok("site-config: endpoint and mode still exactly as shipped")
+  : fail("site-config: the endpoint or mode changed");
+
 console.log("\n== Responsive header: one clean row ==");
 // The desktop header wrapped onto a second line because its content is wider
 // than the container ever gets. These checks pin the arithmetic that fixed it,
@@ -784,8 +1018,8 @@ MAXW > 0 && GUTTER > 0
 // Measured in the browser at 1168-1440px: brand 351 + links 558 + CTA 112 plus
 // two 16px nav gaps. Kept here so the breakpoint below has something to be
 // checked against.
-const HEADER_ROW_PX = 351 + 558 + 112 + 16 * 2;
-HEADER_ROW_PX === 1053
+const HEADER_ROW_PX = 351 + 363 + 112 + 16 * 2;
+HEADER_ROW_PX === 858
   ? ok(`header: full row measures ${HEADER_ROW_PX}px (brand + links + CTA + gaps)`)
   : fail(`header: row arithmetic changed to ${HEADER_ROW_PX}px`);
 HEADER_ROW_PX <= MAXW
@@ -797,17 +1031,29 @@ HEADER_ROW_PX <= MAXW
 const compactBp = Number(
   (cssHdr.match(/@media \(max-width:\s*(\d+)px\) \{\s*\n\s*\/\* Compact mobile menu/) || [])[1]
 );
-const minFullNavVw = MAXW + GUTTER * 2;
+// At the narrowest viewport that shows the full row, the container is either
+// at its max width or the viewport minus both gutters, whichever is smaller.
+// That has to be at least as wide as the row itself.
+const smallestFullNavVw = compactBp + 1;
+const availableThere = Math.min(MAXW, smallestFullNavVw - GUTTER * 2);
 compactBp
   ? ok(`styles: the compact menu covers everything up to ${compactBp}px`)
   : fail("styles: could not find the compact-menu breakpoint");
-compactBp && compactBp + 1 >= minFullNavVw
+compactBp && availableThere >= HEADER_ROW_PX
   ? ok(
-      `header: the full row only appears from ${compactBp + 1}px, at or above the ${minFullNavVw}px it needs`
+      `header: at ${smallestFullNavVw}px the row has ${availableThere}px for ${HEADER_ROW_PX}px of content`
     )
   : fail(
-      `header: the full row appears from ${compactBp + 1}px but needs ${minFullNavVw}px, so it will wrap`
+      `header: at ${smallestFullNavVw}px only ${availableThere}px is available for a ${HEADER_ROW_PX}px row, so it will wrap`
     );
+// The stylesheet token js/nav.js reads must equal the media query it documents.
+const navToken = Number((cssHdr.match(/--nav-compact-max:\s*(\d+)px/) || [])[1]);
+navToken === compactBp
+  ? ok(`styles: --nav-compact-max (${navToken}px) matches the compact media query`)
+  : fail(`styles: --nav-compact-max is ${navToken}px but the media query is ${compactBp}px`);
+/getPropertyValue\("--nav-compact-max"\)/.test(read("js/nav.js"))
+  ? ok("nav: the script reads its breakpoint from the stylesheet")
+  : fail("nav: the compact breakpoint must come from --nav-compact-max");
 
 // The bar must never be allowed to wrap in the compact range, and must keep a
 // gutter there (the container's padding loses to .nav's shorthand).
@@ -1032,7 +1278,7 @@ claimHits === 0
   : fail(`index: ${claimHits} performance claim(s) inside a demo composition`);
 // The demo records must not be tied to the anonymous real implementation.
 const heroAndPillars = figures.map((f) => f.html).join("\n");
-/Gavin|our client|client results|this customer earned/i.test(heroAndPillars)
+new RegExp(PILOT_NAME + "|our client|client results|this customer earned", "i").test(heroAndPillars)
   ? fail("index: a demo composition attributes its records to a real client")
   : ok("index: no demo record is attributed to a real client");
 
@@ -1062,95 +1308,156 @@ preparedPanels.length > 0 && explained.length === preparedPanels.length
   ? ok("index: the manual-message disclosure is still on the page")
   : fail("index: the manual-message disclosure has been lost");
 
-console.log("\n== Hero journey animation ==");
+console.log("\n== Hero dashboard: complete before any script runs ==");
 const motionSrc = read("js/motion.js");
 const idxCss = read("styles.css");
-// Everything the animation reveals ships in the markup, hidden only by a
-// .motion rule, so a blocked or failed script leaves nothing invisible.
-const beats = [...idxHtml.matchAll(/class="[^"]*\bjrn\b[^"]*"\s+data-beat="(\d)"/g)].map((m) =>
-  Number(m[1])
+
+// The dashboard must be finished at first paint. Every record, status, note
+// and total is static markup; the animation only borrows a highlight ring.
+const heroFigure = (idxHtml.match(/<figure class="stack"[\s\S]*?<\/figure>/) || [""])[0];
+const STATIC_DATA = [
+  ["Request received", "the request confirmation"],
+  [">Property manager<", "a pipeline record"],
+  ['<span class="chip new">New</span>', "the New status"],
+  ['<span class="chip booked">Booked</span>', "the Booked status"],
+  ['<span class="chip done">Done</span>', "the Done status"],
+  [">Review request ready<", "the review-request note"],
+  [">Next service date set<", "the next-service note"],
+  [">Due in 14 days<", "a due-for-service date"],
+  ["<b>12</b><span>Leads</span>", "the example-month totals"]
+];
+const missingStatic = STATIC_DATA.filter(([t]) => !heroFigure.includes(t));
+missingStatic.length === 0
+  ? ok(`index: all ${STATIC_DATA.length} hero dashboard values are in the static HTML`)
+  : fail(`index: hero dashboard is missing ${missingStatic.map(([, n]) => n).join(", ")}`);
+
+// Nothing may be inserted into the dashboard by script.
+/\.stack[\s\S]{0,400}?(innerHTML|insertAdjacentHTML|createElement|appendChild)/.test(motionSrc)
+  ? fail("motion: the dashboard is being built by script")
+  : ok("motion: no dashboard content is inserted by script");
+
+// No rule may hide a journey step. The old build faded them in from zero; the
+// dashboard must never depend on that again.
+const jrnRules = (idxCss.replace(/\/\*[\s\S]*?\*\//g, "").match(/[^{}]*\.jrn[^{}]*\{[^}]*\}/g) || []);
+const hidesContent = jrnRules.filter(
+  (r) => !r.includes("::after") && /opacity:\s*0|display:\s*none|visibility:\s*hidden/.test(r)
 );
-const beatSet = [...new Set(beats)].sort();
-beatSet.join(",") === "1,2,3,4,5,6,7"
-  ? ok(`index: all 7 journey beats present across ${beats.length} elements`)
-  : fail(`index: journey beats are ${beatSet.join(",") || "missing"}, expected 1..7`);
-/\.motion \.stack \.jrn \{[^}]*opacity:\s*0/.test(idxCss)
-  ? ok("styles: the beats are hidden only under .motion")
-  : fail("styles: the journey's hidden state must be scoped to .motion");
-// Comments are stripped first: a brace-free comment block above a rule would
-// otherwise be swallowed into the selector text.
-const cssNoComments = idxCss.replace(/\/\*[\s\S]*?\*\//g, "");
-const jrnSelectors = (cssNoComments.match(/[^{}]*\.jrn[^{}]*(?=\{)/g) || []).map((x) =>
-  x.trim().replace(/\s+/g, " ")
-);
-const unguarded = jrnSelectors.filter(
-  (sel) => !sel.split(",").every((one) => one.includes(".motion"))
-);
-jrnSelectors.length > 0 && unguarded.length === 0
-  ? ok(`styles: all ${jrnSelectors.length} .jrn rule(s) sit behind the .motion gate`)
-  : fail(`styles: unguarded .jrn rule(s): ${unguarded.join(" | ") || "none found"}`);
-/\.motion \.stack \.jrn\.is-on \{[^}]*opacity:\s*1/.test(idxCss) &&
-/\.motion \.stack\.journey-done \.jrn \{[^}]*opacity:\s*1[^}]*transition:\s*none/.test(idxCss)
-  ? ok("styles: the settled state restores every beat, as a cut rather than a fade")
-  : fail("styles: the journey needs a settled state that restores every beat");
-// Reduced motion: the finished state, immediately.
-/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.motion \.stack \.jrn \{[^}]*opacity:\s*1 !important;[^}]*transition:\s*none !important;/.test(
+hidesContent.length === 0
+  ? ok(`styles: none of the ${jrnRules.length} .jrn rules hide a dashboard row`)
+  : fail(`styles: a .jrn rule still hides content: ${hidesContent[0].slice(0, 70)}`);
+/\.stack \.jrn::after \{[^}]*opacity:\s*0/.test(idxCss)
+  ? ok("styles: only the decorative highlight ring starts invisible")
+  : fail("styles: the highlight ring must be the thing that starts at opacity 0");
+/\.motion \.stack \.jrn\.is-lit::after \{[^}]*opacity:\s*1/.test(idxCss)
+  ? ok("styles: the lit step shows its ring")
+  : fail("styles: .is-lit must light the ring");
+
+// Only opacity and transform move.
+const ringRules = (idxCss.match(/\.(?:motion )?[^{}]*\.jrn[^{}]*\{[^}]*\}/g) || []).join("\n");
+const ringProps = [
+  ...new Set((ringRules.match(/transition:\s*([a-z-]+)/g) || []))
+].map((x) => x.split(":")[1].trim());
+ringProps.every((pr) => pr === "opacity" || pr === "transform" || pr === "none")
+  ? ok(`journey: transitions only ${ringProps.join(", ") || "nothing"}`)
+  : fail(`journey: transitions a disallowed property: ${ringProps.join(", ")}`);
+
+// The sequence is bounded and runs once.
+const beatMs = Number((motionSrc.match(/BEAT_MS = (\d+)/) || [])[1]);
+const maxMs = Number((motionSrc.match(/JOURNEY_MAX_MS = (\d+)/) || [])[1]);
+const beats = Number((motionSrc.match(/BEATS = (\d+)/) || [])[1]);
+maxMs > 0 && maxMs <= 2500
+  ? ok(`journey: hard ceiling is ${maxMs}ms, within the 2500ms maximum`)
+  : fail(`journey: ceiling is ${maxMs}ms, over the 2500ms maximum`);
+beats * beatMs <= maxMs
+  ? ok(`journey: ${beats} steps at ${beatMs}ms fit inside the ${maxMs}ms ceiling`)
+  : fail(`journey: ${beats} steps at ${beatMs}ms exceed the ${maxMs}ms ceiling`);
+/setTimeout\(endJourney, JOURNEY_MAX_MS\)/.test(motionSrc)
+  ? ok("motion: the ceiling always ends the sequence")
+  : fail("motion: the ceiling must be armed on every run");
+/journeyIO\.disconnect\(\)/.test(motionSrc)
+  ? ok("motion: the journey runs once and cannot replay")
+  : fail("motion: the journey observer must disconnect");
+/setInterval|\balternate\b|infinite/.test(motionSrc)
+  ? fail("motion: something loops forever")
+  : ok("motion: nothing loops forever");
+/!e\.isIntersecting && jTimers\.length/.test(motionSrc)
+  ? ok("motion: leaving the viewport ends the sequence")
+  : fail("motion: the sequence must stop off-screen");
+/new IntersectionObserver/.test(motionSrc) &&
+!/addEventListener\(\s*["'](scroll|resize|wheel|touchmove)/.test(motionSrc)
+  ? ok("motion: IntersectionObserver only, no scroll listener")
+  : fail("motion: no scroll listener may drive the journey");
+
+// Reduced motion and a failed script both leave the finished dashboard.
+/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.motion \.stack \.jrn::after \{[^}]*opacity:\s*0 !important/.test(
   idxCss
 )
-  ? ok("styles: reduced motion shows the finished state with no transition")
-  : fail("styles: reduced-motion users must get the finished state immediately");
-// Only the allowed properties move.
-const jrnRules = (idxCss.match(/\.motion \.stack[^{]*\.jrn[^{]*\{[^}]*\}/g) || []).join("\n");
-const jrnProps = [...new Set((jrnRules.match(/^\s*([a-z-]+):/gm) || []))].map((x) =>
-  x.trim().replace(":", "")
-);
-const ALLOWED_JRN = ["opacity", "transform", "transition"];
-jrnProps.every((p) => ALLOWED_JRN.includes(p))
-  ? ok(`journey: animates only ${jrnProps.join(", ")}`)
-  : fail(`journey: animates disallowed propert(ies): ${jrnProps.filter((p) => !ALLOWED_JRN.includes(p)).join(", ")}`);
-
-// It runs once, on entry, via IntersectionObserver, and settles.
-/new IntersectionObserver/.test(motionSrc)
-  ? ok("motion: the journey uses IntersectionObserver")
-  : fail("motion: IntersectionObserver is required");
-/journeyIO\.disconnect\(\);/.test(motionSrc)
-  ? ok("motion: the journey observer disconnects, so it cannot replay")
-  : fail("motion: the journey must disconnect after its first run");
-/journeyStack\.classList\.add\("journey-done"\)/.test(motionSrc)
-  ? ok("motion: the journey settles into a stable final state")
-  : fail("motion: the journey must settle into a final state");
-/if \(!e\.isIntersecting && jTimers\.length\) \{\s*\n\s*settleJourney\(\);/.test(motionSrc)
-  ? ok("motion: leaving the viewport finishes the sequence instead of animating off-screen")
-  : fail("motion: the journey must not keep animating off-screen");
-/if \(!jStarted\) settleJourney\(\);/.test(motionSrc)
-  ? ok("motion: a timeout settles the journey if the observer never fires")
-  : fail("motion: the records must never sit invisible behind a sequence that never starts");
-/setInterval|requestAnimationFrame\([^)]*\bloop\b/.test(motionSrc)
-  ? fail("motion: the journey loops")
-  : ok("motion: no interval or loop drives the journey");
-/addEventListener\(\s*["'](scroll|resize|wheel|touchmove)/.test(motionSrc)
-  ? fail("motion: a scroll or resize listener was added")
-  : ok("motion: still no scroll, resize, wheel, or touchmove listener");
-/\b(import|require)\s*\(?['"]/.test(motionSrc)
-  ? fail("motion: an external dependency was added")
-  : ok("motion: still dependency-free");
-// The fail-open gate must survive.
+  ? ok("styles: reduced motion never lights the ring, and the data is untouched")
+  : fail("styles: reduced motion must suppress the ring");
 /data-motion-ready/.test(motionSrc) && /classList\.remove\("motion"\)/.test(idxHtml)
-  ? ok("motion: the fail-open gate is intact (no script, no hidden content)")
+  ? ok("motion: the fail-open gate is intact")
   : fail("motion: the fail-open motion gate has been broken");
+// No loaders, skeletons, or fake activity.
+const FAKE_LIVE = [
+  [/skeleton|shimmer|placeholder-row/i, "a skeleton screen"],
+  [/spinner|loading\b|is-loading/i, "a loading indicator"],
+  [/live now|updating|just now|\bpulse\b/i, "fake live activity"]
+];
+const fakeHits = FAKE_LIVE.filter(([re]) => re.test(heroFigure) || re.test(motionSrc));
+fakeHits.length === 0
+  ? ok("index: no loader, skeleton, or fake live activity")
+  : fail(`index: contains ${fakeHits.map(([, n]) => n).join(", ")}`);
 
-// The retired walk-through must be gone from BOTH the script and the markup.
-const RETIRED_UI = ["ui-mock", "ui-row", "ui-cols", "ui-head", "ui-foot", "pillst"];
-const stillThere = RETIRED_UI.filter(
-  (c) => new RegExp("\\b" + c + "\\b").test(motionSrc + idxCss + htmlFiles.map(read).join(""))
-);
-stillThere.length === 0
-  ? ok(`motion/styles: the retired walk-through is fully removed (${RETIRED_UI.length} selectors)`)
-  : fail(`dead code remains for: ${stillThere.join(", ")}`);
-// The empty placeholder bars are what this change replaced.
-/<span class="bar[ "]/.test(idxHtml)
-  ? fail("index: an empty placeholder bar survived")
-  : ok("index: no empty placeholder bars remain");
+console.log("\n== Referral source: captured, sanitised, never rendered ==");
+const intakeSrc = read("js/intake.js");
+const auditHtml = read("contact.html");
+/<input type="hidden" id="referral-source" name="referral_source" value="direct" \/>/.test(
+  auditHtml
+)
+  ? ok('contact: referral_source ships as a hidden field defaulting to "direct"')
+  : fail("contact: the referral_source hidden field is missing or altered");
+/REFERRAL_FALLBACK = "direct"/.test(intakeSrc)
+  ? ok('intake: the fallback is "direct"')
+  : fail('intake: the fallback must be "direct"');
+/REFERRAL_MAX = 80/.test(intakeSrc)
+  ? ok("intake: the source value is capped at 80 characters")
+  : fail("intake: the source value needs an 80-character cap");
+/REFERRAL_ALLOWED = \/\^\[A-Za-z0-9 ._-\]\+\$\//.test(intakeSrc)
+  ? ok("intake: only letters, numbers, spaces, underscores, hyphens and periods")
+  : fail("intake: the allowed-character set has changed");
+/referralField\.value = referralSource\(\);/.test(intakeSrc)
+  ? ok("intake: the value is assigned to .value, never rendered as markup")
+  : fail("intake: the source must be assigned to a hidden input's value");
+/\.innerHTML\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(/.test(intakeSrc)
+  ? fail("intake: an HTML sink appeared near the referral value")
+  : ok("intake: no innerHTML, insertAdjacentHTML, or document.write");
+// Comments are stripped first: the comment that says storage is never used
+// would otherwise trip this.
+const scriptCode = [intakeSrc, motionSrc, read("js/nav.js")]
+  .join("\n")
+  .replace(/\/\*[\s\S]*?\*\//g, "")
+  .replace(/(^|[^:])\/\/.*$/gm, "$1");
+/document\.cookie|\blocalStorage\b|\bsessionStorage\b|\bindexedDB\b/.test(scriptCode)
+  ? fail("site: cookies or browser storage were introduced")
+  : ok("site: no cookies, localStorage, sessionStorage, or IndexedDB");
+/document\.referrer/.test(intakeSrc)
+  ? fail("intake: the referring page URL is being collected")
+  : ok("intake: the referring page URL is never read");
+const TRACKERS = /googletagmanager|google-analytics|gtag\(|fbq\(|segment\.com|mixpanel|hotjar|plausible|fathom/i;
+htmlFiles.concat(["js/intake.js", "js/nav.js", "js/motion.js"]).some((f) => TRACKERS.test(read(f)))
+  ? fail("site: an external analytics or tracking script was added")
+  : ok("site: no external analytics or tracking");
+// The honeypot is dropped from the payload; referral_source must not be.
+/if \(k === HONEYPOT\) return;/.test(intakeSrc)
+  ? ok("intake: the spam trap is still stripped from the payload")
+  : fail("intake: the honeypot strip has been lost");
+!/referral_source[^\n]*return;/.test(intakeSrc)
+  ? ok("intake: referral_source is carried into the payload with the other fields")
+  : fail("intake: referral_source is being dropped before submission");
+// Never shown to the visitor.
+/name="referral_source"[^>]*type="text"|>\s*referral_source\s*</.test(auditHtml)
+  ? fail("contact: the referral source is visible in the page")
+  : ok("contact: the referral source is never shown to the visitor");
 
 console.log("\n== Audit success screen: structure and copy ==");
 // The two-column confirmation that replaces the question stage after a real
@@ -1191,28 +1498,30 @@ successHtml
 // no-name / no-business fallbacks; js/intake.js rewrites them when it can.
 const SUCCESS_COPY = [
   ["Audit received", "left-pane label"],
-  ["Your audit request is in.", "no-name heading fallback"],
+  ["Your Growth System Audit is in.", "heading"],
   [
-    "We have your Growth System Audit request. Ryan will review your answers and look at how your current website and follow-up process connect.",
-    "no-business supporting copy"
-  ],
-  [
-    "Expect a personal reply by email within two business days.",
-    "timing line"
+    "Ryan will personally review your answers and reply by email within two business days.",
+    "supporting copy"
   ],
   ["What happens next", "next-steps heading"],
-  ["We review your answers.", "step 1"],
   [
-    "We examine the gaps across discovery, lead handling, and customer follow-up.",
+    "Ryan reviews how your business handles leads, completed jobs and past customers.",
+    "step 1"
+  ],
+  [
+    "You receive a direct email with the most important gaps he sees.",
     "step 2"
   ],
-  ["Ryan replies with the clearest next step.", "step 3"],
+  [
+    "If it looks like a fit, the next step is a short call to discuss the implementation.",
+    "step 3"
+  ],
   [
     "No automated recommendation. No generic score. A real person reviews your request.",
     "reassurance line"
   ],
   ["Return to website", "primary button label"],
-  ["Need to add something? Email ", "secondary contact link"]
+  ["Need to add context? Email ", "secondary contact link"]
 ];
 const missingCopy = SUCCESS_COPY.filter(([t]) => !successHtml.includes(t));
 missingCopy.length === 0
@@ -1234,9 +1543,15 @@ missingCopy.length === 0
 )
   ? ok("contact: success heading is programmatically focusable")
   : fail('contact: success heading needs tabindex="-1" so focus can move to it');
-/id="audit-success-lede"/.test(successHtml)
-  ? ok("contact: supporting line is addressable for personalisation")
-  : fail("contact: supporting line needs id=audit-success-lede");
+// No scheduling service, no pricing, and no promise of what Ryan will find.
+const HANDOFF_LIMITS = [
+  [/calendly|cal\.com|book a call now|schedule now|pick a time/i, "a scheduling service"],
+  [/\$\s?\d|per month|pricing/i, "pricing"],
+  [/will find|will uncover|will recover|will discover|guarantee/i, "a promise about the outcome"]
+].filter(([re]) => re.test(successHtml));
+HANDOFF_LIMITS.length === 0
+  ? ok("contact: the handoff adds no scheduler, no pricing, and no outcome promise")
+  : fail(`contact: the handoff contains ${HANDOFF_LIMITS.map(([, n]) => n).join(", ")}`);
 
 // Nothing that would turn this into a funnel step.
 const UPSELL = [
@@ -1269,56 +1584,27 @@ OVERPROMISE.length === 0
       `contact: success copy contains ${OVERPROMISE.map(([, n]) => n).join(", ")}`
     );
 
-console.log("\n== Audit success screen: personalisation is text, never markup ==");
-// Visitor-supplied values reach the page only as text. One innerHTML anywhere
-// near them would turn a submitted business name into executable markup.
-/personalise\(firstName, business\);/.test(intake)
-  ? ok("intake: personalisation runs from succeed()")
-  : fail("intake: succeed() must personalise the panel");
-/successHeading\.textContent = "Thanks, " \+ firstName \+ "\.";/.test(intake)
-  ? ok('intake: heading is set with textContent ("Thanks, <first name>.")')
-  : fail("intake: the personalised heading must be assigned with textContent");
-/strong\.textContent = business;/.test(intake)
-  ? ok("intake: business name is set with textContent")
-  : fail("intake: the business name must be assigned with textContent");
-/successLede\.appendChild\(\s*document\.createTextNode\(/.test(intake)
-  ? ok("intake: supporting copy is rebuilt from text nodes")
-  : fail("intake: supporting copy must be rebuilt from text nodes");
-/\.innerHTML\s*=|\.outerHTML\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(/.test(
-  intake
-)
-  ? fail("intake: an HTML-writing sink appeared near visitor-supplied values")
+console.log("\n== Audit success screen: nothing a visitor typed is echoed back ==");
+// The confirmation is fixed copy in contact.html. No submitted value is
+// rendered back to the page at all, which is a stronger guarantee than
+// escaping one: there is nothing to escape.
+const successCode = intake
+  .replace(/\/\*[\s\S]*?\*\//g, "")
+  .replace(/(^|[^:])\/\/.*$/gm, "$1");
+/\.innerHTML\s*=|\.outerHTML\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(/.test(successCode)
+  ? fail("intake: an HTML-writing sink appeared")
   : ok("intake: no innerHTML, outerHTML, insertAdjacentHTML, or document.write");
-
-// Both fallbacks: the static markup is already correct when a value is
-// missing, and the helpers return "" rather than printing something odd.
-/function firstNameOf\(raw\) \{[\s\S]*?if \(!v \|\| v\.indexOf\("@"\) !== -1[\s\S]*?return "";/.test(
-  intake
-)
-  ? ok("intake: an unusable contact name falls back to the generic heading")
-  : fail("intake: firstNameOf must return \"\" for an unusable name");
-/function businessNameOf\(raw\) \{[\s\S]*?if \(!v \|\| v\.length > MAX_BUSINESS\) return "";/.test(
-  intake
-)
-  ? ok("intake: a missing or overlong business name falls back gracefully")
-  : fail("intake: businessNameOf must return \"\" when there is nothing usable");
-/if \(firstName && successHeading\)/.test(intake) &&
-/if \(!business \|\| !successLede\) return;/.test(intake)
-  ? ok("intake: personalisation is skipped entirely when a value is missing")
-  : fail("intake: personalisation must no-op when a value is missing");
-/MAX_FIRST_NAME = \d+/.test(intake) && /MAX_BUSINESS = \d+/.test(intake)
-  ? ok("intake: submitted values are length-capped before they reach the page")
-  : fail("intake: submitted values need a length cap");
-/overflow-wrap: break-word/.test(cssText)
-  ? ok("styles: a long submitted name wraps instead of widening the pane")
-  : fail("styles: the success heading needs a wrapping rule for long names");
-
-// The values must be read while the fields still hold them.
-/function succeed\(\) \{[\s\S]{0,400}?firstNameOf\(fieldValue\("name"\)\)[\s\S]{0,200}?businessNameOf\(fieldValue\("business_name"\)\)[\s\S]{0,120}?form\.reset\(\);/.test(
-  intake
-)
-  ? ok("intake: both values are captured before form.reset()")
-  : fail("intake: the submitted values must be read before form.reset()");
+const SUBMITTED_FIELDS = ["name", "business_name", "email", "phone", "service_area", "notes"];
+const echoed = SUBMITTED_FIELDS.filter((f) =>
+  new RegExp(`(textContent|createTextNode|value)[^\\n]*\\b${f}\\b`).test(successCode)
+);
+echoed.length === 0
+  ? ok(`intake: none of the ${SUBMITTED_FIELDS.length} submitted values is written back to the panel`)
+  : fail(`intake: submitted value(s) echoed into the page: ${echoed.join(", ")}`);
+// The panel's copy must be static markup, not assembled at runtime.
+/successPanel[^\n]*(textContent|innerHTML)\s*=/.test(successCode)
+  ? fail("intake: the confirmation copy is being written by script")
+  : ok("intake: the confirmation copy is static markup");
 
 console.log("\n== Audit success screen: it can only follow a real 2xx ==");
 /if \(res\.ok\) \{\s*\n\s*succeed\(\);/.test(intake)
@@ -1378,7 +1664,7 @@ retired.length === 0
 /function succeed\(\)[\s\S]*?form\.reset\(\);/.test(intake)
   ? ok("intake: the form is still reset on success")
   : fail("intake: form.reset() on success has been lost");
-/clearStatus\(\);\s*\n\s*personalise\(/.test(intake)
+/clearStatus\(\);\s*\n\s*successPanel\.hidden = false;/.test(intake)
   ? ok("intake: the old status box is cleared, not left beside the panel")
   : fail("intake: the status box must be cleared when the panel appears");
 /<footer class="wz-foot">/.test(contact)

@@ -181,6 +181,13 @@
             </div>
           </fieldset>
 
+          <!-- Where the visitor came from, for our own attribution only.
+               js/intake.js fills this from a ?source= parameter after
+               sanitising it, and falls back to "direct". It is a real
+               submitted field, not a spam trap, and it never renders into
+               visible HTML. No cookie, no storage, no referring URL. -->
+          <input type="hidden" id="referral-source" name="referral_source" value="direct" />
+
           <!-- Spam trap. Invisible to people and out of the tab order; bots
                fill it, and js/intake.js then drops the submission silently.
                The name matches the reserved key form services also honour
@@ -219,9 +226,8 @@
               <span class="wz-done-mark" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
               </span>
-              <h2 class="wz-done-title" id="audit-success-title" tabindex="-1">Your audit request is in.</h2>
-              <p class="wz-done-lede" id="audit-success-lede">We have your Growth System Audit request. Ryan will review your answers and look at how your current website and follow-up process connect.</p>
-              <p class="wz-done-timing">Expect a personal reply by email within two business days.</p>
+              <h2 class="wz-done-title" id="audit-success-title" tabindex="-1">Your Growth System Audit is in.</h2>
+              <p class="wz-done-lede">Ryan will personally review your answers and reply by email within two business days.</p>
             </div>
 
             <div class="wz-done-aside">
@@ -229,14 +235,14 @@
               <!-- list-style is removed for the numbered badges, so role="list"
                    keeps the list semantics browsers drop when it is. -->
               <ol class="wz-done-steps" role="list">
-                <li>We review your answers.</li>
-                <li>We examine the gaps across discovery, lead handling, and customer follow-up.</li>
-                <li>Ryan replies with the clearest next step.</li>
+                <li>Ryan reviews how your business handles leads, completed jobs and past customers.</li>
+                <li>You receive a direct email with the most important gaps he sees.</li>
+                <li>If it looks like a fit, the next step is a short call to discuss the implementation.</li>
               </ol>
               <p class="wz-done-reassure">No automated recommendation. No generic score. A real person reviews your request.</p>
               <div class="wz-done-actions">
                 <a class="btn btn-primary btn-lg" href="index.html">Return to website</a>
-                <p class="wz-done-contact">Need to add something? Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a></p>
+                <p class="wz-done-contact">Need to add context? Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>.</p>
               </div>
             </div>
           </section>

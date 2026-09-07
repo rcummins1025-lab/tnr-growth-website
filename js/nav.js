@@ -10,15 +10,74 @@
 (function () {
   "use strict";
 
+  /* The compact-menu width lives in the stylesheet as --nav-compact-max and is
+   * read back here, so the panel's outside-click behaviour can never drift
+   * from the width at which CSS actually collapses the menu. */
+  function compactMaxPx() {
+    var declared = getComputedStyle(document.documentElement)
+      .getPropertyValue("--nav-compact-max")
+      .trim();
+    var n = parseInt(declared, 10);
+    return n > 0 ? n : 1167;
+  }
+
   var toggle = document.getElementById("nav-toggle");
   var panel = document.getElementById("nav-links");
-  if (!toggle || !panel) return;
 
-  var MQ = "(max-width: 860px)";
+  var MQ = "(max-width: " + compactMaxPx() + "px)";
   var mq = window.matchMedia ? window.matchMedia(MQ) : null;
   var isMobile = function () {
     return mq ? mq.matches : false;
   };
+
+  /* ---------------------------------------------------------------------
+   * Phone-only sticky audit CTA.
+   *
+   * NOT behind the motion gate: it is a navigation affordance, so it must
+   * still work when a visitor asks for reduced motion. It ships hidden in the
+   * markup and is only ever revealed here, which means a blocked or failed
+   * script leaves nothing on screen that the page needs.
+   *
+   * It shows in exactly one band: after the hero has scrolled away and before
+   * the closing CTA arrives. That keeps it off the real button and off the
+   * footer's legal links, so it never covers anything. IntersectionObserver
+   * only, no scroll listener. contact.html carries no such element, so the
+   * audit itself never gets a sticky bar over its controls.
+   * ------------------------------------------------------------------- */
+  var sticky = document.getElementById("sticky-cta");
+  if (sticky && "IntersectionObserver" in window) {
+    var hero = document.querySelector(".hero-v3");
+    var closing = document.querySelector(".cta-band");
+    var pastHero = false;
+    var atClosing = false;
+    var sync = function () {
+      sticky.hidden = !(pastHero && !atClosing);
+    };
+    if (hero) {
+      new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            pastHero = !e.isIntersecting;
+          });
+          sync();
+        },
+        { threshold: 0 }
+      ).observe(hero);
+    }
+    if (closing) {
+      new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            atClosing = e.isIntersecting;
+          });
+          sync();
+        },
+        { threshold: 0 }
+      ).observe(closing);
+    }
+  }
+
+  if (!toggle || !panel) return;
 
   function setOpen(open) {
     panel.classList.toggle("is-open", open);

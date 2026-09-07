@@ -189,6 +189,16 @@ then one contact screen. This list must match `contact.html` exactly;
 | `service_area` | yes |
 | `notes` (free text) | optional |
 | `contact_consent` | yes — "Consent is not a condition of any purchase." |
+| `referral_source` | filled automatically, never shown or typed |
+
+`referral_source` records where an applicant came from. A link such as
+`contact.html?source=referral` submits `referral`; with no `?source=` it
+submits `direct`. js/intake.js trims the value, caps it at 80 characters and
+accepts only letters, numbers, spaces, underscores, hyphens and periods,
+falling back to `direct` for anything else. It is written to a hidden input's
+`.value` and never rendered as markup. No cookie, no localStorage, no
+fingerprinting, no third-party analytics, and the referring page URL is never
+read.
 
 **Added automatically at submit time:** `meta_product`, `meta_source`,
 `meta_submitted_at`, plus `_replyto` and `_subject` in `formspree` mode.

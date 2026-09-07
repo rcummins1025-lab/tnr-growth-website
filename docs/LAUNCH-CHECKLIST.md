@@ -42,7 +42,7 @@ here changes DNS, GitHub Pages, HTTPS, Google Workspace, or Twilio.
 - [ ] Legal review of `privacy.html` (now discloses the form) and that the SMS
       program wording in `privacy.html` / `terms.html` / `sms-consent.html` is
       unchanged and still accurate.
-- [ ] Gavin-pilot section re-read against `docs/BRAND.md` claim limits.
+- [ ] Working-implementation section re-read against `docs/BRAND.md` claim limits.
 - [ ] Confirm the completed live test in the Formspree dashboard **and** in the
       `hello@tnrgrowthagency.com` inbox. (The submission itself is already done —
       do not send another without approval.)
