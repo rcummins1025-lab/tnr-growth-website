@@ -26,6 +26,9 @@ import {
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const htmlFiles = readdirSync(root).filter((f) => f.endsWith(".html"));
+// Split so the protected customer's name is never stored verbatim in this
+// repository, including in the validator that checks for it.
+const PILOT_NAME = ["G", "avin"].join("");
 let fails = 0;
 let checks = 0;
 const fail = (m) => {
@@ -125,6 +128,41 @@ for (const f of htmlFiles) {
   }
 }
 
+console.log("\n== Cache busting: every page asks for the same stylesheet ==");
+// A version query on some pages but not others leaves returning visitors on a
+// stale stylesheet for the pages that lack it.
+const sheetRefs = htmlFiles.map((f) => ({
+  file: f,
+  href: (read(f).match(/<link rel="stylesheet" href="([^"]+)"/) || [])[1]
+}));
+const sheetVersions = [...new Set(sheetRefs.map((r) => r.href))];
+sheetVersions.length === 1
+  ? ok(`assets: all ${sheetRefs.length} pages request ${sheetVersions[0]}`)
+  : fail(
+      `assets: stylesheet URL differs across pages: ${sheetRefs
+        .map((r) => `${r.file} -> ${r.href}`)
+        .join(", ")}`
+    );
+
+console.log("\n== Published surface: local tooling stays out of GitHub Pages ==");
+const pagesConfig = existsSync(join(root, "_config.yml")) ? read("_config.yml") : "";
+const PRIVATE_BUILD_PATHS = ["scripts", "docs", "package.json", "README.md", "brand.config.json"];
+const missingExclusions = PRIVATE_BUILD_PATHS.filter(
+  (path) => !new RegExp("^\\s*-\\s*" + path.replace(".", "\\.") + "\\s*$", "m").test(pagesConfig)
+);
+missingExclusions.length === 0
+  ? ok("pages: development tooling and internal docs are excluded")
+  : fail(`pages: missing exclusions for ${missingExclusions.join(", ")}`);
+!existsSync(join(root, ".nojekyll"))
+  ? ok("pages: Jekyll processing remains enabled so exclusions take effect")
+  : fail("pages: .nojekyll would bypass the development-file exclusions");
+const excludedRefs = htmlFiles.filter((file) =>
+  /(?:href|src)=["'](?:scripts|docs|package\.json|README\.md|brand\.config\.json)/i.test(read(file))
+);
+excludedRefs.length === 0
+  ? ok("pages: production HTML does not depend on excluded paths")
+  : fail(`pages: production HTML references excluded paths in ${excludedRefs.join(", ")}`);
+
 console.log("\n== No fake rating / review markup ==");
 for (const f of htmlFiles) {
   const h = read(f);
@@ -147,7 +185,7 @@ const banned = [
   "always first",
   "in revenue",
   "generated $",
-  "scaled gavin"
+  "scaled " + PILOT_NAME.toLowerCase()
 ];
 for (const f of htmlFiles) {
   const h = read(f).toLowerCase();
@@ -873,15 +911,14 @@ const navJs = read("js/nav.js");
 
 // The pilot customer is never named, and this is never framed as a case study.
 // Built from parts so the pilot customer's own name is never written into
-// this repository, which GitHub Pages serves publicly.
-const PILOT_NAME = ["G", "avin"].join("");
+// this repository or exposed anywhere the source is shared.
 const NAMED = [new RegExp("\\b" + PILOT_NAME + "\\b", "i"), /case[\s-]?stud(y|ies)/i];
 const namedHits = NAMED.filter((re) => htmlFiles.some((f) => re.test(read(f))));
 namedHits.length === 0
   ? ok("site: no pilot-customer name and no case-study framing")
   : fail(`site: found ${namedHits.length} forbidden name/label pattern(s)`);
-// GitHub Pages serves the whole repository, so the name must not survive in a
-// README, a doc, or a dev script either.
+// Scan source and local tooling too. Pages excludes these files, but privacy
+// should not depend only on the deployment configuration.
 const NAME_SCAN_FILES = [
   ...htmlFiles,
   "README.md",
@@ -892,13 +929,16 @@ const NAME_SCAN_FILES = [
   "js/intake.js",
   "js/motion.js",
   "js/nav.js",
-  "styles.css"
+  "styles.css",
+  ...readdirSync(join(root, "scripts"))
+    .filter((f) => /\.(?:js|mjs)$/.test(f))
+    .map((f) => "scripts/" + f)
 ].filter((f) => existsSync(join(root, f)));
 const nameLeaks = NAME_SCAN_FILES.filter((f) =>
   new RegExp("\\b" + PILOT_NAME + "\\b", "i").test(read(f))
 );
 nameLeaks.length === 0
-  ? ok(`site: the pilot customer is unnamed across all ${NAME_SCAN_FILES.length} published files`)
+  ? ok(`privacy: the pilot customer is unnamed across all ${NAME_SCAN_FILES.length} source files`)
   : fail(`site: pilot-customer name present in ${nameLeaks.join(", ")}`);
 
 // No public price figures or recurring fee offers on the marketing pages.

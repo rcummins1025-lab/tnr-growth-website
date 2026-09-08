@@ -1,0 +1,9 @@
+# GitHub Pages builds this repository through Jekyll. These paths contain
+# local development notes and QA tooling; none belongs in the public website.
+exclude:
+  - .claude
+  - README.md
+  - brand.config.json
+  - docs
+  - package.json
+  - scripts

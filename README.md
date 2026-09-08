@@ -38,11 +38,16 @@ only** (validation + brand rename); they are not required to build or serve.
 | `scripts/brand-lib.mjs` | Shared brand helpers (name slug, approved mark palette) |
 | `scripts/validate.mjs` | Focused checks / tests |
 | `scripts/mock-endpoint.mjs` | Dev-only local stand-in for the lead endpoint |
+| `_config.yml` | Excludes development tooling and internal docs from the GitHub Pages build |
 | `assets/mark*.svg` | Brand symbol — primary, one-colour, reversed (**provisional**) |
 | `assets/` | T&R Growth logos, favicon, OG image |
 | `robots.txt`, `sitemap.xml` | SEO |
 | `docs/` | Brand, contact-form, launch checklist |
 | `CNAME` | GitHub Pages custom domain (do not change) |
+
+GitHub Pages publishes only the public site surface. Jekyll exclusions in
+`_config.yml` keep `scripts/`, `docs/`, package metadata, and internal brand
+configuration out of the generated website.
 
 ## Local development
 

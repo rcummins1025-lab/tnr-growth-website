@@ -104,15 +104,12 @@ account, wiring a live endpoint, or sending anyone's data anywhere.** It stores
 nothing, and it is **never referenced or executed by the production website** —
 no page links to it, and `scripts/validate.mjs` fails if one ever does.
 
-> **It is still publicly readable.** This repo is served as static files by
-> GitHub Pages, so every committed file is fetchable at its path — including
-> `https://tnrgrowthagency.com/scripts/mock-endpoint.mjs`. Pages runs no
-> server-side code, so the script cannot *run* there; but *not executed* is not
-> *not published*. Treat every file in this repo as public, and keep secrets —
-> API keys, tokens, real endpoint URLs, account identifiers, credentials — out
-> of all of them. The Formspree endpoint URL itself is not a secret (it ships in
-> `js/site-config.js` and is visible in browser dev tools by design); the
-> Formspree **account login** is, and never belongs in the repo.
+> `_config.yml` excludes `scripts/`, `docs/`, and other development-only files
+> from the GitHub Pages build. Source access is still possible wherever the
+> repository is shared, so no source file may contain secrets, credentials,
+> account identifiers, or personal data. The Formspree endpoint URL itself is
+> not a secret (it ships in `js/site-config.js` and is visible in browser dev
+> tools by design); the Formspree **account login** is, and never belongs here.
 
 ```bash
 npm run mock          # serves http://localhost:8125/f/test

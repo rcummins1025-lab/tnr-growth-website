@@ -8,14 +8,10 @@
  * wiring a live endpoint, or sending anyone's data anywhere. It stores nothing,
  * and it is never referenced or executed by the production website.
  *
- * NOTE ON VISIBILITY: this repository is served as static files by GitHub
- * Pages, so every committed file — this one included — is publicly readable at
- * its path (https://tnrgrowthagency.com/scripts/mock-endpoint.mjs). Pages runs
- * no server-side code, so it cannot execute; but "not executed" is not "not
- * published". Treat this file as public. It therefore contains, and must
- * continue to contain, NO secrets: no API keys, tokens, endpoint URLs, account
- * identifiers, credentials, or personal data. Only localhost and a placeholder
- * path appear here. The same rule applies to everything else in the repo.
+ * NOTE ON VISIBILITY: _config.yml excludes scripts/ from the GitHub Pages
+ * build, so this file is not published on the website. The source repository
+ * may still be shared, so this file must continue to contain no secrets,
+ * credentials, account identifiers, or personal data.
  *
  *   node scripts/mock-endpoint.mjs        # or: npm run mock
  *
