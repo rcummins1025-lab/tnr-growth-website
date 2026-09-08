@@ -18,6 +18,15 @@
   "use strict";
 
   var root = document.documentElement;
+  // A preference change takes effect immediately, including mid-journey.
+  var preference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (preference && preference.addEventListener) {
+    preference.addEventListener("change", function (event) {
+      if (!event.matches) return;
+      root.classList.remove("motion");
+      if (typeof endJourney === "function") endJourney();
+    });
+  }
   if (!root.classList.contains("motion")) return;
   if (!("IntersectionObserver" in window)) {
     root.classList.remove("motion"); // fail open: show everything, unanimated

@@ -149,6 +149,8 @@
   }
 
   function showStep(i, moveFocus) {
+    clearTimeout(advanceTimer);
+    pointerCommit = false;
     steps.forEach(function (s, idx) {
       s.hidden = idx !== i;
     });
@@ -283,6 +285,7 @@
     if (e.target.closest && e.target.closest(".wz-tile")) pointerCommit = true;
   });
   form.addEventListener("keydown", function (e) {
+    pointerCommit = false;
     if (e.key !== "Enter") return;
     if (e.target.tagName === "TEXTAREA") return;
     if (current === steps.length - 1) return; // last screen submits normally
@@ -334,6 +337,7 @@
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
+    if (submitBtn.disabled) return; // refuse duplicate requests while sending
     clearStatus();
     // Validate every step before sending.
     for (var i = 0; i < steps.length; i++) {

@@ -6,13 +6,13 @@
     <title>ServiceMomentum | Turn your website and past customers into a repeatable growth system</title>
     <meta
       name="description"
-      content="ServiceMomentum, by T&amp;R Growth, builds local-service websites connected to lead tracking, review generation, customer management, and recurring-service follow-up. From first search to next service."
+      content="ServiceMomentum, by T&amp;R Growth, builds local-service websites connected to lead tracking, review follow-up, customer management, and recurring-service follow-up. From first search to next service."
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#171A1F" />
     <link rel="canonical" href="https://tnrgrowthagency.com/" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260907" />
 
     <!-- Motion gate. Adds the hook ONLY when JS runs and the visitor has not
          asked for reduced motion; drops it again if js/motion.js never loads,
@@ -36,7 +36,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ServiceMomentum" />
     <meta property="og:title" content="ServiceMomentum | A connected customer-growth system for local-service businesses" />
-    <meta property="og:description" content="Websites connected to lead tracking, review generation, customer management, and recurring-service follow-up. From first search to next service. Powered by T&amp;R Growth." />
+    <meta property="og:description" content="Websites connected to lead tracking, review follow-up, customer management, and recurring-service follow-up. From first search to next service. Powered by T&amp;R Growth." />
     <meta property="og:url" content="https://tnrgrowthagency.com/" />
     <meta property="og:image" content="https://tnrgrowthagency.com/assets/og-image.svg" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -98,113 +98,39 @@
       <section class="hero-v3">
         <div class="container">
           <div class="hero-copy">
-            <p class="eyebrow">Customer-growth system for established local-service businesses</p>
-            <h1>Get found. Get booked. <span class="amber">Bring customers back.</span></h1>
+            <p class="eyebrow">For established HVAC &amp; heat-pump contractors</p>
+            <h1><span>Get found.</span> <span>Get booked.</span> <span class="amber">Bring customers back.</span></h1>
             <p class="hero-sub">
-              We connect your website, lead pipeline, customer records,
-              reviews, and next-service follow-up into one system your team
-              can operate.
+              Good work should lead to the next job. We build and connect your website,
+              lead pipeline and customer follow-up so opportunities stop relying on memory.
             </p>
+            <p class="hero-service">Set up for your business. Operated by your team.<br />Ongoing support from T&amp;R Growth.</p>
             <div class="hero-actions-v3">
               <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
               <a class="hero-link" href="#system">See the system</a>
             </div>
-            <p class="hero-note">Built first for established HVAC and heat-pump service businesses.</p>
+            <p class="hero-note">Eight guided steps. Ryan reviews your answers and replies by email.</p>
           </div>
 
-          <!-- Layered composition: public site -> private pipeline -> due for
-               service, tied together by the amber pathway.
-
-               Every record below is invented for demonstration. The <figcaption>
-               says so in visible text, deliberately not in a tooltip, a title
-               attribute, or an aria-label. The panes are exposed to assistive
-               technology because the sample records carry information the
-               surrounding copy does not; only the drawn pathway is decorative.
-
-               js/motion.js walks one fictional journey through these panes on
-               first view. Everything it reveals is already in this markup, so
-               with JavaScript blocked, motion.js missing, or reduced motion in
-               effect, the populated state is simply what renders. -->
-          <figure class="stack">
-            <!-- Decorative pathway only. It leaves the request confirmation,
-                 tucks under the pipeline pane, and re-emerges heading for the
-                 due-for-service view. The viewBox matches the composition's
-                 pixel box, so these coordinates sit in the gaps between panes
-                 rather than across any record. -->
-            <svg class="stack-path" viewBox="0 0 560 670" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M147 282 C 187 282, 198 306, 246 312" />
-              <path d="M246 344 C 198 356, 167 352, 100 350" />
-              <circle cx="147" cy="282" r="5" style="--i:0" />
-              <circle cx="246" cy="344" r="5" style="--i:1" />
-              <circle cx="100" cy="350" r="5" style="--i:2" />
-            </svg>
-
-            <div class="pane pane-site">
-              <div class="pane-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><b>Your public website</b></div>
-              <div class="site-hero">
-                <span class="kick">Local heat-pump service</span>
-                <b>Keep your system clean and efficient</b>
-                <span class="cta">Request service</span>
-              </div>
-              <div class="site-body">
-                <span class="site-field">Name</span>
-                <span class="site-field">Service needed</span>
-                <span class="site-ok jrn" data-beat="1">Request received</span>
-              </div>
+          <!-- One illustrative record, fully readable before scripts run.
+               Dates describe a fictional history, not live activity or results. -->
+          <figure class="stack lifecycle-demo" aria-label="Illustrative customer service history">
+            <div class="demo-toolbar"><span>Customer workspace</span><span class="demo-sample">Illustrative example</span></div>
+            <div class="demo-record">
+              <span class="demo-record-icon" aria-hidden="true">4</span>
+              <div><p class="demo-overline">Sample property A</p><h2>Heat-pump cleaning</h2><p>Property manager &middot; 4 units</p></div>
             </div>
-
-            <div class="pane pane-pipeline">
-              <div class="pane-head"><b>Private lead pipeline</b><span class="tag">Sample</span></div>
-              <div class="rowset">
-                <div class="rrow jrn" data-beat="2">
-                  <span class="rec-ico" aria-hidden="true">4</span>
-                  <span class="rec"><b>Property manager</b><span class="rec-sub">4-unit cleaning</span></span>
-                  <span class="chip new">New</span>
-                </div>
-                <div class="rrow jrn" data-beat="3">
-                  <span class="rec-ico" aria-hidden="true">2</span>
-                  <span class="rec"><b>Homeowner</b><span class="rec-sub">2-unit service</span></span>
-                  <span class="chip booked">Booked</span>
-                </div>
-                <div class="rrow jrn" data-beat="4">
-                  <span class="rec-ico" aria-hidden="true">6</span>
-                  <span class="rec"><b>Small office</b><span class="rec-sub">6-unit cleaning</span></span>
-                  <span class="chip done">Done</span>
-                </div>
-              </div>
-              <div class="pane-foot">
-                <span class="note jrn" data-beat="5">Review request ready</span>
-                <span class="note jrn" data-beat="6">Next service date set</span>
-              </div>
-            </div>
-
-            <div class="pane pane-due">
-              <div class="pane-head"><b>Due for service</b><span class="tag">Sample</span></div>
-              <div class="rowset">
-                <div class="rrow jrn" data-beat="7">
-                  <span class="rec-ico" aria-hidden="true">2</span>
-                  <span class="rec"><b>Residential customer</b><span class="rec-sub">2 units</span></span>
-                  <span class="chip due">Due in 14 days</span>
-                </div>
-                <div class="rrow jrn" data-beat="7">
-                  <span class="rec-ico" aria-hidden="true">4</span>
-                  <span class="rec"><b>Property manager</b><span class="rec-sub">4 units</span></span>
-                  <span class="chip due">Due in 30 days</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="stack-meter">
-              <span class="meter-label">Example month</span>
-              <div class="meter-cells">
-                <span class="mcell"><b>12</b><span>Leads</span></span>
-                <span class="mcell"><b>7</b><span>Booked</span></span>
-                <span class="mcell"><b>5</b><span>Completed</span></span>
-                <span class="mcell"><b>18</b><span>Due soon</span></span>
-              </div>
-            </div>
-
-            <figcaption class="stack-label">Example dashboard. Demo data, not live customer information.<span class="stack-note">Review requests and reminders are prepared here. A person reviews and sends each one.</span></figcaption>
+            <div class="demo-history-head"><b>One record. Every next step.</b><span>Service history</span></div>
+            <ol class="demo-history" role="list">
+              <li class="jrn" data-beat="1"><span class="demo-step" aria-hidden="true">01</span><div><b>Website inquiry captured</b><span>4-unit cleaning &middot; 10 Sep 2026</span></div><span class="demo-state">Received</span></li>
+              <li class="jrn" data-beat="2"><span class="demo-step" aria-hidden="true">02</span><div><b>Lead enters the pipeline</b><span>Service details stay with the record</span></div><span class="demo-state">New</span></li>
+              <li class="jrn" data-beat="3"><span class="demo-step" aria-hidden="true">03</span><div><b>Appointment booked</b><span>Scheduled &middot; 15 Sep 2026</span></div><span class="demo-state">Booked</span></li>
+              <li class="jrn" data-beat="4"><span class="demo-step" aria-hidden="true">04</span><div><b>Completed work recorded</b><span>4 units cleaned &middot; 15 Sep 2026</span></div><span class="demo-state">Done</span></li>
+              <li class="jrn" data-beat="5"><span class="demo-step" aria-hidden="true">05</span><div><b>Review request ready</b><span>A person reviews and sends the message</span></div><span class="demo-state">Prepared</span></li>
+              <li class="jrn" data-beat="6"><span class="demo-step" aria-hidden="true">06</span><div><b>Next-service date set</b><span>15 Mar 2027 &middot; recorded after the job</span></div><span class="demo-state">Recorded</span></li>
+              <li class="jrn demo-due" data-beat="7"><span class="demo-step" aria-hidden="true">07</span><div><b>Back in the due-for-service view</b><span>Due in 14 days &middot; example view: 1 Mar 2027</span></div><span class="demo-state">Follow up</span></li>
+            </ol>
+            <figcaption class="stack-label">Example dashboard. Demo data, not live customer information.<span class="stack-note">All records and dates are fictional. Messages require manual review and sending.</span></figcaption>
           </figure>
         </div>
       </section>
@@ -247,7 +173,7 @@
           <div class="band-head">
             <p class="eyebrow">See the system</p>
             <h2>See the system at work.</h2>
-            <p>Follow one customer from website inquiry to their next service.</p>
+            <p>Follow Sample property A from a website inquiry to its next service. The supporting records below are fictional too.</p>
           </div>
 
           <div class="pillar stage">
@@ -262,7 +188,7 @@
                 <div class="rowset">
                   <div class="rrow">
                     <span class="rec-ico" aria-hidden="true">4</span>
-                    <span class="rec"><b>Property manager</b><span class="rec-sub">4-unit cleaning</span></span>
+                    <span class="rec"><b>Sample property A</b><span class="rec-sub">4-unit cleaning</span></span>
                     <span class="chip new">New</span>
                   </div>
                   <div class="rrow">
@@ -280,10 +206,11 @@
               <div class="pane">
                 <div class="pane-head"><b>Job record</b><span class="tag">Sample</span></div>
                 <dl class="fieldset">
+                  <div><dt>Record</dt><dd>Sample property A</dd></div>
                   <div><dt>Source</dt><dd>Website</dd></div>
                   <div><dt>Service</dt><dd>4-unit cleaning</dd></div>
                   <div><dt>Status</dt><dd><span class="chip booked">Booked</span></dd></div>
-                  <div><dt>Next action</dt><dd>Confirm appointment</dd></div>
+                  <div><dt>Scheduled</dt><dd>15 Sep 2026</dd></div>
                 </dl>
               </div>
               <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
@@ -302,7 +229,7 @@
                 <div class="rowset">
                   <div class="rrow rrow-wide">
                     <span class="rec-ico" aria-hidden="true">4</span>
-                    <span class="rec"><b>Property manager</b><span class="rec-sub">4 units</span></span>
+                    <span class="rec"><b>Sample property A</b><span class="rec-sub">4 units &middot; 15 Sep 2026</span></span>
                     <span class="chip done">Done</span>
                     <span class="note">Review request ready</span>
                   </div>
@@ -343,8 +270,8 @@
                   </div>
                   <div class="rrow rrow-wide">
                     <span class="rec-ico" aria-hidden="true">4</span>
-                    <span class="rec"><b>Property manager</b><span class="rec-sub">4 units</span></span>
-                    <span class="chip due">Due in 30 days</span>
+                    <span class="rec"><b>Sample property A</b><span class="rec-sub">4 units</span></span>
+                    <span class="chip due">Due in 14 days</span>
                     <span class="note">Reminder ready</span>
                   </div>
                   <div class="rrow rrow-wide">
@@ -354,14 +281,13 @@
                     <span class="note">Reach out</span>
                   </div>
                 </div>
-                <p class="pane-caption">Reminders are prepared here. A person reviews and sends each one.</p>
+                <p class="pane-caption">Sample property A: next service 15 Mar 2027, viewed on 1 Mar 2027. Reminders are prepared here. A person reviews and sends each one.</p>
               </div>
               <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
             </figure>
           </div>
-          <p class="demo-note">
-            Messages are prepared for review. Nothing goes out automatically.
-          </p>
+          <p class="demo-note">Messages are prepared for review. Nothing goes out automatically.</p>
+          <div class="system-audit"><div><h3>Where does your follow-up break down?</h3><p>The audit starts with how you handle leads and past customers today.</p></div><a class="btn btn-gold" href="contact.html">Start your growth audit</a></div>
         </div>
       </section>
 
@@ -370,7 +296,7 @@
         <div class="container">
           <div class="band-head">
             <p class="eyebrow">Built and operating</p>
-            <h2>A working HVAC service-business implementation.</h2>
+            <h2>A real service-business implementation.</h2>
             <p>The public website, private workflow and return-service process have been built and used in a real operating business.</p>
           </div>
           <div class="proof-grid">
@@ -402,7 +328,6 @@
               <li>In a separate unbranded test, Gemini displayed the business and cited its website.</li>
               <li>These were separate events, and results vary by query, user and location.</li>
               <li>We do not claim the website caused a particular job.</li>
-              <li>A customer reported submitting a Google review, but it is not treated as publicly live until verified.</li>
               <li>Automated customer texting is not operating.</li>
               <li>T&amp;R Growth&rsquo;s opt-in operational SMS lead alerts are for authorized business recipients only. Customers are never automatically enrolled or messaged. See <a href="sms-consent.html">SMS Consent</a>.</li>
             </ul>
@@ -452,15 +377,15 @@
             </details>
             <details>
               <summary>Does this replace our existing software?</summary>
-              <p>No. This is not a ServiceTitan replacement, and it does not replace your accounting, scheduling or invoicing tools. It connects to how you already work.</p>
+              <p>No. This is not a ServiceTitan replacement, and it does not replace your accounting, scheduling or invoicing tools. We assess what to connect, keep or build around your existing tools before recommending an implementation.</p>
             </details>
             <details>
               <summary>Is automated customer texting included?</summary>
-              <p>No. It is not part of the current base implementation and is not operating. Review and reminder messages are prepared by the system and sent <strong>manually</strong>. Compliant automated messaging can be added later as a separate add-on.</p>
+              <p>No. It is not part of the current base implementation and is not operating. Review and reminder messages are prepared by the system and sent <strong>manually</strong>. Automatic customer texting may be offered separately in the future.</p>
             </details>
             <details>
               <summary>Can you guarantee leads, reviews or search rankings?</summary>
-              <p>No. We do not guarantee leads, revenue, reviews, reactivated customers, or placement in Google or AI assistants. We build the foundations that help. Placement still varies by query, user and location.</p>
+              <p>No. We do not guarantee leads, revenue, bookings, reviews, reactivated customers, or placement in Google or AI assistants. We build the foundations that help. Placement still varies by query, user and location.</p>
             </details>
           </div>
         </div>
@@ -469,11 +394,11 @@
       <!-- ========================== FINAL CTA ========================= -->
       <section class="cta-band">
         <div class="container">
-          <h2>Find the gaps costing you repeat business.</h2>
+          <h2>See where your next job gets forgotten.</h2>
           <p>
-            Answer a few questions about how your business handles leads,
-            completed jobs and past customers. We&rsquo;ll review your answers
-            and follow up directly.
+            Tell us how you handle leads, completed jobs and past customers.
+            Ryan will review your answers and reply by email. If there&rsquo;s a fit,
+            you can discuss the implementation and pricing on a call.
           </p>
           <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
         </div>

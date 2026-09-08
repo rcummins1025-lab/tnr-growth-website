@@ -97,7 +97,8 @@ for (const f of htmlFiles) {
       }
       continue;
     }
-    const [path, frag] = ref.split("#");
+    const [rawPath, frag] = ref.split("#");
+    const path = rawPath.split("?")[0]; // a cache-busting ?v= is not part of the filename
     if (path && !existsSync(join(root, path)))
       fail(`${f}: missing file ${path}`);
     else if (frag && path.endsWith(".html") && idsByPage[path] && !idsByPage[path].has(frag))
@@ -739,9 +740,15 @@ const contact = read("contact.html");
 !/send your audit summary/i.test(contact)
   ? ok("contact: no audit-summary promise")
   : fail("contact: still promises an audit summary");
-/So we can review your answers and follow up\./.test(contact)
-  ? ok("contact: corrected step-5 hint present")
-  : fail("contact: corrected step-5 hint missing");
+const auditHeading = (contact.match(/<h1\b([^>]*)>([\s\S]*?)<\/h1>/) || []);
+auditHeading[2] && /audit/i.test(auditHeading[2]) && !/hidden|sr-only|visually-hidden/.test(auditHeading[1]) &&
+contact.indexOf(auditHeading[0]) < contact.indexOf('data-step="1"')
+  ? ok("contact: a visible h1 names the audit before the questions")
+  : fail("contact: the audit needs a visible h1 introduction");
+const auditHints = [...contact.matchAll(/<p class="wz-hint">([\s\S]*?)<\/p>/g)].map((m) => m[1]);
+!/Be blunt|weak site|not what you would like to happen/i.test(auditHints.join(" "))
+  ? ok("contact: question hints avoid the retired judgmental language")
+  : fail("contact: a question hint has reverted to judgmental language");
 const idxHtml = read("index.html");
 // (The case-study introduction it used to check was replaced by the guided
 // "Built and operating" section, which the section below validates.)
@@ -785,49 +792,31 @@ sectionOrder.every((v, i) => i === 0 || v > sectionOrder[i - 1])
   ? ok("index: the guided sections appear in the intended reading order")
   : fail("index: the guided sections are out of order");
 
-// The approved copy for the guided path.
-const GUIDED_COPY = [
-  ["Customer-growth system for established local-service businesses", "hero kicker"],
-  ["Get found. Get booked.", "hero heading"],
-  ["one system your team", "hero supporting copy"],
-  ["Built first for established HVAC and heat-pump service businesses.", "hero fit note"],
-  ["See the system at work.", "demonstration heading"],
-  ["Follow one customer from website inquiry to their next service.", "demonstration lede"],
-  ["New inquiry", "stage 1"],
-  ["Job completed", "stage 2"],
-  ["Customer due again", "stage 3"],
-  ["Messages are prepared for review. Nothing goes out automatically.", "messaging disclosure"],
-  ["A working HVAC service-business implementation.", "proof heading"],
-  ["Public discovery and lead capture", "proof point 1"],
-  ["Private operating workflow", "proof point 2"],
-  ["Review and return-service process", "proof point 3"],
-  ["Read the implementation and accuracy notes", "accuracy disclosure"],
-  ["Built for established service businesses with customers worth bringing back.", "fit heading"],
-  ["Find the gaps costing you repeat business.", "closing heading"]
-];
-const missingGuided = GUIDED_COPY.filter(([t]) => !idxHtml.includes(t));
-missingGuided.length === 0
-  ? ok(`index: all ${GUIDED_COPY.length} guided copy anchors present`)
-  : fail(`index: missing ${missingGuided.map(([, n]) => n).join(", ")}`);
-
-// Four how-it-works stages and four FAQ entries, no more.
-const flowSteps = (idxHtml.match(/<div class="flow-step">/g) || []).length;
-flowSteps === 4
-  ? ok("index: four how-it-works stages")
-  : fail(`index: ${flowSteps} how-it-works stages (expected 4)`);
-const stages = (idxHtml.match(/<div class="pillar stage">/g) || []).length;
-stages === 3
-  ? ok("index: three demonstration stages")
-  : fail(`index: ${stages} demonstration stages (expected 3)`);
+// Guard the visitor's path and the approved headline without freezing all prose.
+const plainText = (html) => html.replace(/<!--[\s\S]*?-->/g, " ").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+const sectionHtml = (id) => (idxHtml.match(new RegExp(`<section\\b[^>]*\\bid="${id}"[^>]*>[\\s\\S]*?<\\/section>`)) || [""])[0];
+const headline = plainText((idxHtml.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/) || [""])[0]);
+["Get found.", "Get booked.", "Bring customers back."].every((part) => headline.includes(part))
+  ? ok("index: the approved hero headline is preserved")
+  : fail("index: the approved hero headline changed");
+const systemSection = sectionHtml("system");
+const workflowTopics = [/inquiry/i, /complet/i, /due|next.service/i];
+workflowTopics.every((re) => re.test(plainText(systemSection)))
+  ? ok("index: the demonstration explains inquiry, completion, and returning service")
+  : fail("index: a core workflow stage is missing from the demonstration");
+const proofSection = sectionHtml("built");
+/service.business implementation/i.test(plainText(proofSection)) &&
+!/HVAC|heat[ -]pump|cannabis/i.test(plainText(proofSection))
+  ? ok("index: the real implementation is described without exposing a client industry")
+  : fail("index: proof must describe a service-business implementation without a client industry");
+const lastDemo = systemSection.lastIndexOf("</figure>");
+lastDemo >= 0 && /href="contact\.html"/.test(systemSection.slice(lastDemo))
+  ? ok("index: a contextual audit link follows the workflow demonstrations")
+  : fail("index: the workflow demonstrations need a contextual audit link");
 const faqBlock = (idxHtml.match(/<div class="faq">[\s\S]*?\n          <\/div>/) || [""])[0];
-const faqs = (faqBlock.match(/<summary>/g) || []).length;
-faqs === 4
-  ? ok("index: exactly four FAQ entries")
-  : fail(`index: ${faqs} FAQ entries (expected 4)`);
-const proofs = (idxHtml.match(/<div class="proof">/g) || []).length;
-proofs === 3
-  ? ok("index: three proof points")
-  : fail(`index: ${proofs} proof points (expected 3)`);
+/<summary>[^<]+<\/summary>/.test(faqBlock)
+  ? ok("index: objections remain available as native FAQ disclosures")
+  : fail("index: no native FAQ disclosure found");
 
 // The audit is the one action, and every primary CTA reaches it directly.
 const PRIMARY = "Start your growth audit";
@@ -912,11 +901,12 @@ nameLeaks.length === 0
   ? ok(`site: the pilot customer is unnamed across all ${NAME_SCAN_FILES.length} published files`)
   : fail(`site: pilot-customer name present in ${nameLeaks.join(", ")}`);
 
-// No public pricing anywhere on the marketing pages.
+// No public price figures or recurring fee offers on the marketing pages.
+// Mentioning that pricing is discussed on a call is an honest handoff.
 const PRICING = [
   /\$\s?\d/,
   /\b\d+\s*(?:usd|dollars)\b/i,
-  /\bper month\b|\bmonthly fee\b|\bstarting at\b|\bpricing\b/i
+  /\bper month\b|\bmonthly fee\b|\bstarting at\b/i
 ];
 const pricingPages = htmlFiles.filter(
   (f) => f !== "terms.html" && PRICING.some((re) => re.test(read(f)))
@@ -932,7 +922,6 @@ const FACTS = [
   ["separate unbranded test", "the unbranded test"],
   ["separate events", "the separation of the two events"],
   ["do not claim the website caused", "the no-causation statement"],
-  ["not treated as publicly live until verified", "the unverified-review caveat"],
   ["Automated customer texting is not operating", "the texting status"]
 ];
 // Native <details>, collapsed by default, so the facts stay available without
@@ -960,6 +949,10 @@ const FACTS = [
 )
   ? ok("index: the visible results-vary and manual-send note is present")
   : fail("index: the visible proof note is missing or reworded");
+
+/reported submitting a Google review|not treated as publicly live until verified/i.test(proofSection)
+  ? fail("index: the unverified Google-review anecdote has returned")
+  : ok("index: proof omits the unverified Google-review anecdote");
 
 const missingFacts = FACTS.filter(([t]) => !accuracy.includes(t));
 missingFacts.length === 0
@@ -1115,8 +1108,8 @@ console.log("\n== Populated demo dashboards: the disclosure ==");
 // must never slip is the statement that they are invented: it has to be
 // visible text inside each composition, not a title, aria-label, or footnote.
 const DEMO_SENTENCE = "Example dashboard. Demo data, not live customer information.";
-const figures = [...idxHtml.matchAll(/<figure class="(stack|pillar-visual)"[\s\S]*?<\/figure>/g)].map(
-  (m) => ({ kind: m[1], html: m[0] })
+const figures = [...idxHtml.matchAll(/<figure class="((?:stack|pillar-visual)\b[^"]*)"[\s\S]*?<\/figure>/g)].map(
+  (m) => ({ kind: m[1].split(/\s+/)[0], html: m[0] })
 );
 figures.length === 4
   ? ok(`index: 4 populated compositions (1 hero, 3 pillars)`)
@@ -1146,8 +1139,9 @@ hiddenLabel
 
 console.log("\n== Populated demo dashboards: no personal information ==");
 // Records name a customer TYPE, never a person, and carry nothing that looks
-// like contact details or an appointment.
+// like contact details. Clearly fictional service dates explain the workflow.
 const APPROVED_TYPES = [
+  "Sample property A",
   "Property manager",
   "Homeowner",
   "Small office",
@@ -1159,13 +1153,12 @@ const recordNames = [
 ].map((m) => m[1]);
 const offTypes = [...new Set(recordNames)].filter((n) => !APPROVED_TYPES.includes(n));
 recordNames.length > 0 && offTypes.length === 0
-  ? ok(`index: all ${recordNames.length} demo records use a generic customer type`)
+  ? ok(`index: all ${recordNames.length} demo records use a fictional property label or generic customer type`)
   : fail(`index: non-generic record subject(s): ${offTypes.join(", ") || "none found"}`);
 const PERSONAL = [
   [/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "an email address", true],
   [/\(?\b\d{3}\)?[ .-]\d{3}[ .-]\d{4}\b/g, "a phone number"],
   [/\b\d{1,5}\s+[A-Z][a-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Lane|Ln|Drive|Dr|Court|Ct|Way|Blvd)\b/g, "a street address"],
-  [/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}\b/g, "an appointment date"],
   [/\bCustomer\s+\d\b|\bLead\s+\d\b|\bClient\s+\d\b|Lorem|placeholder/i, "an unfinished placeholder"]
 ];
 let personalHits = 0;
@@ -1179,74 +1172,62 @@ for (const f of figures) {
   }
 }
 personalHits === 0
-  ? ok("index: no email, phone, address, date, or placeholder in any demo record")
+  ? ok("index: no email, phone, address, or unfinished placeholder in any demo record")
   : fail(`${personalHits} piece(s) of customer-like information in the demo records`);
 
-console.log("\n== Populated demo dashboards: the records themselves ==");
-// The agreed demonstration content, panel by panel.
+console.log("\n== Demo workflow: one coherent fictional lifecycle ==");
 const heroFig = (figures.find((f) => f.kind === "stack") || { html: "" }).html;
 const pillarFigs = figures.filter((f) => f.kind === "pillar-visual").map((f) => f.html);
-const REQUIRED = [
-  [heroFig, "hero: public website pane", [
-    "Local heat-pump service",
-    "Keep your system clean and efficient",
-    "Request service",
-    "Request received"
-  ]],
-  [heroFig, "hero: pipeline records", [
-    ">Property manager<", ">4-unit cleaning<", '<span class="chip new">New</span>',
-    ">Homeowner<", ">2-unit service<", '<span class="chip booked">Booked</span>',
-    ">Small office<", ">6-unit cleaning<", '<span class="chip done">Done</span>'
-  ]],
-  [heroFig, "hero: due-for-service records", [
-    ">Residential customer<", ">2 units<", ">Due in 14 days<",
-    ">Property manager<", ">4 units<", ">Due in 30 days<"
-  ]],
-  [heroFig, "hero: example-month totals", [
-    "Example month",
-    "<b>12</b><span>Leads</span>",
-    "<b>7</b><span>Booked</span>",
-    "<b>5</b><span>Completed</span>",
-    "<b>18</b><span>Due soon</span>"
-  ]],
-  [pillarFigs[0] || "", "pillar 1: lead intake", [
-    ">Property manager<", ">4-unit cleaning<",
-    ">Homeowner<", ">2-unit service<",
-    ">Small office<", ">6-unit cleaning<",
-    "<dt>Source</dt><dd>Website</dd>",
-    "<dt>Service</dt><dd>4-unit cleaning</dd>",
-    "<dt>Next action</dt><dd>Confirm appointment</dd>"
-  ]],
-  [pillarFigs[1] || "", "pillar 2: completed work", [
-    ">Property manager<", ">4 units<",
-    ">Homeowner<", ">2 units<",
-    ">Small office<", ">6 units<",
-    ">Review request ready<", ">Recorded<"
-  ]],
-  [pillarFigs[2] || "", "pillar 3: due for service", [
-    ">Residential customer<", ">2 units<", ">Due in 14 days<",
-    ">Property manager<", ">4 units<", ">Due in 30 days<",
-    ">Small office<", ">6 units<", ">Due in 45 days<",
-    ">Reminder ready<", ">Reach out<"
-  ]]
+const lifecycleText = plainText(heroFig);
+/lifecycle-demo/.test(heroFig) && /Sample property A/.test(lifecycleText)
+  ? ok("index: the hero is explicitly one fictional sample property")
+  : fail("index: the hero needs one labelled fictional lifecycle record");
+// All stages must be readable without animation; one stable beat per event.
+const lifecycleBeats = [...heroFig.matchAll(/class="[^"]*\bjrn\b[^"]*"[^>]*data-beat="(\d+)"/g)].map((m) => Number(m[1]));
+lifecycleBeats.join(",") === "1,2,3,4,5,6,7"
+  ? ok("index: seven unique lifecycle events exist in static reading order")
+  : fail(`index: expected seven static lifecycle events, found ${lifecycleBeats.join(",")}`);
+const lifecycleFields = [
+  [/inquiry|request received/i, "inquiry"],
+  [/booked|scheduled/i, "booking"],
+  [/completed/i, "completed work"],
+  [/Review request ready/i, "prepared review request"],
+  [/next.service/i, "next-service date"],
+  [/due in \d+ days/i, "due status"]
 ];
-let missingRecords = 0;
-for (const [html, label, needles] of REQUIRED) {
-  const gone = needles.filter((n) => !html.includes(n));
-  if (gone.length) {
-    missingRecords += gone.length;
-    fail(`index: ${label} missing ${gone.join(", ")}`);
-  } else {
-    ok(`index: ${label} complete`);
-  }
-}
-missingRecords === 0
-  ? ok("index: every agreed demo record and unit count is present")
-  : fail(`index: ${missingRecords} required demo value(s) missing`);
-// "Example month" must sit beside its totals, not somewhere else on the page.
-/<span class="meter-label">Example month<\/span>\s*<div class="meter-cells">/.test(heroFig)
-  ? ok('index: "Example month" labels the four synthetic totals directly')
-  : fail('index: "Example month" must sit immediately beside the totals');
+const absentFields = lifecycleFields.filter(([re]) => !re.test(lifecycleText));
+absentFields.length === 0
+  ? ok("index: the lifecycle explains each operational state in visible text")
+  : fail(`index: lifecycle missing ${absentFields.map(([, label]) => label).join(", ")}`);
+// These are fictional dates, but their interval must match the displayed due status.
+const demoDatePattern = /\b(\d{1,2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* (\d{4})\b/;
+const parseDemoDate = (text) => {
+  const parts = text.match(demoDatePattern);
+  if (!parts) return NaN;
+  const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].indexOf(parts[2]);
+  return Date.UTC(Number(parts[3]), month, Number(parts[1]));
+};
+const lifecycleEvents = [...heroFig.matchAll(/<li\b[^>]*class="[^"]*\bjrn\b[^>]*>[\s\S]*?<\/li>/g)].map((m) => plainText(m[0]));
+const eventDate = (pattern) => parseDemoDate(lifecycleEvents.find((text) => pattern.test(text)) || "");
+const inquiryDate = eventDate(/inquiry/i);
+const bookedDate = eventDate(/appointment booked/i);
+const completedDate = eventDate(/completed work/i);
+const nextServiceDate = eventDate(/next.service date/i);
+const snapshotDate = eventDate(/due in/i);
+const dueDays = Number((lifecycleText.match(/due in (\d+) days/i) || [])[1]);
+[inquiryDate, bookedDate, completedDate, nextServiceDate, snapshotDate].every(Number.isFinite) &&
+inquiryDate <= bookedDate && bookedDate <= completedDate && completedDate <= snapshotDate &&
+(nextServiceDate - snapshotDate) / 86400000 === dueDays && dueDays > 0
+  ? ok("index: fictional lifecycle dates are chronological and agree with the due interval")
+  : fail("index: fictional lifecycle dates must be chronological and agree with the due interval");
+/stack-meter|meter-cells|example month/i.test(heroFig) ||
+/<b>\s*\d+\s*<\/b>\s*<span>\s*(Leads|Booked|Completed|Due soon)/i.test(figures.map((f) => f.html).join(" "))
+  ? fail("index: fictional aggregate performance counters have returned")
+  : ok("index: demos have no fictional monthly performance counters");
+const panelTopics = [/Website|Source/i, /Review request ready/i, /Reminder ready|due in/i];
+pillarFigs.length === panelTopics.length && panelTopics.every((re, i) => re.test(plainText(pillarFigs[i])))
+  ? ok("index: the three detailed demos retain intake, review preparation, and service reminders")
+  : fail("index: a detailed workflow demo is missing its operational purpose");
 // Status is text, never colour alone.
 const chips = [...idxHtml.matchAll(/<span class="chip [a-z]+">([^<]*)<\/span>/g)].map((m) => m[1].trim());
 chips.length > 0 && chips.every((t) => t.length > 0)
@@ -1297,7 +1278,7 @@ autoHits.length === 0
 // Each panel that shows prepared messages says who sends them.
 const preparedPanels = figures.filter((f) => /Review request ready|Reminder ready/.test(f.html));
 const explained = preparedPanels.filter((f) =>
-  /A person reviews and sends each one\./.test(f.html)
+  /A person reviews and sends|sent manually|manual send|review[^.]*send manually/i.test(plainText(f.html))
 );
 preparedPanels.length > 0 && explained.length === preparedPanels.length
   ? ok(`index: all ${preparedPanels.length} prepared-message panel(s) say a person sends them`)
@@ -1313,23 +1294,13 @@ const motionSrc = read("js/motion.js");
 const idxCss = read("styles.css");
 
 // The dashboard must be finished at first paint. Every record, status, note
-// and total is static markup; the animation only borrows a highlight ring.
-const heroFigure = (idxHtml.match(/<figure class="stack"[\s\S]*?<\/figure>/) || [""])[0];
-const STATIC_DATA = [
-  ["Request received", "the request confirmation"],
-  [">Property manager<", "a pipeline record"],
-  ['<span class="chip new">New</span>', "the New status"],
-  ['<span class="chip booked">Booked</span>', "the Booked status"],
-  ['<span class="chip done">Done</span>', "the Done status"],
-  [">Review request ready<", "the review-request note"],
-  [">Next service date set<", "the next-service note"],
-  [">Due in 14 days<", "a due-for-service date"],
-  ["<b>12</b><span>Leads</span>", "the example-month totals"]
-];
-const missingStatic = STATIC_DATA.filter(([t]) => !heroFigure.includes(t));
-missingStatic.length === 0
-  ? ok(`index: all ${STATIC_DATA.length} hero dashboard values are in the static HTML`)
-  : fail(`index: hero dashboard is missing ${missingStatic.map(([, n]) => n).join(", ")}`);
+// and date is static markup; the animation only borrows a highlight ring.
+const heroFigure = heroFig;
+const hiddenLifecycleRows = [...heroFigure.matchAll(/<[^>]+class="[^"]*\bjrn\b[^>]*>/g)]
+  .filter((m) => /(?:\shidden(?:\s|=|>)|aria-hidden="true")/.test(m[0]));
+lifecycleBeats.length > 0 && hiddenLifecycleRows.length === 0
+  ? ok("index: lifecycle records are static HTML available before scripts run")
+  : fail("index: the lifecycle records must be static, exposed HTML");
 
 // Nothing may be inserted into the dashboard by script.
 /\.stack[\s\S]{0,400}?(innerHTML|insertAdjacentHTML|createElement|appendChild)/.test(motionSrc)
