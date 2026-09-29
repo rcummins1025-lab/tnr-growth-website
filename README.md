@@ -18,8 +18,10 @@ designs, installs, operates, and supports it.
 
 Plain static **HTML + CSS**, deployed as-is from the repo root via **GitHub Pages**.
 The only JavaScript is `js/intake.js` (the multi-step audit form),
-`js/site-config.js` (its config), and `js/motion.js` (the scroll/entry motion
-layer) — self-contained, no libraries, no analytics, no tracking, no cookies. The `package.json` scripts are **dev tooling
+`js/site-config.js` (its config), `js/motion.js` (the scroll/entry motion
+layer), and, on the ChatGPT Ads landing page only, `js/lead-form.js` (short
+form) and `js/ads-events.js` (conversion hook, inactive until the pixel is
+installed) — self-contained, no libraries, no analytics, no tracking, no cookies. The `package.json` scripts are **dev tooling
 only** (validation + brand rename); they are not required to build or serve.
 
 ## Structure
@@ -28,6 +30,8 @@ only** (validation + brand rename); they are not required to build or serve.
 | --- | --- |
 | `index.html` | Homepage (hero, how it works, see the system, built and operating, who it’s for, FAQ, final CTA) |
 | `contact.html` | "Growth System Audit" multi-step application form |
+| `command-center.html` | ChatGPT Ads landing page (one offer, `noindex`). Short lead form; pixel placeholders. See [`docs/CHATGPT-ADS.md`](docs/CHATGPT-ADS.md) |
+| `js/lead-form.js` / `js/ads-events.js` | Landing-page form submission / inactive ads conversion hook |
 | `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages (SMS program wording preserved) |
 | `styles.css` | Forge palette — **all** brand tokens in the `:root` block at the top |
 | `js/site-config.js` | **One place** to set the form `formEndpoint` / `formEndpointMode` |
