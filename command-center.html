@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Command Center for Home-Service Owners | ServiceMomentum</title>
+    <meta
+      name="description"
+      content="The Command Center for home-service owners. Your customer book imported on day one, a due-for-service list, and every lead in one place. Set up and supported by T&amp;R Growth."
+    />
+    <!-- Paid-traffic landing page (ChatGPT Ads). Kept out of search and out of
+         sitemap.xml so it never competes with the homepage. -->
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#171A1F" />
+    <link rel="canonical" href="https://tnrgrowthagency.com/command-center.html" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css?v=20260907" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ServiceMomentum" />
+    <meta property="og:title" content="The Command Center for home-service owners | ServiceMomentum" />
+    <meta property="og:description" content="Your customer book imported on day one. See who is due for service. Every lead in one place." />
+    <meta property="og:url" content="https://tnrgrowthagency.com/command-center.html" />
+    <meta property="og:image" content="https://tnrgrowthagency.com/assets/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ServiceMomentum: the Command Center for home-service owners. Powered by T&amp;R Growth." />
+
+    <!-- ================= OPENAI ADS PIXEL: NOT INSTALLED =================
+         INACTIVE PLACEHOLDER. Nothing here loads or tracks anything.
+
+         To install (Ryan, see docs/CHATGPT-ADS.md for the full checklist):
+           1. OpenAI Ads Manager -> Tools -> Conversions -> your pixel ->
+              copy the BASE PIXEL code exactly as shown.
+           2. Paste it on the line below this comment, replacing nothing else.
+              Do not retype or edit it.
+           3. The lead_created event is fired from js/ads-events.js, only
+              after a real, successful form submission. Paste the Ads Manager
+              lead_created line there.
+           4. Before this goes live, the privacy policy and
+              scripts/validate.mjs must be updated in the same change (the
+              site currently promises no cookies and no third-party scripts,
+              and the validator enforces it).
+         ==================================================================== -->
+    <!-- OPENAI-ADS-PIXEL:BASE (paste Ads Manager base code here) -->
+
+    <style>
+      /* Page-scoped styles for this landing page only (lp- prefix). */
+      .lp-header { border-bottom: 1px solid var(--line); background: var(--bg); }
+      .lp-header .container { display: flex; align-items: center; justify-content: space-between; min-height: 68px; gap: 16px; }
+      .lp-header .btn { white-space: nowrap; }
+      .lp-hero { background: var(--bg-alt); padding: 40px 0 48px; }
+      .lp-hero .container { display: grid; gap: 28px; }
+      .lp-hero h1 { font-size: clamp(2rem, 6.4vw, 3.3rem); line-height: 1.06; letter-spacing: -0.03em; margin: 10px 0 14px; color: var(--ink); }
+      .lp-hero h1 .amber { color: var(--gold-text); }
+      .lp-sub { font-size: 1.12rem; color: var(--ink-2); line-height: 1.55; margin: 0 0 20px; max-width: 34em; }
+      .lp-proof { list-style: none; padding: 0; margin: 0 0 22px; display: grid; gap: 12px; }
+      .lp-proof li { display: flex; gap: 12px; align-items: flex-start; font-size: 1rem; line-height: 1.45; color: var(--ink); }
+      .lp-proof li::before { content: ""; flex: 0 0 10px; height: 10px; margin-top: 7px; border-radius: 50%; background: var(--gold); }
+      .lp-proof b { font-weight: 700; }
+      .lp-honest { font-size: 0.86rem; color: var(--muted); margin: 0; }
+      .lp-card { background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow); }
+      .lp-card h2 { font-size: 1.35rem; margin: 0 0 4px; }
+      .lp-card > p { color: var(--ink-2); margin: 0 0 16px; }
+      .lp-form { display: grid; gap: 14px; }
+      .lp-field { display: grid; gap: 6px; }
+      .lp-field label { font-weight: 700; font-size: 0.95rem; }
+      .lp-field input, .lp-field select { width: 100%; min-height: 52px; border: 1px solid var(--line-strong); border-radius: 10px; padding: 12px 14px; font: inherit; font-size: 16px; background: #fff; color: var(--ink); }
+      .lp-field input:focus-visible, .lp-field select:focus-visible { outline: 3px solid var(--ring); outline-offset: 1px; }
+      .lp-field input[aria-invalid="true"], .lp-field select[aria-invalid="true"] { border-color: var(--err); }
+      .lp-field .form-error { color: var(--err); font-size: 0.88rem; min-height: 0; margin: 0; }
+      .lp-form .btn { width: 100%; min-height: 56px; font-size: 1.05rem; }
+      .lp-fine { font-size: 0.82rem; color: var(--muted); margin: 0; line-height: 1.5; }
+      .lp-trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+      .lp-thanks h2:focus { outline: none; }
+      .lp-thanks ol { margin: 12px 0 0; padding-left: 1.2em; display: grid; gap: 8px; color: var(--ink-2); }
+      .lp-section { padding: 48px 0; }
+      .lp-section h2 { font-size: clamp(1.5rem, 4.4vw, 2.1rem); letter-spacing: -0.02em; margin: 8px 0 22px; }
+      .lp-shots { display: grid; gap: 18px; }
+      .lp-shot { margin: 0; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); overflow: hidden; }
+      /* The still itself: a fixed 1:1 frame so each one exports cleanly as an
+         ad image (see docs/CHATGPT-ADS.md). */
+      .lp-still { aspect-ratio: 1 / 1; background: var(--forge-black); color: var(--forge-on-dark); padding: 7%; display: flex; flex-direction: column; gap: 4%; container-type: inline-size; }
+      .lp-still-title { font-size: 7.4cqi; font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin: 0; }
+      .lp-still-title em { font-style: normal; color: var(--gold); }
+      .lp-still-rows { display: grid; gap: 2.6cqi; margin-top: auto; }
+      .lp-row { display: flex; align-items: center; justify-content: space-between; gap: 3cqi; background: var(--forge-black-2); border: 1px solid var(--forge-black-3); border-radius: 2.6cqi; padding: 3.2cqi 3.8cqi; font-size: 3.9cqi; }
+      .lp-row b { color: #fff; font-weight: 700; }
+      .lp-row span { color: var(--forge-on-dark-muted); font-size: 3.3cqi; }
+      .lp-row .lp-pill { flex: 0 0 auto; border-radius: 99px; padding: 1.1cqi 2.6cqi; font-size: 3cqi; font-weight: 700; background: var(--forge-black-3); color: var(--forge-on-dark); }
+      .lp-row .lp-pill--due { background: var(--gold); color: var(--forge-black); }
+      .lp-row .lp-pill--ok { background: #cfe3d6; color: #164a31; }
+      .lp-still-note { font-size: 2.8cqi; color: var(--forge-on-dark-muted); margin: 0; }
+      .lp-shot figcaption { padding: 14px 18px 18px; }
+      .lp-shot figcaption b { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+      .lp-shot figcaption span { color: var(--ink-2); font-size: 0.95rem; }
+      .lp-steps { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 14px; }
+      .lp-steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; }
+      .lp-steps li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--forge-black); color: #fff; font-weight: 800; }
+      .lp-steps b { display: block; }
+      .lp-steps span { color: var(--ink-2); }
+      .lp-final { background: var(--forge-black); color: var(--forge-on-dark); text-align: center; padding: 48px 0; }
+      .lp-final h2 { color: #fff; margin: 0 0 16px; font-size: clamp(1.5rem, 4.4vw, 2.1rem); }
+      .lp-foot { padding: 24px 0 40px; font-size: 0.88rem; color: var(--muted); }
+      .lp-foot .container { display: flex; flex-wrap: wrap; gap: 10px 18px; justify-content: space-between; }
+      .lp-foot a { color: var(--muted); margin-right: 14px; }
+      @media (min-width: 900px) {
+        .lp-hero { padding: 64px 0 72px; }
+        .lp-hero .container { grid-template-columns: 1.15fr 0.85fr; align-items: start; gap: 48px; }
+        .lp-card { padding: 28px; position: sticky; top: 20px; }
+        .lp-shots { grid-template-columns: repeat(3, 1fr); }
+        .lp-section { padding: 72px 0; }
+      }
+      @media (max-width: 420px) {
+        .lp-header .brand-sub { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#get-started">Skip to the form</a>
+
+    <header class="lp-header">
+      <div class="container">
+        <a class="nav-brand" href="index.html" aria-label="ServiceMomentum home">
+          <span class="wordmark"><img class="brand-mark" src="assets/mark.svg" width="38" height="38" alt="" aria-hidden="true" /><span class="brand-name" data-brand="product">ServiceMomentum</span></span>
+          <span class="brand-sub">by T&amp;R Growth</span>
+        </a>
+        <a class="btn btn-primary btn-sm" href="#get-started">Get a walkthrough</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============================ OFFER ============================
+           REUSE FOR A LAUNCH PACK: copy this file, then change only the
+           eyebrow, <h1>, .lp-sub, the three .lp-proof items, the form's
+           meta_offer value, and the three still captions. Keep one offer
+           per page. See docs/CHATGPT-ADS.md. -->
+      <section class="lp-hero">
+        <div class="container">
+          <div>
+            <p class="eyebrow">For home-service owners</p>
+            <h1>The Command Center for <span class="amber">home-service owners.</span></h1>
+            <p class="lp-sub">
+              Your customer book imported on day one. See who is due for service, every
+              new lead in one pipeline, and what needs you today, on your phone.
+            </p>
+            <ul class="lp-proof">
+              <li><span><b>Day-1 book import.</b> We bring in the customers you already have, from a spreadsheet, invoices or service software, and you check anything unclear before it goes live.</span></li>
+              <li><span><b>Due-for-service list.</b> See which past customers are due for their next visit, estimated from their last completed job. You decide who to contact.</span></li>
+              <li><span><b>One place for every lead.</b> Calls, texts and website requests land in one pipeline: New, Contacted, Booked, Done.</span></li>
+            </ul>
+            <p class="lp-honest">Built and used in a real operating home-service business. Set up for you and supported by T&amp;R Growth. Messages to customers are reviewed and sent by a person; nothing texts your customers automatically.</p>
+          </div>
+
+          <div class="lp-card" id="get-started">
+            <!-- CALL BUTTON: DISABLED until there is a published business
+                 number. To enable, set the number and remove this comment:
+                 <a class="btn btn-ghost" href="tel:+1XXXXXXXXXX">Or call Ryan</a> -->
+            <div id="lead-form-wrap">
+              <h2 id="lead-form-title">See your own Command Center</h2>
+              <p>Five quick details. Ryan will call you to set up a short walkthrough.</p>
+              <form class="lp-form" id="lead-form" novalidate aria-labelledby="lead-form-title">
+                <div class="lp-field">
+                  <label for="lf-name">Your name</label>
+                  <input id="lf-name" name="name" type="text" autocomplete="name" maxlength="120" required />
+                  <p class="form-error" id="lf-name-err" role="alert"></p>
+                </div>
+                <div class="lp-field">
+                  <label for="lf-phone">Mobile phone</label>
+                  <input id="lf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="40" required pattern="[0-9()+.\-\s]{10,}" />
+                  <p class="form-error" id="lf-phone-err" role="alert"></p>
+                </div>
+                <div class="lp-field">
+                  <label for="lf-business">Business name</label>
+                  <input id="lf-business" name="business_name" type="text" autocomplete="organization" maxlength="160" required />
+                  <p class="form-error" id="lf-business-err" role="alert"></p>
+                </div>
+                <div class="lp-field">
+                  <label for="lf-trade">Trade</label>
+                  <select id="lf-trade" name="trade" required>
+                    <option value="">Choose one</option>
+                    <option>HVAC or heat pumps</option>
+                    <option>Mini-split or duct cleaning</option>
+                    <option>Plumbing</option>
+                    <option>Electrical</option>
+                    <option>Pest control</option>
+                    <option>Lawn or landscaping</option>
+                    <option>Pool or spa</option>
+                    <option>Cleaning</option>
+                    <option>Other home service</option>
+                  </select>
+                  <p class="form-error" id="lf-trade-err" role="alert"></p>
+                </div>
+                <div class="lp-field">
+                  <label for="lf-city">City</label>
+                  <input id="lf-city" name="city" type="text" autocomplete="address-level2" maxlength="120" required />
+                  <p class="form-error" id="lf-city-err" role="alert"></p>
+                </div>
+                <!-- Spam trap: humans never see or reach it. -->
+                <div class="lp-trap" aria-hidden="true">
+                  <label for="lf-gotcha">Leave this empty</label>
+                  <input id="lf-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+                </div>
+                <input type="hidden" name="meta_offer" value="command-center" />
+                <button class="btn btn-gold btn-lg" type="submit" id="lf-submit">Get my walkthrough</button>
+                <p class="form-status" id="lf-status" role="status" aria-live="polite" hidden></p>
+                <p class="lp-fine">We use these details only to contact you about this request. See our <a href="privacy.html">Privacy Policy</a>.</p>
+              </form>
+            </div>
+
+            <!-- Thank-you / next step. Fixed text; shown ONLY after a real
+                 successful submission (js/lead-form.js). Nothing the visitor
+                 typed is written back into the page. -->
+            <div class="lp-thanks" id="lead-thanks" hidden>
+              <h2 id="lead-thanks-title" tabindex="-1">Thanks. Your request is in.</h2>
+              <p>Here is what happens next:</p>
+              <ol>
+                <li><b>Ryan calls you</b> to find a time that works.</li>
+                <li><b>A short walkthrough</b> of the Command Center, using your trade.</li>
+                <li><b>If it fits,</b> we plan your day-1 customer book import together.</li>
+              </ol>
+              <p class="lp-fine">Missed the call? Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a> and mention your business name.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================= STILL SLOTS =========================
+           Three 1:1 stills. Each doubles as a ChatGPT ad creative: export
+           notes (image, title, copy, URL) are in docs/CHATGPT-ADS.md, and
+           exported PNGs live in docs/ad-creative/. All data is fictional. -->
+      <section class="lp-section" aria-labelledby="shots-title">
+        <div class="container">
+          <p class="eyebrow">What you get</p>
+          <h2 id="shots-title">Your whole book, and what to do next.</h2>
+          <div class="lp-shots">
+            <figure class="lp-shot" data-ad-creative="1">
+              <div class="lp-still" role="img" aria-label="Illustrative example: a customer book import with records ready and one needing a check">
+                <p class="lp-still-title">Your customer book, <em>imported on day one.</em></p>
+                <div class="lp-still-rows">
+                  <div class="lp-row"><b>Sample customer A</b><span class="lp-pill lp-pill--ok">Ready</span></div>
+                  <div class="lp-row"><b>Sample customer B</b><span class="lp-pill lp-pill--ok">Ready</span></div>
+                  <div class="lp-row"><b>Sample customer C</b><span class="lp-pill lp-pill--due">Check date</span></div>
+                </div>
+                <p class="lp-still-note">Illustrative example. Fictional records.</p>
+              </div>
+              <figcaption><b>Day-1 book import</b><span>Spreadsheet, invoices or service software. Anything unclear waits for your check.</span></figcaption>
+            </figure>
+            <figure class="lp-shot" data-ad-creative="2">
+              <div class="lp-still" role="img" aria-label="Illustrative example: past customers due for their next service">
+                <p class="lp-still-title">See who is <em>due for service.</em></p>
+                <div class="lp-still-rows">
+                  <div class="lp-row"><b>Sample customer D</b><span>Last cleaned 13 mo ago</span></div>
+                  <div class="lp-row"><b>Sample customer E</b><span>Last cleaned 12 mo ago</span></div>
+                  <div class="lp-row"><b>Sample customer F</b><span class="lp-pill lp-pill--due">Due soon</span></div>
+                </div>
+                <p class="lp-still-note">Illustrative example. Due is an estimate, not a booking.</p>
+              </div>
+              <figcaption><b>Due-for-service list</b><span>Past customers ready for their next visit, from their last completed job.</span></figcaption>
+            </figure>
+            <figure class="lp-shot" data-ad-creative="3">
+              <div class="lp-still" role="img" aria-label="Illustrative example: the Today screen with leads to contact and upcoming jobs">
+                <p class="lp-still-title">Open it. <em>Know what needs you today.</em></p>
+                <div class="lp-still-rows">
+                  <div class="lp-row"><b>Leads to contact</b><span class="lp-pill lp-pill--due">2</span></div>
+                  <div class="lp-row"><b>Due for service</b><span class="lp-pill">5</span></div>
+                  <div class="lp-row"><b>Upcoming jobs</b><span class="lp-pill">3</span></div>
+                </div>
+                <p class="lp-still-note">Illustrative example. Fictional numbers.</p>
+              </div>
+              <figcaption><b>A Today screen built for owners</b><span>New leads, due customers and upcoming jobs, in one view on your phone.</span></figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="lp-section" aria-labelledby="how-title" style="background: var(--bg-alt)">
+        <div class="container">
+          <p class="eyebrow">How it starts</p>
+          <h2 id="how-title">Three steps, and you are running.</h2>
+          <ol class="lp-steps">
+            <li><div><b>A short walkthrough call</b><span>We look at how you track customers today.</span></div></li>
+            <li><div><b>We import your book</b><span>Your existing customers and job history, checked with you before anything goes live.</span></div></li>
+            <li><div><b>You run your day from Today</b><span>Leads, due customers and upcoming jobs. T&amp;R Growth supports you after launch.</span></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="lp-final">
+        <div class="container">
+          <h2>See it with your own trade.</h2>
+          <a class="btn btn-gold btn-lg" href="#get-started">Get my walkthrough</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lp-foot">
+      <div class="container">
+        <div><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+        <div>&copy; 2026 T&amp;R Growth LLC &middot; <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a></div>
+      </div>
+    </footer>
+
+    <script src="js/site-config.js"></script>
+    <script src="js/ads-events.js"></script>
+    <script src="js/lead-form.js"></script>
+  </body>
+</html>

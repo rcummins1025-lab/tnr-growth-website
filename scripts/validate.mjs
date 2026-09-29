@@ -1820,5 +1820,56 @@ dashHits === 0
   ? ok(`public copy: no em or en dashes across ${PUBLIC_FILES.length} shipped files`)
   : fail(`${dashHits} long dash(es) in public website files`);
 
+console.log("\n== ChatGPT Ads landing page (command-center.html) ==");
+{
+  const lp = read("command-center.html");
+  const leadJs = read("js/lead-form.js");
+  const adsJs = read("js/ads-events.js");
+  const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
+
+  /<meta name="robots" content="noindex, follow"/.test(lp)
+    ? ok("landing: kept out of search (noindex)")
+    : fail("landing: paid-traffic page must be noindex");
+  !/command-center\.html/.test(read("sitemap.xml"))
+    ? ok("landing: not listed in sitemap.xml")
+    : fail("landing: must not be in sitemap.xml");
+  const missingFields = ["name", "phone", "business_name", "trade", "city"].filter(
+    (n) => !new RegExp(`<(?:input|select)[^>]*name="${n}"[^>]*\\brequired\\b`).test(lp)
+  );
+  missingFields.length === 0
+    ? ok("landing: form requires name, phone, business, trade, city")
+    : fail(`landing: required field(s) missing: ${missingFields.join(", ")}`);
+  /OPENAI-ADS-PIXEL:BASE/.test(lp) && /OPENAI-ADS-PIXEL:LEAD_CREATED/.test(adsJs)
+    ? ok("landing: pixel install markers are present")
+    : fail("landing: a pixel install marker was removed");
+  /<div class="lp-thanks" id="lead-thanks" hidden>/.test(lp)
+    ? ok("landing: the thank-you panel ships hidden")
+    : fail("landing: the thank-you panel must ship hidden");
+
+  // The conversion may fire from exactly one place: succeed(), which runs only
+  // from the res.ok branch.
+  const code = strip(leadJs);
+  const calls = (code.match(/SM_ADS\.leadCreated\(\)/g) || []).length;
+  const succeedBody = (code.match(/function succeed\(\) \{[\s\S]*?\n  \}/) || [""])[0];
+  calls === 1 && /SM_ADS\.leadCreated\(\)/.test(succeedBody)
+    ? ok("landing: lead_created can fire only from succeed()")
+    : fail("landing: the conversion hook is called outside succeed()");
+  /if \(res\.ok\) \{\s*succeed\(\);/.test(code) && (code.match(/succeed\(\)/g) || []).length === 2
+    ? ok("landing: succeed() runs only on a real 2xx")
+    : fail("landing: succeed() is reachable without a 2xx");
+  /if \(k === HONEYPOT\) return;/.test(code) && /if \(trap && trap\.value\) return;/.test(code)
+    ? ok("landing: the spam trap stops the send and is never transmitted")
+    : fail("landing: spam-trap handling changed");
+  /function endpointIsSafe/.test(code) && /zentradesk\|middleware/.test(code)
+    ? ok("landing: endpoint safety check present")
+    : fail("landing: endpoint safety check missing");
+  /document\.cookie|\blocalStorage\b|\bsessionStorage\b|\bindexedDB\b/.test(code + strip(adsJs))
+    ? fail("landing: cookies or browser storage were introduced")
+    : ok("landing: no cookies or storage in the landing scripts");
+  TRACKERS.test(leadJs + adsJs)
+    ? fail("landing: a tracker was added to the landing scripts")
+    : ok("landing: no third-party tracker in the landing scripts");
+}
+
 console.log(`\n${fails === 0 ? "PASS" : "FAIL"} — ${checks} checks passed, ${fails} failed.\n`);
 process.exit(fails === 0 ? 0 : 1);
