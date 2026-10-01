@@ -490,7 +490,8 @@ const CONTACT_FIELDS = [
   "phone",
   "service_area",
   "notes",
-  "contact_consent"
+  "contact_consent",
+  "sms_consent"
 ];
 const missingQ = QUALIFICATION_FIELDS.filter(
   (f) => !new RegExp(`data-required-group="${f}"`).test(wiz)
@@ -1785,6 +1786,107 @@ const doneMobile = (doneCss.match(/@media \(max-width: 860px\) \{[\s\S]*?\n\}\n/
 /\.wz-done-actions \.btn \{[^}]*width:\s*100%/.test(doneCss)
   ? ok("styles: the primary button is full width")
   : fail("styles: the primary button must be full width");
+
+console.log("\n== A2P SMS compliance: policy, SMS terms, and the opt-in checkbox ==");
+// Carrier campaign registration reads these three pages and the form. Each
+// check below is one thing a reviewer looks for; losing any of them gets a
+// campaign rejected, so none of it may drift.
+// plainText() turns every tag into a space, which strands the full stop after a
+// closing </a>. Pull punctuation back so linked and unlinked copy compare equal.
+const decode = (t) =>
+  t.replace(/&amp;/g, "&").replace(/&nbsp;/g, " ").replace(/\s+([.,;:])/g, "$1");
+const pageText = (f) => decode(plainText(read(f)));
+const SMS_BRAND = `T&R Growth / ${brand.productName}`;
+const NO_SALE_SENTENCE =
+  "We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes.";
+const privacyHtml = read("privacy.html");
+const privacyText = pageText("privacy.html");
+/<h1>Privacy Policy<\/h1>/.test(privacyHtml)
+  ? ok("privacy: the page is titled Privacy Policy")
+  : fail("privacy: the h1 must read exactly Privacy Policy");
+privacyHtml.includes(NO_SALE_SENTENCE)
+  ? ok("privacy: the no-sale / no-sharing sentence is present verbatim")
+  : fail("privacy: the exact no-sale / no-sharing sentence is missing or reworded");
+privacyText.includes(SMS_BRAND)
+  ? ok(`privacy: names the SMS brand (${SMS_BRAND})`)
+  : fail(`privacy: must name the SMS brand ${SMS_BRAND}`);
+/Information we collect/.test(privacyText) && /How we use information/.test(privacyText)
+  ? ok("privacy: says what is collected and how it is used")
+  : fail("privacy: must keep the collection and use sections");
+
+const termsHtml = read("terms.html");
+const smsTerms = decode(
+  plainText(
+    (termsHtml.match(/<section>\s*<h2 id="sms-terms">[\s\S]*?<\/section>/) || [""])[0]
+  )
+);
+const SMS_TERMS = [
+  [/^SMS Terms/, "an SMS Terms heading"],
+  [new RegExp(SMS_BRAND.replace(/[/&]/g, "\\$&")), "the brand name"],
+  [/Message frequency may vary/, "message frequency"],
+  [/Message and data rates may apply/, "message and data rates"],
+  [/Reply STOP/, "STOP to opt out"],
+  [/Reply HELP/, "HELP for help"]
+];
+const missingTerms = SMS_TERMS.filter(([re]) => !re.test(smsTerms));
+missingTerms.length === 0
+  ? ok(`terms: the SMS Terms section carries all ${SMS_TERMS.length} required disclosures`)
+  : fail(`terms: SMS Terms section is missing ${missingTerms.map(([, n]) => n).join(", ")}`);
+
+const smsBox = (wiz.match(/<label class="consent">\s*<input[^>]*name="sms_consent"[^>]*>[\s\S]*?<\/label>/) || [""])[0];
+const smsInput = (smsBox.match(/<input[^>]*>/) || [""])[0];
+/type="checkbox"/.test(smsInput) && /value="yes"/.test(smsInput)
+  ? ok("contact: the SMS consent checkbox is present")
+  : fail("contact: the SMS consent checkbox (sms_consent) is missing");
+!/\bchecked\b/.test(smsInput)
+  ? ok("contact: SMS consent is unchecked by default")
+  : fail("contact: SMS consent must never be pre-checked");
+!/\brequired\b/.test(smsInput)
+  ? ok("contact: SMS consent is optional, so texts are never a condition of the form")
+  : fail("contact: SMS consent must stay optional");
+!/name="contact_consent"/.test(smsBox)
+  ? ok("contact: SMS consent is separate from the general contact consent")
+  : fail("contact: SMS consent must not be bundled with contact_consent");
+const smsLabel = decode(plainText(smsBox));
+const SMS_LABEL = [
+  [new RegExp(SMS_BRAND.replace(/[/&]/g, "\\$&")), "the brand name"],
+  [/text messages/, "that it is about text messages"],
+  [/Message frequency may vary/, "message frequency"],
+  [/Message and data rates may apply/, "message and data rates"],
+  [/Reply STOP/, "STOP"],
+  [/HELP/, "HELP"],
+  [/not a condition of any purchase/, "not a condition of purchase"]
+];
+const missingLabel = SMS_LABEL.filter(([re]) => !re.test(smsLabel));
+missingLabel.length === 0
+  ? ok(`contact: the disclosure beside the checkbox carries all ${SMS_LABEL.length} required parts`)
+  : fail(`contact: SMS disclosure is missing ${missingLabel.map(([, n]) => n).join(", ")}`);
+/href="privacy\.html"/.test(smsBox) && /href="terms\.html#sms-terms"/.test(smsBox)
+  ? ok("contact: the disclosure links the Privacy Policy and the SMS Terms")
+  : fail("contact: the SMS disclosure must link privacy.html and terms.html#sms-terms");
+// The consent page quotes the checkbox. A reviewer compares the two.
+smsLabel && pageText("sms-consent.html").includes(smsLabel)
+  ? ok("sms-consent: quotes the checkbox wording exactly")
+  : fail("sms-consent: the quoted opt-in wording no longer matches contact.html");
+/data\.sms_consent = "no"/.test(intake)
+  ? ok("intake: an unticked box is submitted as an explicit no")
+  : fail("intake: an unticked SMS box must be recorded as no");
+/smsConsent\.checked && !phoneField\.value\.trim\(\)/.test(intake)
+  ? ok("intake: ticking SMS consent requires a phone number")
+  : fail("intake: SMS consent with no phone number must be refused");
+// Stale claims from before the form had an opt-in.
+const STALE_SMS = [
+  /does not\s+contain an SMS opt-in/i,
+  /does not include an SMS opt-in/i,
+  /no opt-in form anywhere on this website/i,
+  /no way to opt in from this\s+website/i
+];
+const staleSms = ["privacy.html", "terms.html", "sms-consent.html"].filter((f) =>
+  STALE_SMS.some((re) => re.test(pageText(f)))
+);
+staleSms.length === 0
+  ? ok("legal: no page still claims the website has no SMS opt-in")
+  : fail(`legal: stale "no SMS opt-in on this website" claim in ${staleSms.join(", ")}`);
 
 console.log("\n== Public copy: no em or en dashes ==");
 // Applies to the files a visitor's browser actually loads: every page, the

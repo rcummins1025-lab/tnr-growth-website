@@ -28,7 +28,7 @@ only** (validation + brand rename); they are not required to build or serve.
 | --- | --- |
 | `index.html` | Homepage (hero, how it works, see the system, built and operating, who it’s for, FAQ, final CTA) |
 | `contact.html` | "Growth System Audit" multi-step application form |
-| `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages (SMS program wording preserved) |
+| `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages: A2P SMS disclosures (audit-form opt-in + lead-alert program wording preserved) |
 | `styles.css` | Forge palette — **all** brand tokens in the `:root` block at the top |
 | `js/site-config.js` | **One place** to set the form `formEndpoint` / `formEndpointMode` |
 | `js/intake.js` | Multi-step form logic + submission |

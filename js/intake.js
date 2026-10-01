@@ -184,10 +184,28 @@
     }
   }
 
+  /* SMS opt-in. The phone field is optional and the text-message checkbox is
+   * optional and never pre-checked, but agreeing to texts with no number to
+   * text is not a usable consent, so the pair is checked together. The phone
+   * input stays optional in the markup; this only flags it while the box is
+   * ticked and the number is blank. */
+  var SMS_NEEDS_PHONE =
+    "Add a mobile number to receive text messages, or untick the text-message box.";
+  var smsConsent = form.querySelector('input[name="sms_consent"]');
+  var phoneField = form.querySelector('input[name="phone"]');
+
+  function syncSmsConsent() {
+    if (!smsConsent || !phoneField) return;
+    phoneField.setCustomValidity(
+      smsConsent.checked && !phoneField.value.trim() ? SMS_NEEDS_PHONE : ""
+    );
+  }
+
   // Validate only the fields inside the current step.
   function validateStep(i) {
     var stepEl = steps[i];
     var invalid = null;
+    syncSmsConsent();
     // Clear previous field errors in this step.
     stepEl.querySelectorAll(".form-error").forEach(function (e) {
       e.textContent = "";
@@ -312,6 +330,9 @@
       if (k === HONEYPOT) return; // never transmit the spam trap's value
       data[k] = typeof v === "string" ? v.trim() : v;
     });
+    // An unticked checkbox is simply absent from FormData. Record the refusal
+    // explicitly so the submission is an unambiguous consent record either way.
+    if (smsConsent && !smsConsent.checked) data.sms_consent = "no";
     var product = cfg.productName || "ServiceMomentum";
     // NOTE: metadata keys deliberately avoid a leading underscore. Form services
     // (Formspree included) reserve "_"-prefixed names such as _replyto, _subject,

@@ -113,6 +113,8 @@
           field.dispatchEvent(new Event('input', {bubbles: true}));
           field.dispatchEvent(new Event('change', {bubbles: true}));
         }
+        const sms = form.elements.namedItem('sms_consent');
+        check('SMS consent ships unchecked and optional', !sms.checked && !sms.required);
         const consent = form.elements.namedItem('contact_consent');
         consent.checked = fixture !== 'invalid';
         consent.dispatchEvent(new Event('change', {bubbles: true}));
@@ -153,6 +155,7 @@
           check('Duplicate submit is blocked: exactly one local request', after.requests - before.requests === 1);
           const payload = after.payloads[before.payloads.length];
           check('Local mock received the real multipart form body', payload && /multipart\/form-data/.test(payload.contentType) && payload.fields.email === fields.email && payload.fields.contact_consent === 'yes');
+          check('Untouched SMS box is recorded as an explicit no', payload && payload.fields.sms_consent === 'no');
           check('Payload strips honeypot and retains referral metadata', payload && !('_gotcha' in payload.fields) && payload.fields.referral_source === 'direct' && Boolean(payload.fields.meta_submitted_at));
         }
       }

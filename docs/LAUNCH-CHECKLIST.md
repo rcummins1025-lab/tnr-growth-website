@@ -39,9 +39,11 @@ here changes DNS, GitHub Pages, HTTPS, Google Workspace, or Twilio.
 ## ✅ Pre-deploy review
 
 - [ ] `node scripts/validate.mjs` passes.
-- [ ] Legal review of `privacy.html` (now discloses the form) and that the SMS
-      program wording in `privacy.html` / `terms.html` / `sms-consent.html` is
-      unchanged and still accurate.
+- [ ] Legal review of `privacy.html` (now discloses the form and its optional
+      SMS opt-in) and that the SMS wording in `privacy.html` / `terms.html` /
+      `sms-consent.html` is still accurate: the inquiry follow-up opt-in
+      matches the checkbox in `contact.html` and the registered A2P campaign,
+      and the operational lead-alert wording is unchanged.
 - [ ] Working-implementation section re-read against `docs/BRAND.md` claim limits.
 - [ ] Confirm the completed live test in the Formspree dashboard **and** in the
       `hello@tnrgrowthagency.com` inbox. (The submission itself is already done —
