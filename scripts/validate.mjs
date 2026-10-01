@@ -1798,7 +1798,7 @@ const decode = (t) =>
 const pageText = (f) => decode(plainText(read(f)));
 const SMS_BRAND = `T&R Growth / ${brand.productName}`;
 const NO_SALE_SENTENCE =
-  "We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes.";
+  "We do not sell or share your SMS opt-in data with third parties for their marketing.";
 const privacyHtml = read("privacy.html");
 const privacyText = pageText("privacy.html");
 /<h1>Privacy Policy<\/h1>/.test(privacyHtml)
