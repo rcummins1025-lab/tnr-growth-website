@@ -186,6 +186,7 @@ then one contact screen. This list must match `contact.html` exactly;
 | `service_area` | yes |
 | `notes` (free text) | optional |
 | `contact_consent` | yes — "Consent is not a condition of any purchase." |
+| `sms_consent` | **optional**, never pre-checked — submits `yes` or `no` |
 | `referral_source` | filled automatically, never shown or typed |
 
 `referral_source` records where an applicant came from. A link such as
@@ -196,6 +197,16 @@ falling back to `direct` for anything else. It is written to a hidden input's
 `.value` and never rendered as markup. No cookie, no localStorage, no
 fingerprinting, no third-party analytics, and the referring page URL is never
 read.
+
+`sms_consent` is the A2P 10DLC opt-in for inquiry follow-up texts from
+T&R Growth / ServiceMomentum. It is separate from `contact_consent`, unchecked
+by default, and the form submits without it. When it is ticked, js/intake.js
+requires a phone number (the phone field itself stays optional in the markup).
+An unticked box is submitted as an explicit `no`, so every submission is a
+consent record either way. The checkbox wording is quoted on
+`sms-consent.html` and described in `privacy.html` and `terms.html#sms-terms`;
+change all of them together. `scripts/validate.mjs` holds the required
+disclosures in place.
 
 **Added automatically at submit time:** `meta_product`, `meta_source`,
 `meta_submitted_at`, plus `_replyto` and `_subject` in `formspree` mode.
@@ -215,5 +226,8 @@ steals focus from the page heading when the page opens); errors use
 
 - It does **not** send SMS or email on submit (no automated messaging).
 - It does **not** set cookies or run analytics.
+- It records the optional `sms_consent` choice, and nothing more: ticking the
+  box triggers no text. Any follow-up text is sent separately, and only to a
+  number whose submission says `sms_consent: yes`.
 - It does **not** enroll anyone in the operational SMS lead-alert program (that
   is a separate, opt-in program — see `sms-consent.html`).

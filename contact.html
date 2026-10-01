@@ -181,6 +181,18 @@
                 <textarea id="notes" name="notes" rows="3" placeholder="Optional. Add anything the questions above missed."></textarea>
               </div>
             </div>
+            <!-- SMS opt-in. Optional, never pre-checked, and separate from the
+                 required contact consent below, so agreeing to texts is never
+                 bundled with anything else. js/intake.js asks for a phone
+                 number only when this is ticked, and submits an explicit
+                 "no" when it is not. The wording is quoted on
+                 sms-consent.html; change both together. -->
+            <div class="wz-consent">
+              <label class="consent">
+                <input type="checkbox" name="sms_consent" value="yes" />
+                <span>I agree to receive text messages from T&amp;R Growth / ServiceMomentum about my inquiry at the phone number I provided. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of any purchase. See our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html#sms-terms" target="_blank" rel="noopener">Terms of Service</a>.</span>
+              </label>
+            </div>
             <div class="wz-consent">
               <label class="consent">
                 <input type="checkbox" name="contact_consent" value="yes" required />
