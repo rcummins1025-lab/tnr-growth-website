@@ -1,4 +1,4 @@
-# ServiceMomentum — operated by T&R Growth LLC
+# Service Momentum
 # Allow all reputable crawlers. Nothing here is private.
 User-agent: *
 Allow: /

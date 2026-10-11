@@ -2,22 +2,21 @@
 /**
  * apply-brand.mjs — change the working PRODUCT NAME in one command.
  *
- * The product name ("ServiceMomentum") is a WORKING name and is not legally
- * finalized. Because it is a single, unique token, renaming it is a safe,
- * literal, whole-word replacement across the site's HTML + JS + config + docs.
+ * The product name ("Service Momentum") is a literal string, so renaming it is
+ * a case-sensitive replacement across the site's HTML + JS + config + docs.
  *
  * Three name-derived forms are rewritten together, so nothing is left behind:
- *   1. the name itself           ServiceMomentum      -> NewName
- *   2. the lowercase slug        servicemomentum-site -> newname-site
- *   3. the uppercase wordmark    SERVICEMOMENTUM      -> NEWNAME  (og-image.svg)
+ *   1. the name itself           Service Momentum     -> New Name
+ *   2. the lowercase slug        servicemomentum      -> newname
+ *   3. the uppercase form        SERVICE MOMENTUM     -> NEW NAME
  *
- * The brand SYMBOL needs no rewriting at all: assets/mark*.svg is drawn
- * geometry with no letterforms, and the product wordmark beside it is HTML
- * text (.brand-name), never baked into the artwork. That is deliberate — the
- * name is provisional, so nothing name-shaped is allowed into the graphics.
+ * Not rewritten: the SM logo artwork (assets/sm-logo.svg, favicon.svg, the PNG
+ * icons and assets/og-image.png) and the SMS consent wording, which reads
+ * "T&R Growth / ServiceMomentum" exactly as registered for A2P texting. Change
+ * those by hand, and update the A2P registration before the consent text.
  *
  * Usage:
- *   node scripts/apply-brand.mjs --from "ServiceMomentum" --to "NewName"
+ *   node scripts/apply-brand.mjs --from "Service Momentum" --to "New Name"
  *   node scripts/apply-brand.mjs --to "NewName"     # --from defaults to the
  *                                                     current productName in
  *                                                     brand.config.json
@@ -58,8 +57,8 @@ const slug = slugFor;
 const files = [
   ...readdirSync(root).filter((f) => f.endsWith(".html")),
   "js/site-config.js",
-  "js/intake.js",
-  "js/motion.js",
+  "js/demo-form.js",
+  "js/site.js",
   "styles.css",
   "package.json",
   "README.md",
@@ -114,8 +113,5 @@ if (check) {
   console.log(
     `\nRenamed "${from}" -> "${to}" in ${total} place(s); brand.config.json updated.`
   );
-  console.log("The brand symbol is letter-free, so no artwork changed.");
-  console.log(
-    "Reminder: this is a WORKING name. Run domain + trademark checks before public launch."
-  );
+  console.log("Logo artwork, PNG icons and the A2P SMS consent wording were NOT changed.");
 }

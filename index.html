@@ -2,78 +2,85 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ServiceMomentum | Turn your website and past customers into a repeatable growth system</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Service Momentum | Your past customers are calling someone else</title>
     <meta
       name="description"
-      content="ServiceMomentum, by T&amp;R Growth, builds local-service websites connected to lead tracking, review follow-up, customer management, and recurring-service follow-up. From first search to next service."
+      content="Service Momentum sets up and runs the Command Center for HVAC, mini-split, heating and plumbing shops: your customer book, every lead tracked to its source, and a daily list of who's due with the text already written."
     />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#171A1F" />
+    <meta name="theme-color" content="#FFFFFF" />
     <link rel="canonical" href="https://tnrgrowthagency.com/" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=20260907" />
-
-    <!-- Motion gate. Adds the hook ONLY when JS runs and the visitor has not
-         asked for reduced motion; drops it again if js/motion.js never loads,
-         so nothing can be left hidden behind an animation. -->
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="styles.css?v=20261011b" />
+    <!-- Reveal gate: hides .reveal blocks only while JS runs, and drops the gate
+         if js/site.js has not loaded within 2.5 s, so nothing stays hidden. -->
     <script>
-      (function () {
-        var d = document.documentElement;
-        var mq = window.matchMedia
-          ? window.matchMedia("(prefers-reduced-motion: reduce)")
-          : null;
-        if (mq ? mq.matches : false) return;
-        d.classList.add("motion");
+      (function (d) {
+        d.classList.add("js");
         setTimeout(function () {
-          if (d.getAttribute("data-motion-ready") !== "1")
-            d.classList.remove("motion");
+          if (d.getAttribute("data-site-ready") !== "1") d.classList.remove("js");
         }, 2500);
-      })();
+      })(document.documentElement);
     </script>
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ServiceMomentum" />
-    <meta property="og:title" content="ServiceMomentum | A connected customer-growth system for local-service businesses" />
-    <meta property="og:description" content="Websites connected to lead tracking, review follow-up, customer management, and recurring-service follow-up. From first search to next service. Powered by T&amp;R Growth." />
+    <meta property="og:site_name" content="Service Momentum" />
+    <meta property="og:title" content="Your past customers are calling someone else." />
+    <meta property="og:description" content="Your phone should ring from people you already did work for. Service Momentum sets it up and runs it for home-service shops." />
     <meta property="og:url" content="https://tnrgrowthagency.com/" />
-    <!-- PNG, not SVG: Facebook, LinkedIn and X do not render SVG share images.
-         Declaring width/height/type lets a crawler lay the card out before the
-         image finishes downloading. -->
     <meta property="og:image" content="https://tnrgrowthagency.com/assets/og-image.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ServiceMomentum: turn your website and past customers into a repeatable growth system. Get found, get booked, get reviewed, get rebooked. Powered by T&amp;R Growth." />
+    <meta property="og:image:alt" content="Service Momentum. Your past customers are calling someone else." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ServiceMomentum | From first search to next service" />
-    <meta name="twitter:description" content="A connected customer-growth system for local-service businesses. Powered by T&amp;R Growth." />
+    <meta name="twitter:title" content="Your past customers are calling someone else." />
+    <meta name="twitter:description" content="The done-for-you Command Center for home-service shops." />
     <meta name="twitter:image" content="https://tnrgrowthagency.com/assets/og-image.png" />
-    <meta name="twitter:image:alt" content="ServiceMomentum: a connected customer-growth system. Powered by T&amp;R Growth." />
+    <meta name="twitter:image:alt" content="Service Momentum. Your past customers are calling someone else." />
 
-    <!-- Organization structured data for T&amp;R Growth LLC (accurate; no reviews/ratings) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "T\u0026R Growth LLC",
-        "alternateName": "ServiceMomentum",
+        "name": "Service Momentum",
+        "legalName": "T\u0026R Growth LLC",
         "url": "https://tnrgrowthagency.com/",
         "email": "hello@tnrgrowthagency.com",
-        "logo": "https://tnrgrowthagency.com/assets/logo-horizontal-light.svg",
-        "description": "T\u0026R Growth LLC designs, installs, and operates ServiceMomentum, a connected customer-growth system for established local-service businesses in the United States.",
-        "areaServed": "US",
-        "slogan": "From first search to next service."
+        "logo": "https://tnrgrowthagency.com/assets/sm-logo-512.png",
+        "description": "Service Momentum sets up and runs the Command Center for home-service businesses with repeat customers: the customer book, lead tracking by source, and who's due for service.",
+        "areaServed": "US"
       }
     </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "ServiceMomentum",
-        "url": "https://tnrgrowthagency.com/",
-        "publisher": { "@type": "Organization", "name": "T\u0026R Growth LLC" }
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is this a CRM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. A CRM is software you have to learn, fill in and keep up. We hold your customer book for you, track every lead by source, and show you who's due. You don't manage a system. We run it." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I have to learn software?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. We install it, set it up and run it. You get one Today screen that shows who's due, with the text already written. You read it and tap send." }
+          },
+          {
+            "@type": "Question",
+            "name": "What do you need from me?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Your customer list in whatever form it's in today: a spreadsheet, an export from your invoicing tool, or a stack of old invoices. Access to your calendar. And one short kickoff call. We do the rest." }
+          },
+          {
+            "@type": "Question",
+            "name": "How long until it's live?",
+            "acceptedAnswer": { "@type": "Answer", "text": "About two weeks. In week 1 we load your customer book. In week 2 we connect your calendar and tracking number and it goes live. After that we run it for you every month." }
+          }
+        ]
       }
     </script>
   </head>
@@ -81,388 +88,514 @@
     <a class="skip-link" href="#main">Skip to main content</a>
 
     <header class="site-header">
-      <div class="container nav">
-        <a class="nav-brand" href="index.html" aria-label="ServiceMomentum home">
-          <span class="wordmark"><img class="brand-mark" src="assets/mark.svg" width="38" height="38" alt="" aria-hidden="true" /><span class="brand-name" data-brand="product">ServiceMomentum</span></span>
-          <span class="brand-sub">by T&amp;R Growth</span>
+      <div class="wrap nav">
+        <a class="brand" href="index.html" aria-label="Service Momentum home">
+          <span class="logo-tile"><img src="assets/sm-logo.svg" width="26" height="11" alt="" /></span>
+          <span class="brand-text">Service Momentum</span>
         </a>
-        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
-          <span class="bars" aria-hidden="true"></span>
-        </button>
-        <ul class="nav-links" id="nav-links">
-          <li><a href="#how">How It Works</a></li>
-          <li><a href="#system">See the System</a></li>
-          <li><a href="#fit">Who It&rsquo;s For</a></li>
-          <!-- Shown only where the header CTA button is not: the compact menu
-               must still offer the audit. -->
-          <li class="nav-audit"><a href="contact.html">Start Audit</a></li>
+        <ul class="nav-links">
+          <li><a href="index.html#between-jobs">How it works</a></li>
+          <li><a href="index.html#leads">Lead tracking</a></li>
+          <li><a href="index.html#done-for-you">Done for you</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
         </ul>
-        <a class="btn btn-primary btn-sm nav-cta" href="contact.html">Start audit</a>
+        <a class="btn btn-primary btn-sm" href="index.html#book">Book a demo</a>
       </div>
     </header>
 
     <main id="main">
-      <!-- ============================ HERO ============================ -->
-      <section class="hero-v3">
-        <div class="container">
+      <!-- 1. HERO: the headline and the Today screen. -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">For established HVAC &amp; heat-pump contractors</p>
-            <h1><span>Get found.</span> <span>Get booked.</span> <span class="amber">Bring customers back.</span></h1>
-            <p class="hero-sub">
-              Good work should lead to the next job. We build and connect your website,
-              lead pipeline and customer follow-up so opportunities stop relying on memory.
-            </p>
-            <p class="hero-service">Set up for your business. Operated by your team.<br />Ongoing support from T&amp;R Growth.</p>
-            <div class="hero-actions-v3">
-              <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
-              <a class="hero-link" href="#system">See the system</a>
+            <p class="label">HVAC &middot; Mini-split &middot; Heating &middot; Plumbing</p>
+            <h1 id="hero-title" class="display h-xl">Your past customers are calling <span class="blue">someone else.</span></h1>
+            <p class="lede">Your phone should ring from people you already did work for. We load your customer book, track every lead, and hand you a list of who&rsquo;s due with the text already written.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#book">Book a demo</a>
+              <a class="play-link" href="#video"><span class="disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg></span>Watch the 30-second ad</a>
             </div>
-            <p class="hero-note">Eight guided steps. Ryan reviews your answers and replies by email.</p>
-          </div>
-
-          <!-- One illustrative record, fully readable before scripts run.
-               Dates describe a fictional history, not live activity or results. -->
-          <figure class="stack lifecycle-demo" aria-label="Illustrative customer service history">
-            <div class="demo-toolbar"><span>Customer workspace</span><span class="demo-sample">Illustrative example</span></div>
-            <div class="demo-record">
-              <span class="demo-record-icon" aria-hidden="true">4</span>
-              <div><p class="demo-overline">Sample property A</p><h2>Heat-pump cleaning</h2><p>Property manager &middot; 4 units</p></div>
-            </div>
-            <div class="demo-history-head"><b>One record. Every next step.</b><span>Service history</span></div>
-            <ol class="demo-history" role="list">
-              <li class="jrn" data-beat="1"><span class="demo-step" aria-hidden="true">01</span><div><b>Website inquiry captured</b><span>4-unit cleaning &middot; 10 Sep 2026</span></div><span class="demo-state">Received</span></li>
-              <li class="jrn" data-beat="2"><span class="demo-step" aria-hidden="true">02</span><div><b>Lead enters the pipeline</b><span>Service details stay with the record</span></div><span class="demo-state">New</span></li>
-              <li class="jrn" data-beat="3"><span class="demo-step" aria-hidden="true">03</span><div><b>Appointment booked</b><span>Scheduled &middot; 15 Sep 2026</span></div><span class="demo-state">Booked</span></li>
-              <li class="jrn" data-beat="4"><span class="demo-step" aria-hidden="true">04</span><div><b>Completed work recorded</b><span>4 units cleaned &middot; 15 Sep 2026</span></div><span class="demo-state">Done</span></li>
-              <li class="jrn" data-beat="5"><span class="demo-step" aria-hidden="true">05</span><div><b>Review request ready</b><span>A person reviews and sends the message</span></div><span class="demo-state">Prepared</span></li>
-              <li class="jrn" data-beat="6"><span class="demo-step" aria-hidden="true">06</span><div><b>Next-service date set</b><span>15 Mar 2027 &middot; recorded after the job</span></div><span class="demo-state">Recorded</span></li>
-              <li class="jrn demo-due" data-beat="7"><span class="demo-step" aria-hidden="true">07</span><div><b>Back in the due-for-service view</b><span>Due in 14 days &middot; example view: 1 Mar 2027</span></div><span class="demo-state">Follow up</span></li>
-            </ol>
-            <figcaption class="stack-label">Example dashboard. Demo data, not live customer information.<span class="stack-note">All records and dates are fictional. Messages require manual review and sending.</span></figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <!-- ======================= OUTCOME FLOW ========================= -->
-      <section class="band band-warm" id="how">
-        <div class="container">
-          <div class="band-head">
-            <p class="eyebrow">How it works</p>
-            <h2>From first search to next service.</h2>
-          </div>
-          <div class="flow">
-            <div class="flow-step">
-              <div class="dotnum">01</div>
-              <h3>Get found</h3>
-              <p>A focused website and strong local-search foundation.</p>
-            </div>
-            <div class="flow-step">
-              <div class="dotnum">02</div>
-              <h3>Get booked</h3>
-              <p>Website inquiries enter a private lead pipeline.</p>
-            </div>
-            <div class="flow-step">
-              <div class="dotnum">03</div>
-              <h3>Get reviewed</h3>
-              <p>Completed jobs create a review-request workflow.</p>
-            </div>
-            <div class="flow-step">
-              <div class="dotnum">04</div>
-              <h3>Get rebooked</h3>
-              <p>Next-service dates surface customers who are due again.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ========================= THE SYSTEM ========================= -->
-      <section class="band band-dark" id="system">
-        <div class="container">
-          <div class="band-head">
-            <p class="eyebrow">See the system</p>
-            <h2>See the system at work.</h2>
-            <p>Follow Sample property A from a website inquiry to its next service. The supporting records below are fictional too.</p>
-          </div>
-
-          <div class="pillar stage">
-            <div>
-              <p class="stage-step"><span class="stage-num" aria-hidden="true">1</span>Stage 1 of 3</p>
-              <h3>New inquiry</h3>
-              <p>The website request enters the private pipeline with the service needed and its current status.</p>
-            </div>
-            <figure class="pillar-visual">
-              <div class="pane">
-                <div class="pane-head"><b>Leads</b><span class="tag">Sample</span></div>
-                <div class="rowset">
-                  <div class="rrow">
-                    <span class="rec-ico" aria-hidden="true">4</span>
-                    <span class="rec"><b>Sample property A</b><span class="rec-sub">4-unit cleaning</span></span>
-                    <span class="chip new">New</span>
-                  </div>
-                  <div class="rrow">
-                    <span class="rec-ico" aria-hidden="true">2</span>
-                    <span class="rec"><b>Homeowner</b><span class="rec-sub">2-unit service</span></span>
-                    <span class="chip new">New</span>
-                  </div>
-                  <div class="rrow">
-                    <span class="rec-ico" aria-hidden="true">6</span>
-                    <span class="rec"><b>Small office</b><span class="rec-sub">6-unit cleaning</span></span>
-                    <span class="chip booked">Booked</span>
-                  </div>
-                </div>
-              </div>
-              <div class="pane">
-                <div class="pane-head"><b>Job record</b><span class="tag">Sample</span></div>
-                <dl class="fieldset">
-                  <div><dt>Record</dt><dd>Sample property A</dd></div>
-                  <div><dt>Source</dt><dd>Website</dd></div>
-                  <div><dt>Service</dt><dd>4-unit cleaning</dd></div>
-                  <div><dt>Status</dt><dd><span class="chip booked">Booked</span></dd></div>
-                  <div><dt>Scheduled</dt><dd>15 Sep 2026</dd></div>
-                </dl>
-              </div>
-              <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
-            </figure>
-          </div>
-
-          <div class="pillar stage">
-            <div>
-              <p class="stage-step"><span class="stage-num" aria-hidden="true">2</span>Stage 2 of 3</p>
-              <h3>Job completed</h3>
-              <p>The customer and completed work are recorded, and a review request is prepared.</p>
-            </div>
-            <figure class="pillar-visual">
-              <div class="pane">
-                <div class="pane-head"><b>Completed jobs</b><span class="tag">Sample</span></div>
-                <div class="rowset">
-                  <div class="rrow rrow-wide">
-                    <span class="rec-ico" aria-hidden="true">4</span>
-                    <span class="rec"><b>Sample property A</b><span class="rec-sub">4 units &middot; 15 Sep 2026</span></span>
-                    <span class="chip done">Done</span>
-                    <span class="note">Review request ready</span>
-                  </div>
-                  <div class="rrow rrow-wide">
-                    <span class="rec-ico" aria-hidden="true">2</span>
-                    <span class="rec"><b>Homeowner</b><span class="rec-sub">2 units</span></span>
-                    <span class="chip done">Done</span>
-                    <span class="note">Review request ready</span>
-                  </div>
-                  <div class="rrow rrow-wide">
-                    <span class="rec-ico" aria-hidden="true">6</span>
-                    <span class="rec"><b>Small office</b><span class="rec-sub">6 units</span></span>
-                    <span class="chip done">Done</span>
-                    <span class="note">Recorded</span>
-                  </div>
-                </div>
-                <p class="pane-caption">Review requests are prepared here. A person reviews and sends each one.</p>
-              </div>
-              <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
-            </figure>
-          </div>
-
-          <div class="pillar stage">
-            <div>
-              <p class="stage-step"><span class="stage-num" aria-hidden="true">3</span>Stage 3 of 3</p>
-              <h3>Customer due again</h3>
-              <p>The next-service date brings the customer back into view when follow-up is appropriate.</p>
-            </div>
-            <figure class="pillar-visual">
-              <div class="pane">
-                <div class="pane-head"><b>Due for service</b><span class="tag">Sample</span></div>
-                <div class="rowset">
-                  <div class="rrow rrow-wide">
-                    <span class="rec-ico" aria-hidden="true">2</span>
-                    <span class="rec"><b>Residential customer</b><span class="rec-sub">2 units</span></span>
-                    <span class="chip due">Due in 14 days</span>
-                    <span class="note">Reminder ready</span>
-                  </div>
-                  <div class="rrow rrow-wide">
-                    <span class="rec-ico" aria-hidden="true">4</span>
-                    <span class="rec"><b>Sample property A</b><span class="rec-sub">4 units</span></span>
-                    <span class="chip due">Due in 14 days</span>
-                    <span class="note">Reminder ready</span>
-                  </div>
-                  <div class="rrow rrow-wide">
-                    <span class="rec-ico" aria-hidden="true">6</span>
-                    <span class="rec"><b>Small office</b><span class="rec-sub">6 units</span></span>
-                    <span class="chip due">Due in 45 days</span>
-                    <span class="note">Reach out</span>
-                  </div>
-                </div>
-                <p class="pane-caption">Sample property A: next service 15 Mar 2027, viewed on 1 Mar 2027. Reminders are prepared here. A person reviews and sends each one.</p>
-              </div>
-              <figcaption class="illus">Example dashboard. Demo data, not live customer information.</figcaption>
-            </figure>
-          </div>
-          <p class="demo-note">Messages are prepared for review. Nothing goes out automatically.</p>
-          <div class="system-audit"><div><h3>Where does your follow-up break down?</h3><p>The audit starts with how you handle leads and past customers today.</p></div><a class="btn btn-gold" href="contact.html">Start your growth audit</a></div>
-        </div>
-      </section>
-
-      <!-- ===================== BUILT AND OPERATING ==================== -->
-      <section class="band band-dark" id="built">
-        <div class="container">
-          <div class="band-head">
-            <p class="eyebrow">Built and operating</p>
-            <h2>A real service-business implementation.</h2>
-            <p>The public website, private workflow and return-service process have been built and used in a real operating business.</p>
-          </div>
-          <div class="proof-grid">
-            <div class="proof">
-              <h3>Public discovery and lead capture</h3>
-              <p>A focused service-business website and connected intake path were built and put into operation.</p>
-            </div>
-            <div class="proof">
-              <h3>Private operating workflow</h3>
-              <p>Leads, customers, jobs and completed work are tracked in one private workflow.</p>
-            </div>
-            <div class="proof">
-              <h3>Review and return-service process</h3>
-              <p>The operating system prepares review requests, records next-service dates and surfaces customers who are due again.</p>
-            </div>
-          </div>
-          <p class="proof-note">
-            Results vary, and customer review and reminder messages are
-            currently reviewed and sent manually.
-          </p>
-          <!-- Native <details>: it opens and closes with pointer, touch and
-               keyboard with no script, so every qualification below stays
-               reachable if JavaScript fails. Collapsed by default so the
-               facts are available without interrupting the page. -->
-          <details class="accuracy">
-            <summary>Read the implementation and accuracy notes</summary>
-            <ul>
-              <li>A commercial customer reported discovering the service business through Gemini.</li>
-              <li>In a separate unbranded test, Gemini displayed the business and cited its website.</li>
-              <li>These were separate events, and results vary by query, user and location.</li>
-              <li>We do not claim the website caused a particular job.</li>
-              <li>Automated customer texting is not operating.</li>
-              <li>T&amp;R Growth&rsquo;s opt-in operational SMS lead alerts are for authorized business recipients only. Customers are never automatically enrolled or messaged. See <a href="sms-consent.html">SMS Consent</a>.</li>
+            <ul class="not-these" aria-label="What Service Momentum is not">
+              <li>Not a CRM</li>
+              <li>Not an ad agency</li>
+              <li>Nothing to learn</li>
             </ul>
-          </details>
+          </div>
+
+          <div class="hero-stage">
+            <!-- example:start -->
+            <div class="app" role="img" aria-label="Command Center Today screen for a three-truck heating and air shop on Tuesday, October 13: 14 customers due this month, 6 jobs today, 3 leads to call, and $6,240 booked from past customers in October. The due list shows drafted texts with Send buttons, and the right column shows today's schedule by truck.">
+              <div class="app-bar"><span class="app-dots"><i></i><i></i><i></i></span><span class="app-addr">Command Center &middot; Today</span></div>
+              <div class="app-body with-side">
+                <div class="app-side" aria-hidden="true">
+                  <div class="ws"><img src="assets/sm-logo.svg" width="24" height="10" alt="" />Service Momentum</div>
+                  <span class="nav-i on">Today <b>14</b></span>
+                  <span class="nav-i">Leads <b>3</b></span>
+                  <span class="nav-i">Customers <b>612</b></span>
+                  <span class="nav-i">Schedule <b>6</b></span>
+                  <span class="nav-i">Money</span>
+                  <div class="shop"><b>Heating &amp; Air</b>3 trucks &middot; 4 techs</div>
+                </div>
+                <div class="app-main">
+                  <div class="app-top">
+                    <div>
+                      <p class="app-date">Tuesday, October 13</p>
+                      <p class="app-h">Morning, Dan. 14 customers are due.</p>
+                    </div>
+                    <span class="app-btn">+ Add job</span>
+                  </div>
+                  <div class="kpis">
+                    <div class="kpi"><div class="kpi-label">Due this month</div><div class="kpi-value">14</div><div class="kpi-note">5 texted this week</div></div>
+                    <div class="kpi"><div class="kpi-label">Jobs today</div><div class="kpi-value">6</div><div class="kpi-note">3 trucks out</div></div>
+                    <div class="kpi"><div class="kpi-label">Leads to call</div><div class="kpi-value">3</div><div class="kpi-note">Oldest 47 min</div></div>
+                    <div class="kpi"><div class="kpi-label">Repeat work, Oct</div><div class="kpi-value">$6,240</div><div class="kpi-note">18 jobs</div></div>
+                  </div>
+                  <div class="today-grid">
+                    <div class="panel">
+                      <div class="panel-head"><span class="panel-title">Due for service</span><span class="panel-meta">14 this month</span></div>
+                      <div class="due-row">
+                        <div class="due-top"><span class="av">MR</span><div class="due-who"><div class="due-name">Maya Ruiz</div><div class="due-meta">2 mini-splits &middot; cleaned Oct 2025</div></div><span class="send">Send</span></div>
+                        <p class="draft"><small>Text drafted</small>Hi Maya, it&rsquo;s Dan from Heating &amp; Air. Your mini-splits are due for their yearly cleaning. I have Thursday at 10 or Friday at 1. Want one?</p>
+                      </div>
+                      <div class="due-row">
+                        <div class="due-top"><span class="av">SO</span><div class="due-who"><div class="due-name">Sam Okafor</div><div class="due-meta">Gas furnace &middot; tune-up Oct 2025</div></div><span class="send">Send</span></div>
+                        <p class="draft only-wide"><small>Text drafted</small>Hi Sam, heating season&rsquo;s here. Want me to get your furnace tune-up on the books before the first cold snap?</p>
+                      </div>
+                      <div class="due-row">
+                        <div class="due-top"><span class="av">PP</span><div class="due-who"><div class="due-name">Priya Patel</div><div class="due-meta">4 heat pumps &middot; serviced Sep 2025</div></div><span class="pill pill-done">Texted 9:41 AM</span></div>
+                      </div>
+                      <div class="due-row">
+                        <div class="due-top"><span class="av">TB</span><div class="due-who"><div class="due-name">Tom Becker</div><div class="due-meta">Boiler &middot; serviced Oct 2025</div></div><span class="pill pill-booked">Booked Thu 8:00</span></div>
+                      </div>
+                      <div class="due-row">
+                        <div class="due-top"><span class="av">CD</span><div class="due-who"><div class="due-name">Carla Diaz</div><div class="due-meta">Water heater flush &middot; Nov 2025</div></div><span class="send">Send</span></div>
+                      </div>
+                    </div>
+                    <div class="panel only-wide">
+                      <div class="panel-head"><span class="panel-title">Today&rsquo;s schedule</span><span class="panel-meta">6 jobs</span></div>
+                      <ul class="sched-list">
+                        <li><time>8:00</time><span class="job"><b>Linda Cho</b><span>AC tune-up</span></span><span class="truck">Truck 1</span></li>
+                        <li><time>9:30</time><span class="job"><b>Jordan Lee</b><span>Clean 3 mini-splits</span></span><span class="truck">Truck 2</span></li>
+                        <li><time>11:00</time><span class="job"><b>Ray Alvarez</b><span>No-heat call</span></span><span class="truck">Truck 1</span></li>
+                        <li><time>12:30</time><span class="job"><b>Erin Walsh</b><span>Mini-split estimate</span></span><span class="truck">Truck 3</span></li>
+                        <li><time>2:00</time><span class="job"><b>Dev Kapoor</b><span>Furnace tune-up</span></span><span class="truck">Truck 2</span></li>
+                        <li><time>3:30</time><span class="job"><b>Ana Flores</b><span>Water heater swap</span></span><span class="truck">Truck 3</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <p class="ex-note">Example data</p>
+                </div>
+              </div>
+            </div>
+            <!-- example:end -->
+            <div class="phone hero-phone">
+              <video
+                id="hero-video"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                poster="media/hero-loop-poster.jpg"
+                aria-label="Looping clip from the Service Momentum ad: a job goes on the calendar, the customer is logged, and the next visit is set"
+              >
+                <source src="media/hero-loop.mp4" type="video/mp4" />
+              </video>
+              <button class="video-toggle" type="button" id="hero-video-toggle" aria-pressed="false" aria-label="Pause background video">
+                <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg>
+                <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- ========================= WHO IT'S FOR ======================== -->
-      <section class="band band-warm" id="fit">
-        <div class="container">
-          <div class="band-head">
-            <p class="eyebrow">Who it&rsquo;s for</p>
-            <h2>Built for established service businesses with customers worth bringing back.</h2>
+      <!-- 2. THE PROBLEM: dark band, plain talk, stills from the ad. -->
+      <section class="section dark" id="problem" aria-labelledby="problem-title">
+        <div class="wrap problem-grid">
+          <div class="problem-copy">
+            <p class="label">Where follow-up lives today</p>
+            <h2 id="problem-title" class="display h-lg">On a sticky note. In a text thread. In your head.</h2>
+            <ul class="slips">
+              <li><span>The office</span>The sticky note fell off the dash in July.</li>
+              <li><span>The techs</span>The text thread is on Luis&rsquo;s phone, and he&rsquo;s off today.</li>
+              <li><span>You</span>You meant to call Mrs. Lee back in March.</li>
+            </ul>
+            <p class="kicker">So the repeat job goes to whoever shows up first on Google.</p>
           </div>
-          <div class="fit-grid">
-            <div class="fit">
-              <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--ok)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A strong fit</h3>
-              <ul>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Established HVAC, heat-pump or recurring local-service company.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Existing customer history and a good offline reputation.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Website, lead handling and follow-up are disconnected.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Recurring cleaning, maintenance or service opportunities.</li>
-              </ul>
+          <div class="stills">
+            <figure class="still reveal">
+              <img src="media/scenes/missed-calls.jpg" width="720" height="1027" loading="lazy" alt="Phone lock screen stacked with alerts: tune-up overdue, estimate expired, voicemail not returned, no follow-up sent, due for service 14 months ago, called someone else, missed call from a past customer." />
+              <figcaption>From our ad: a normal Tuesday</figcaption>
+            </figure>
+            <figure class="still still-2 reveal">
+              <img src="media/scenes/office-techs.jpg" width="720" height="947" loading="lazy" alt="Sticky notes reading Call back Mrs. Lee and Ruiz 2nd unit, a crew group text asking who is following up on her, and a software tab showing 112 overdue tasks." />
+              <figcaption>Nobody owns follow-up</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. BETWEEN JOBS: how it runs, with the calendar scene from the ad. -->
+      <section class="section" id="between-jobs" aria-labelledby="between-title">
+        <div class="wrap split">
+          <div class="split-stills">
+            <figure class="reveal">
+              <img src="media/scenes/calendar-entry.jpg" width="720" height="933" loading="lazy" alt="A job typed into the phone calendar, Jordan Lee 3 units, Thursday October 15, showing up in the Command Center schedule." />
+              <figcaption>You book it like always</figcaption>
+            </figure>
+            <figure class="reveal">
+              <img src="media/scenes/next-visit.jpg" width="720" height="880" loading="lazy" alt="Command Center card for Jordan Lee, 3 units, marked done, with next service due in 12 months." />
+              <figcaption>The next visit sets itself</figcaption>
+            </figure>
+          </div>
+          <div class="copy-stack">
+            <p class="label">Between jobs</p>
+            <h2 id="between-title" class="display h-lg">Put the job on the calendar. <span class="blue">That&rsquo;s it.</span></h2>
+            <ol class="steps">
+              <li><div><b>Book the job like you already do.</b><p>Your calendar, your phone. Nothing new to open in the truck.</p></div></li>
+              <li><div><b>The customer gets logged.</b><p>Name, address, units, tech and what you did, in one book that never walks out the door.</p></div></li>
+              <li><div><b>Their next visit gets set.</b><p>When it&rsquo;s time, they land on your Today list with the text already written. You tap send.</p></div></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. LEADS: wide mock-up and the Meta callout. -->
+      <section class="section steel" id="leads" aria-labelledby="leads-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Every lead, tracked</p>
+            <h2 id="leads-title" class="display h-lg">Know which ad made your phone ring.</h2>
+          </div>
+          <div class="leads-layout">
+            <!-- example:start -->
+            <div class="app reveal" role="img" aria-label="Leads screen for October: 33 leads and 22 booked. Google Business Profile 11 leads, 7 booked. Phone calls on the tracking number 9, 6 booked. Website form 7, 4 booked. Meta Fall tune-up ad 3, 2 booked. Meta Mini-split check ad 1, 1 booked. Referrals 2, 2 booked. A feed of the latest leads with times, sources and status.">
+              <div class="app-bar"><span class="app-dots"><i></i><i></i><i></i></span><span class="app-addr">Command Center &middot; Leads</span></div>
+              <div class="app-main">
+                <div class="app-top">
+                  <div><p class="app-date">October &middot; month to date</p><p class="app-h">33 leads &middot; 22 booked</p></div>
+                  <span class="chip on">This month</span>
+                </div>
+                <div class="leads-grid">
+                  <div class="panel">
+                    <table class="src-table">
+                      <thead><tr><th>Source</th><th class="n">Leads</th><th class="n">Booked</th></tr></thead>
+                      <tbody>
+                        <tr><td><span class="src-name">Google Business Profile</span><span class="src-bar"><i style="width:100%"></i></span></td><td class="n">11</td><td class="n">7</td></tr>
+                        <tr><td><span class="src-name">Phone calls &middot; tracking number</span><span class="src-bar"><i style="width:82%"></i></span></td><td class="n">9</td><td class="n">6</td></tr>
+                        <tr><td><span class="src-name">Website form</span><span class="src-bar"><i style="width:64%"></i></span></td><td class="n">7</td><td class="n">4</td></tr>
+                        <tr><td><span class="src-name">Meta &middot; &ldquo;Fall tune-up&rdquo; ad</span><span class="src-bar"><i style="width:27%"></i></span></td><td class="n">3</td><td class="n">2</td></tr>
+                        <tr><td><span class="src-name">Meta &middot; &ldquo;Mini-split check&rdquo; ad</span><span class="src-bar"><i style="width:9%"></i></span></td><td class="n">1</td><td class="n">1</td></tr>
+                        <tr><td><span class="src-name">Referral</span><span class="src-bar"><i style="width:18%"></i></span></td><td class="n">2</td><td class="n">2</td></tr>
+                        <tr class="total"><td>Total</td><td class="n">33</td><td class="n">22</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="panel">
+                    <div class="panel-head"><span class="panel-title">Latest leads</span><span class="panel-meta">Updated 9:14 AM</span></div>
+                    <ul class="feed">
+                      <li><b>Linda Cho</b><span class="pill pill-booked">Booked</span><span class="via">Today 9:12 AM &middot; Call &middot; Google</span></li>
+                      <li><b>Ray Alvarez</b><span class="pill pill-alert">Call back</span><span class="via">Today 8:47 AM &middot; Form &middot; Website</span></li>
+                      <li><b>Erin Walsh</b><span class="pill pill-booked">Booked</span><span class="via">Mon 6:20 PM &middot; Call &middot; Meta, Fall tune-up</span></li>
+                      <li><b>Nate Holloway</b><span class="pill pill-due">Quote sent</span><span class="via">Mon 2:05 PM &middot; Call &middot; Meta, Fall tune-up</span></li>
+                      <li><b>Grace Kim</b><span class="pill pill-done">Done</span><span class="via">Mon 11:40 AM &middot; Call &middot; Referral</span></li>
+                    </ul>
+                  </div>
+                </div>
+                <p class="ex-note">Example data</p>
+              </div>
             </div>
-            <div class="nofit">
-              <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Not yet</h3>
-              <ul>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Brand-new business with no meaningful customer history.</li>
-                <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Company seeking only ad management.</li>
-              </ul>
+            <!-- example:end -->
+            <div class="meta-callout reveal">
+              <p class="big">Meta said 1 lead. <span class="blue">It was 4.</span></p>
+              <p>Three of them picked up the phone instead of filling out the form. Meta never saw those calls. Your tracking number did.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ============================= FAQ ============================ -->
-      <section class="band band-light">
-        <div class="container">
-          <div class="band-head center">
-            <p class="eyebrow" style="justify-content: center;">FAQ</p>
-            <h2>Straight answers</h2>
+      <!-- 5. THE BOOK AND THE MONEY: two mock-ups, different sizes. -->
+      <section class="section" id="book-money" aria-labelledby="book-title-h">
+        <div class="wrap">
+          <div class="duo-head">
+            <div class="copy-stack">
+              <p class="label">Your customer book</p>
+              <h2 id="book-title-h" class="display h-lg">Every customer you&rsquo;ve ever had. In one place.</h2>
+              <p class="lede">The book stays with the business, not in a tech&rsquo;s head. And you can see what it pays you, month by month.</p>
+            </div>
+            <!-- example:start -->
+            <div class="app money-app reveal" role="img" aria-label="Money screen: $6,240 booked from past customers in October, 18 repeat jobs, average repeat ticket $347. Bar chart of repeat work by month: May $2,180, June $2,610, July $3,050, August $3,940, September $4,870, October $6,240.">
+              <div class="app-bar"><span class="app-dots"><i></i><i></i><i></i></span><span class="app-addr">Command Center &middot; Money</span></div>
+              <div class="app-main">
+                <div class="money-kpis">
+                  <div class="kpi"><div class="kpi-label">Booked from past customers &middot; October</div><div class="kpi-value">$6,240</div><div class="kpi-note">Up $1,370 from September</div></div>
+                  <div class="kpi"><div class="kpi-label">Repeat jobs</div><div class="kpi-value">18</div></div>
+                  <div class="kpi"><div class="kpi-label">Avg. repeat ticket</div><div class="kpi-value">$347</div></div>
+                </div>
+                <div class="panel">
+                  <div class="panel-head"><span class="panel-title">Repeat work by month</span><span class="panel-meta">May to Oct</span></div>
+                  <div class="bars" aria-hidden="true">
+                    <div class="bar-col"><b>$2.2k</b><i style="height:46px"></i></div>
+                    <div class="bar-col"><b>$2.6k</b><i style="height:55px"></i></div>
+                    <div class="bar-col"><b>$3.1k</b><i style="height:64px"></i></div>
+                    <div class="bar-col"><b>$3.9k</b><i style="height:83px"></i></div>
+                    <div class="bar-col"><b>$4.9k</b><i style="height:102px"></i></div>
+                    <div class="bar-col now"><b>$6.2k</b><i style="height:131px"></i></div>
+                  </div>
+                  <div class="bar-x" aria-hidden="true"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
+                </div>
+                <p class="ex-note">Example data</p>
+              </div>
+            </div>
+            <!-- example:end -->
+          </div>
+          <div class="duo">
+            <!-- example:start -->
+            <div class="app reveal" role="img" aria-label="Customer book with 612 customers, filtered to 14 due this month. Rows show customer, status, equipment, last service, next due and address: due now, texted, or booked.">
+              <div class="app-bar"><span class="app-dots"><i></i><i></i><i></i></span><span class="app-addr">Command Center &middot; Customers</span></div>
+              <div class="book-tools">
+                <span class="search">Search 612 customers</span>
+                <span class="chip">All 612</span>
+                <span class="chip on">Due this month 14</span>
+                <span class="chip">Due next month 22</span>
+              </div>
+              <div class="table-scroll">
+                <table class="book">
+                  <thead><tr><th>Customer</th><th>Status</th><th>Equipment</th><th>Last service</th><th>Next due</th><th>Address</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>Maya Ruiz</b></td><td><span class="pill pill-due">Due now</span></td><td>2 mini-splits</td><td>Oct 9, 2025</td><td>Oct 2026</td><td>14 Birch Ln</td></tr>
+                    <tr><td><b>Sam Okafor</b></td><td><span class="pill pill-due">Due now</span></td><td>Gas furnace</td><td>Oct 21, 2025</td><td>Oct 2026</td><td>203 Mill Rd</td></tr>
+                    <tr><td><b>Priya Patel</b></td><td><span class="pill pill-done">Texted today</span></td><td>4 heat pumps</td><td>Sep 30, 2025</td><td>Oct 2026</td><td>9 Harbor View</td></tr>
+                    <tr><td><b>Tom Becker</b></td><td><span class="pill pill-booked">Booked Thu</span></td><td>Boiler</td><td>Oct 2, 2025</td><td>Oct 2026</td><td>77 Orchard St</td></tr>
+                    <tr><td><b>Carla Diaz</b></td><td><span class="pill pill-due">Due now</span></td><td>Water heater</td><td>Nov 4, 2025</td><td>Nov 2026</td><td>418 Pine Ave</td></tr>
+                    <tr><td><b>Mike Brennan</b></td><td><span class="pill pill-booked">Booked Oct 20</span></td><td>Central AC + furnace</td><td>Oct 14, 2025</td><td>Oct 2026</td><td>31 Elm Ct</td></tr>
+                    <tr><td><b>Linda Cho</b></td><td><span class="pill pill-done">On today</span></td><td>Central AC</td><td>Oct 13, 2026</td><td>Apr 2027</td><td>6 Quarry Hill</td></tr>
+                    <tr><td><b>Jordan Lee</b></td><td><span class="pill pill-done">On today</span></td><td>3 mini-splits</td><td>Oct 13, 2026</td><td>Oct 2027</td><td>52 Lakeview Dr</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="ex-note" style="padding: 8px 14px 12px">Example data</p>
+            </div>
+            <!-- example:end -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. DONE FOR YOU: the three steps as a ruled timeline. -->
+      <section class="section dark" id="done-for-you" aria-labelledby="dfy-title">
+        <div class="wrap dfy">
+          <div class="dfy-copy">
+            <p class="label">Done for you</p>
+            <h2 id="dfy-title" class="display h-lg">You run the trucks. We run this.</h2>
+            <p class="lede">Setup, then monthly. No software to learn, no logins to manage, nobody on your team stuck keeping it up.</p>
+          </div>
+          <ol class="weeks">
+            <li><span class="when">Week 1</span><div><b>We load your customer book.</b><p>Spreadsheet, invoicing export or a shoebox of old invoices. Every customer goes in, sorted by when they&rsquo;re due.</p><span class="you">You: send us the list</span></div></li>
+            <li><span class="when">Week 2</span><div><b>We connect it and it goes live.</b><p>Your calendar and your tracking number get wired in, so every job and every call lands in one place.</p><span class="you">You: one kickoff call</span></div></li>
+            <li><span class="when">Every month</span><div><b>We run it.</b><p>We keep the book clean, track every lead to its source, and line up who&rsquo;s due next.</p><span class="you">You: tap send, answer the phone</span></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 7. VIDEO: the website cut of the multi-truck ad. -->
+      <section class="section" id="video" aria-labelledby="video-title">
+        <div class="wrap video-band">
+          <div class="phone reveal">
+            <video
+              controls
+              playsinline
+              preload="none"
+              poster="media/vsl-poster.jpg"
+              aria-label="Service Momentum ad, 31 seconds, with captions burned in"
+            >
+              <source src="media/vsl.mp4" type="video/mp4" />
+              Your browser can&rsquo;t play this video.
+            </video>
+          </div>
+          <div class="video-copy">
+            <p class="label">31 seconds</p>
+            <h2 id="video-title" class="display h-lg">More jobs from the customers you already have.</h2>
+            <p class="lede">The whole idea, start to finish. Sound on, captions built in.</p>
+            <div><a class="btn btn-primary" href="#book">Book a demo</a></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE STUDY SLOT: add a real case study here only with the owner's
+           written OK. Until then this section stays out of the page. -->
+
+      <!-- 8. FAQ -->
+      <section class="section steel" id="faq" aria-labelledby="faq-title">
+        <div class="wrap faq-grid">
+          <div class="copy-stack">
+            <p class="label">FAQ</p>
+            <h2 id="faq-title" class="display h-lg">Straight answers.</h2>
           </div>
           <div class="faq">
             <details>
-              <summary>Do we need a new website?</summary>
-              <p>Not always. We recommend a rebuild only when it materially improves the connected system. If your site is in good shape, we assess connecting to it instead.</p>
+              <summary>Is this a CRM?</summary>
+              <div><p>No. A CRM is software you have to learn, fill in and keep up. We hold your customer book for you, track every lead by source, and show you who&rsquo;s due. You don&rsquo;t manage a system. We run it.</p></div>
             </details>
             <details>
-              <summary>Does this replace our existing software?</summary>
-              <p>No. This is not a ServiceTitan replacement, and it does not replace your accounting, scheduling or invoicing tools. We assess what to connect, keep or build around your existing tools before recommending an implementation.</p>
+              <summary>Do I have to learn software?</summary>
+              <div><p>No. We install it, set it up and run it. You get one Today screen that shows who&rsquo;s due, with the text already written. You read it and tap send.</p></div>
             </details>
             <details>
-              <summary>Is automated customer texting included?</summary>
-              <p>No. It is not part of the current base implementation and is not operating. Review and reminder messages are prepared by the system and sent <strong>manually</strong>. Automatic customer texting may be offered separately in the future.</p>
+              <summary>What do you need from me?</summary>
+              <div><p>Your customer list in whatever form it&rsquo;s in today: a spreadsheet, an export from your invoicing tool, or a stack of old invoices. Access to your calendar. And one short kickoff call. We do the rest.</p></div>
             </details>
             <details>
-              <summary>Can you guarantee leads, reviews or search rankings?</summary>
-              <p>No. We do not guarantee leads, revenue, bookings, reviews, reactivated customers, or placement in Google or AI assistants. We build the foundations that help. Placement still varies by query, user and location.</p>
+              <summary>How long until it&rsquo;s live?</summary>
+              <div><p>About two weeks. In week 1 we load your customer book. In week 2 we connect your calendar and tracking number and it goes live. After that we run it for you every month.</p></div>
             </details>
           </div>
         </div>
       </section>
 
-      <!-- ========================== FINAL CTA ========================= -->
-      <section class="cta-band">
-        <div class="container">
-          <h2>See where your next job gets forgotten.</h2>
-          <p>
-            Tell us how you handle leads, completed jobs and past customers.
-            Ryan will review your answers and reply by email. If there&rsquo;s a fit,
-            you can discuss the implementation and pricing on a call.
-          </p>
-          <a class="btn btn-gold btn-lg" href="contact.html">Start your growth audit</a>
+      <!-- 9. FINAL CALL TO ACTION -->
+      <section class="section dark" id="book" aria-labelledby="book-title">
+        <div class="wrap cta-grid">
+          <div class="cta-copy">
+            <p class="label">Book a demo</p>
+            <h2 id="book-title" class="display h-lg">Want to see who&rsquo;s due in your book right now?</h2>
+            <p class="lede">Tell us about your shop. On the demo we&rsquo;ll show you the Command Center with your kind of customers in it.</p>
+            <ul class="cta-list">
+              <li>Live in about two weeks</li>
+              <li>Nothing for you to learn</li>
+              <li>We run it every month</li>
+            </ul>
+          </div>
+          <div class="form-card">
+            <form id="demo-form" method="post" novalidate>
+              <h3>Book a demo</h3>
+              <p class="form-intro">Takes about a minute. We reply by email within two business days.</p>
+              <noscript><p class="form-status err">This form needs JavaScript. Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a> and we&rsquo;ll set up your demo.</p></noscript>
+              <div class="fields">
+                <div class="field">
+                  <label for="name">Your name</label>
+                  <input id="name" name="name" type="text" required autocomplete="name" />
+                </div>
+                <div class="field">
+                  <label for="business_name">Business name</label>
+                  <input id="business_name" name="business_name" type="text" required autocomplete="organization" />
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" required autocomplete="email" />
+                </div>
+                <div class="field">
+                  <label for="phone">Mobile phone <span class="opt">(optional)</span></label>
+                  <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+                </div>
+                <div class="field">
+                  <label for="trade">What do you do?</label>
+                  <select id="trade" name="trade" required>
+                    <option value="">Choose one</option>
+                    <option>HVAC</option>
+                    <option>Mini-split</option>
+                    <option>Heating</option>
+                    <option>Plumbing</option>
+                    <option>Other home service</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="trucks">How many trucks?</label>
+                  <select id="trucks" name="trucks" required>
+                    <option value="">Choose one</option>
+                    <option>1</option>
+                    <option>2 to 3</option>
+                    <option>4 to 5</option>
+                    <option>6 or more</option>
+                  </select>
+                </div>
+                <div class="field field-wide">
+                  <label for="notes">Anything we should know? <span class="opt">(optional)</span></label>
+                  <textarea id="notes" name="notes" rows="3" placeholder="Roughly how many past customers you have, where you keep them, a good time to talk."></textarea>
+                </div>
+              </div>
+
+              <!-- SMS opt-in. Optional, never pre-checked, and separate from the
+                   required contact consent below. js/demo-form.js asks for a
+                   phone number only when this is ticked and submits an explicit
+                   "no" when it is not. The wording is quoted word for word on
+                   sms-consent.html for the A2P registration; change both together. -->
+              <div class="consents">
+                <label class="consent">
+                  <input type="checkbox" name="sms_consent" value="yes" />
+                  <span>I agree to receive text messages from T&amp;R Growth / ServiceMomentum about my inquiry at the phone number I provided. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of any purchase. See our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html#sms-terms" target="_blank" rel="noopener">Terms of Service</a>.</span>
+                </label>
+                <label class="consent">
+                  <input type="checkbox" name="contact_consent" value="yes" required />
+                  <span>I agree that T&amp;R Growth may contact me about this inquiry using the details I provided. Consent is not a condition of any purchase.</span>
+                </label>
+              </div>
+
+              <!-- Where the visitor came from (?source=...), sanitised by
+                   js/demo-form.js. Falls back to "direct". Never rendered. -->
+              <input type="hidden" id="referral-source" name="referral_source" value="direct" />
+              <!-- Spam trap. Invisible and out of the tab order. Bots fill it,
+                   and js/demo-form.js then drops the submission silently. -->
+              <div class="hp" aria-hidden="true">
+                <label for="hp-gotcha">Leave this empty</label>
+                <input id="hp-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="form-actions">
+                <p class="form-error" id="form-error" role="alert"></p>
+                <button class="btn btn-primary" type="submit" id="demo-submit">Book my demo</button>
+                <p class="form-status" id="form-status" role="status" hidden></p>
+              </div>
+            </form>
+
+            <!-- Shown ONLY after a real 2xx response from the form service. -->
+            <div class="form-success" id="demo-success" hidden>
+              <span class="check-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>
+              <h3 id="demo-success-title" tabindex="-1">Got it. We&rsquo;ll be in touch.</h3>
+              <p>We&rsquo;ll reply by email within two business days to set up your demo.</p>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <!-- Sticky audit CTA, phones only. It ships hidden and js/nav.js reveals
-         it once the hero has scrolled away, then hides it again over the
-         footer so it can never sit on top of the legal links. With JavaScript
-         off it simply never appears; nothing on the page depends on it. -->
-    <div class="sticky-cta" id="sticky-cta" hidden>
-      <a class="btn btn-gold" href="contact.html">Start your growth audit</a>
-    </div>
-
-    <!-- FOOTER -->
     <footer class="site-footer">
-      <div class="container">
+      <div class="wrap">
         <div class="footer-grid">
           <div class="footer-brand">
-            <span class="nav-brand" style="pointer-events:none;">
-              <span class="wordmark"><img class="brand-mark" src="assets/mark.svg" width="38" height="38" alt="" aria-hidden="true" /><span class="brand-name" data-brand="product">ServiceMomentum</span></span>
-            </span>
-            <p>
-              ServiceMomentum is a connected customer-growth system for U.S.
-              local-service businesses, designed and operated by T&amp;R Growth
-              LLC.
-            </p>
-            <a class="foot-email" href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>
+            <a class="brand" href="index.html" aria-label="Service Momentum home">
+              <span class="logo-tile"><img src="assets/sm-logo.svg" width="26" height="11" alt="" /></span>
+              <span>Service Momentum</span>
+            </a>
+            <p>We set up and run the Command Center for home-service shops with repeat customers.</p>
+            <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>
           </div>
-          <nav class="footer-nav" aria-label="Footer">
-            <div>
-              <div class="footer-col-title">System</div>
-              <ul>
-                <li><a href="index.html#how">How It Works</a></li>
-                <li><a href="index.html#system">See the System</a></li>
-                <li><a href="index.html#fit">Who It&rsquo;s For</a></li>
-                <li><a href="contact.html">Start Audit</a></li>
-              </ul>
-            </div>
-            <div>
-              <div class="footer-col-title">Legal</div>
-              <ul>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="terms.html">Terms of Service</a></li>
-                <li><a href="sms-consent.html">SMS Consent</a></li>
-              </ul>
-            </div>
+          <nav class="footer-col" aria-labelledby="foot-site">
+            <h2 id="foot-site">Site</h2>
+            <ul>
+              <li><a href="index.html#between-jobs">How it works</a></li>
+              <li><a href="index.html#leads">Lead tracking</a></li>
+              <li><a href="index.html#faq">FAQ</a></li>
+              <li><a href="contact.html">Book a demo</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-labelledby="foot-legal">
+            <h2 id="foot-legal">Legal</h2>
+            <ul>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+              <li><a href="terms.html">Terms of Service</a></li>
+              <li><a href="sms-consent.html">SMS Consent</a></li>
+            </ul>
           </nav>
         </div>
-        <div class="footer-bottom">
-          <span>&copy; 2026 T&amp;R Growth LLC. United States.</span>
-          <span>tnrgrowthagency.com</span>
+        <div class="footer-legal">
+          <span>Service Momentum is operated by T&amp;R Growth LLC. &copy; 2026. United States.</span>
+          <span>We text only people who opt in. See <a href="sms-consent.html">SMS Consent</a>.</span>
         </div>
       </div>
     </footer>
-    <script src="js/nav.js" defer></script>
-    <script src="js/motion.js" defer></script>
+    <script src="js/site-config.js"></script>
+    <script src="js/demo-form.js" defer></script>
+    <script src="js/site.js" defer></script>
   </body>
 </html>
