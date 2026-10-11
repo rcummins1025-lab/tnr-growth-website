@@ -1,15 +1,14 @@
 /** Local-only preview and regression fixtures. No production requests permitted.
  * Run: node scripts/preview.mjs. Static GitHub Pages never executes this file.
- * /contact.html uses a local mock; the source configuration is never rewritten.
- * /contact.html?qa=success|error|timeout|trap|invalid|race runs isolated tests.
- * /index.html?qa=nojs|missing-motion|no-observer|reduced exercises fallbacks.
+ * The demo form on / and /contact.html posts to a local mock; the source
+ * configuration is never rewritten. ?qa=error or ?qa=timeout makes the mock fail.
  */
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const types = {'.html':'text/html', '.css':'text/css', '.js':'text/javascript', '.svg':'image/svg+xml', '.json':'application/json'};
+const types = {'.html':'text/html', '.css':'text/css', '.js':'text/javascript', '.svg':'image/svg+xml', '.json':'application/json', '.png':'image/png', '.jpg':'image/jpeg', '.mp4':'video/mp4'};
 const stats = {requests:0, payloads:[]};
 createServer(async (req,res) => {
   const url = new URL(req.url, 'http://127.0.0.1');
@@ -34,24 +33,11 @@ createServer(async (req,res) => {
     if(!path.startsWith(root + '/')) throw Error('path');
     let content = await readFile(path);
     const qa=url.searchParams.get('qa')||'';
-    if(extname(path)==='.html') {
-      content=content.toString();
-      if(path.endsWith('/contact.html')) {
-        const mode=['error','timeout'].includes(qa)?qa:'success';
-        const setup=`<script>window.TNR_CONFIG.formEndpoint=location.origin+'/__qa/submit?mode=${mode}';</script>`;
-        content=content.replace('<script src="js/intake.js">',setup+'<script src="js/intake.js">');
-        content=content.replace('</body>',`<p style="text-align:center;font-size:14px;padding:12px">Local preview: submissions stay on this computer.</p>${qa?'<script src="scripts/browser-checks.js"></script>':''}</body>`);
-      }
-      if(path.endsWith('/index.html') && qa) {
-        if(qa==='nojs') content=content.replace(/<script\b[\s\S]*?<\/script>/gi,'');
-        if(qa==='missing-motion') content=content.replace('<script src="js/motion.js" defer></script>','');
-        if(qa==='no-observer') content=content.replace('<head>','<head><script>delete window.IntersectionObserver;</script>');
-        // Fixture emulates both CSS media-query matching and the JS preference.
-        if(qa==='reduced') content=content.replace('<head>',`<head><script>const originalMatchMedia=window.matchMedia.bind(window);window.matchMedia=q=>q.includes('prefers-reduced-motion')?{matches:true,addEventListener(){},addListener(){}}:originalMatchMedia(q);</script>`).replace(/href="styles.css[^"]*"/, 'href="styles.css?reduced=1"');
-        content=content.replace('</body>', '<script src="scripts/browser-checks.js"></script></body>');
-      }
+    if(extname(path)==='.html' && /js\/demo-form\.js/.test(content.toString())) {
+      const mode=['error','timeout'].includes(qa)?qa:'success';
+      const setup=`<script>window.TNR_CONFIG.formEndpoint=location.origin+'/__qa/submit?mode=${mode}';</script>`;
+      content=content.toString().replace('<script src="js/demo-form.js"',setup+'<script src="js/demo-form.js"');
     }
-    if(url.pathname==='/styles.css' && url.searchParams.has('reduced')) content=content.toString().replaceAll('@media (prefers-reduced-motion: reduce)', '@media all');
     res.setHeader('Content-Type',types[extname(path)]||'application/octet-stream');
     res.end(req.method==='HEAD'?'':content);
   } catch {res.statusCode=404;res.end('Not found');}

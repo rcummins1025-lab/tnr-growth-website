@@ -1,169 +1,92 @@
-# ServiceMomentum — website (operated by T&R Growth LLC)
+# Service Momentum — website
 
-Marketing/acquisition website for **ServiceMomentum**, a connected
-customer-growth system for established local-service businesses. ServiceMomentum
-is the customer-facing product name; **T&R Growth LLC** is the company that
-designs, installs, operates, and supports it.
+Marketing website for **Service Momentum**, a done-for-you agency that installs
+and runs the Command Center for home-service businesses with repeat customers
+(HVAC, mini-split, heating, plumbing and similar; owner-run shops with 1 to 5
+trucks). Service Momentum is operated by **T&R Growth LLC**, which is named only
+on the legal pages, in the A2P SMS consent wording, and in the footer fine print.
 
-> **ServiceMomentum is a WORKING product name — not legally finalized.** Domain
-> and trademark checks are required before public launch. See
-> [`docs/BRAND.md`](docs/BRAND.md) and [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md).
-
-- **Operational domain:** https://tnrgrowthagency.com (`CNAME` = `tnrgrowthagency.com`)
+- **Domain:** https://tnrgrowthagency.com (`CNAME` = `tnrgrowthagency.com`, unchanged)
 - **Email:** hello@tnrgrowthagency.com
-- **Positioning:** _Turn your website and past customers into a repeatable growth system._
-- **Tagline:** _From first search to next service._
+- **Headline:** _Your past customers are calling someone else._
 
 ## Stack
 
-Plain static **HTML + CSS**, deployed as-is from the repo root via **GitHub Pages**.
-The only JavaScript is `js/intake.js` (the multi-step audit form),
-`js/site-config.js` (its config), and `js/motion.js` (the scroll/entry motion
-layer) — self-contained, no libraries, no analytics, no tracking, no cookies. The `package.json` scripts are **dev tooling
-only** (validation + brand rename); they are not required to build or serve.
+Plain static **HTML + CSS** with two small scripts, deployed as-is from the repo
+root via **GitHub Pages**. No framework, no build step, no web fonts, no
+analytics, no cookies. The `package.json` scripts are dev tooling only.
 
 ## Structure
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | Homepage (hero, how it works, see the system, built and operating, who it’s for, FAQ, final CTA) |
-| `contact.html` | "Growth System Audit" multi-step application form |
-| `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages: A2P SMS disclosures (audit-form opt-in + lead-alert program wording preserved) |
-| `styles.css` | Forge palette — **all** brand tokens in the `:root` block at the top |
+| `index.html` | Home page: hero (video loop), problem, how it works, what you get, video, case-study placeholder, FAQ, Book a demo form |
+| `contact.html` | Book a demo page (same form; old links and `?source=` links keep working) |
+| `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages. A2P SMS wording preserved |
+| `styles.css` | All styles. Every colour is a `--sm-*` token in the `:root` block at the top |
 | `js/site-config.js` | **One place** to set the form `formEndpoint` / `formEndpointMode` |
-| `js/intake.js` | Multi-step form logic + submission |
-| `js/motion.js` | Motion layer (IntersectionObserver only; reduced-motion aware) |
-| `brand.config.json` | **Single source of truth** for the working brand |
-| `scripts/apply-brand.mjs` | Rename the product name in one command |
-| `scripts/brand-lib.mjs` | Shared brand helpers (name slug, approved mark palette) |
-| `scripts/validate.mjs` | Focused checks / tests |
-| `scripts/mock-endpoint.mjs` | Dev-only local stand-in for the lead endpoint |
-| `_config.yml` | Excludes development tooling and internal docs from the GitHub Pages build |
-| `assets/mark*.svg` | Brand symbol — primary, one-colour, reversed (**provisional**) |
-| `assets/` | T&R Growth logos, favicon, OG image |
-| `robots.txt`, `sitemap.xml` | SEO |
-| `docs/` | Brand, contact-form, launch checklist |
-| `CNAME` | GitHub Pages custom domain (do not change) |
+| `js/demo-form.js` | Demo form validation and submission |
+| `js/site.js` | Hero video pause/play, reduced motion, scroll reveal |
+| `media/` | Web-compressed videos and their poster images |
+| `assets/` | SM logo (SVG), share image, icons |
+| `favicon.svg` | SM logo on a white tile |
+| `brand.config.json` | Brand source of truth (name, logo colours, palette, audience) |
+| `scripts/validate.mjs` | Site checks (run before every merge) |
+| `scripts/preview.mjs` | Local preview with a built-in form mock |
+| `scripts/mock-endpoint.mjs` | Stand-alone dev-only form endpoint mock |
+| `scripts/apply-brand.mjs` | Rename the product in one command |
+| `_config.yml` | Keeps dev tooling and internal docs out of the GitHub Pages build |
+| `docs/` | Brand, contact form, launch checklist |
 
-GitHub Pages publishes only the public site surface. Jekyll exclusions in
-`_config.yml` keep `scripts/`, `docs/`, package metadata, and internal brand
-configuration out of the generated website.
-
-## Local development
-
-No build step. Serve the folder and open it:
+## Local preview
 
 ```bash
-python3 -m http.server 8000
-# or: npm run serve
+npm run serve
 ```
 
-Then visit <http://localhost:8000>. Check desktop, tablet, and phone widths
-(320 / 390). The contact form needs JavaScript (served files run it directly).
+Then open <http://127.0.0.1:8000>. The demo form posts to a local mock there,
+never to Formspree. Add `?qa=error` or `?qa=timeout` to test failures. Check
+390px and desktop widths.
 
-## Testing
+## Checks
 
 ```bash
-npm run validate      # or: node scripts/validate.mjs
+npm run validate
 ```
 
-Checks structure, internal links + anchors, escaping, email consistency, JSON-LD
-validity, absence of fake rating markup, the pilot-implementation claim guardrails, the
-SEO assets + `CNAME`, the brand symbol (present, drawn not embedded, approved
-colours, letter-free, labelled provisional, no stale name in any casing), the
-form's submission safeguards (the endpoint matches the approved one, a valid
-`formEndpointMode`, no endpoint mirrored in `brand.config.json`, no focus steal
-on load), and the
-motion layer's reduced-motion and fail-open guarantees. Exits non-zero on failure.
+Covers structure, links, JSON-LD, the brand (SM logo, ads palette, no TNR
+branding outside the legal operator lines), honest copy (no pricing, no
+"small", no invented stats, sample data labelled, no client names), the demo
+form's safeguards and A2P consent wording, video size budgets and autoplay
+rules, colour contrast, and the GitHub Pages surface. Exits non-zero on failure.
 
-## Change the product name
+## Videos
+
+Source renders live outside this repo
+(`BizWorkFlow/output/service-momentum-scale-ad/`). Only the multi-truck ad is
+used, because the other Service Momentum renders show real client numbers or
+internal account details.
+
+| File | From | Notes |
+| --- | --- | --- |
+| `media/hero-loop.mp4` | `SM-Scale-Ad-Clean.mp4`, 10.25s to 23.75s | 720×1280, no audio, ~0.4 MB, autoplays muted with a pause button |
+| `media/vsl.mp4` | `SM-Scale-Ad-Captioned.mp4`, full 32s | 720×1280, AAC 96k, ~2 MB, click to play, captions burned in |
+
+Re-encode with:
 
 ```bash
-node scripts/apply-brand.mjs --check          # dry run
-node scripts/apply-brand.mjs --to "NewName"   # rename everywhere
+ffmpeg -ss 10.25 -i SM-Scale-Ad-Clean.mp4 -t 13.5 -an -vf "scale=720:1280:flags=lanczos,format=yuv420p" -c:v libx264 -profile:v high -preset veryslow -crf 30 -movflags +faststart -map_metadata -1 media/hero-loop.mp4
+ffmpeg -i SM-Scale-Ad-Captioned.mp4 -vf "scale=720:1280:flags=lanczos,format=yuv420p" -c:v libx264 -profile:v high -preset veryslow -crf 27 -c:a aac -b:a 96k -movflags +faststart -map_metadata -1 media/vsl.mp4
 ```
-
-The rename covers three name-derived forms — the name, its lowercase slug, and
-its uppercase wordmark (`assets/og-image.svg`) — so nothing is left behind. The
-brand symbol carries no letters, so a rename never touches artwork. See
-[`docs/BRAND.md`](docs/BRAND.md).
-
-## Brand symbol
-
-> **The symbol is PROVISIONAL** — approved as a working mark only, until
-> "ServiceMomentum" clears trademark and domain checks. Do not register or use it
-> externally before then.
-
-An asymmetric four-stage **open loop**: an organic, varying-radius pathway in
-Forge Black `#171A1F` carrying three stage nodes, ending inside a single Burnt
-Orange `#D9653B` endpoint. Every stage sits **on** the path — it
-starts inside stage 1 and terminates inside the accent — so nothing floats free,
-and the loop never closes. It is a spline rather than a circular arc, so it does
-not read as a loading ring. Hand-constructed SVG geometry — the full polar table
-is written out in each file's `<desc>` — with no traced or embedded raster art,
-no gradients, shadows, glow, arrows, or `<text>`. Variants:
-`assets/mark.svg` (primary), `assets/mark-mono.svg` (one colour, `currentColor`),
-`assets/mark-reversed.svg` (dark surfaces), and `favicon.svg` (reversed on a Forge
-Black tile, optically weighted for 16px). The product wordmark next to it is always
-HTML text, never baked into the artwork. See [`docs/BRAND.md`](docs/BRAND.md).
-
-## Motion
-
-`js/motion.js` adds entry and scroll motion that explains the system: the
-connected-system path traces through its seven stages, the four lifecycle steps
-arrive in order, the redacted dashboard sample walks New → Booked → Done → Due
-(labelled as a sample; never presented as live data), and the case-study
-timeline grows as milestones are reached. It is `IntersectionObserver` only —
-no libraries, no scroll listeners, no parallax, no autoplay media, and only
-`opacity`/`transform` change, so there is no layout shift.
-
-Motion is gated on `<html class="motion">`, added by a small inline `<head>`
-script **only** when JavaScript runs and `prefers-reduced-motion` is not
-`reduce`. If `js/motion.js` never loads, that script removes the class again,
-so no content can be stranded behind an animation.
-
-## Contact form
-
-The audit form posts only to `js/site-config.js` → `formEndpoint`, which is the
-**single source of truth** — the endpoint is deliberately not mirrored anywhere
-else. **The dedicated Formspree endpoint is wired** (`formEndpointMode:
-"formspree"`), and one real local end-to-end submission returned an HTTP success
-response.
-
-**Still to confirm (Ryan):** dashboard receipt and delivery to
-`hello@tnrgrowthagency.com`. **Further live submissions require explicit
-approval** — use the local mock for everything else, and when a mock test is
-finished restore the **real endpoint**, never `""`.
-
-The path around it is finished and tested: `formEndpointMode` picks the encoding
-(`json` or `formspree`), submissions carry non-reserved `meta_*` metadata plus
-`_replyto`/`_subject` for a usable inbox, a hidden `_gotcha` spam trap stops bots
-without transmitting anything, the endpoint is refused unless it is https (and
-never the tenant-scoped client-booking backend), requests time out after 20s
-instead of hanging, and a provider's own error message is shown to the visitor.
-
-Exercise all of it without wiring anything real:
-
-```bash
-npm run mock          # local stand-in on http://localhost:8125/f/test
-```
-
-See [`docs/CONTACT-FORM.md`](docs/CONTACT-FORM.md).
 
 ## Deployment (GitHub Pages, from `main` / root)
 
-The site is served statically from `main`. Nothing here pushes, deploys, or
-changes DNS automatically.
+Nothing here deploys automatically from a branch. Merging to `main` publishes.
 
-1. Open a PR from your working branch into `main`; review.
-2. Merge to `main`; GitHub Pages rebuilds automatically.
-3. In **Settings → Pages**, source is _Deploy from a branch_ → `main` → `/ (root)`.
-4. Verify at https://tnrgrowthagency.com and the `github.io` URL.
+1. Review the PR. Run `npm run validate`.
+2. Merge to `main`. GitHub Pages rebuilds in a minute or two.
+3. Check https://tnrgrowthagency.com on a phone and a laptop.
 
-Custom domain and DNS are already configured for `tnrgrowthagency.com` — **do not
-change them**. Resolve every item in [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md)
-before deploying the rebrand.
-
-## Ownership
-
-Content and branding are owned by T&R Growth LLC.
+Custom domain, DNS and HTTPS are already configured for `tnrgrowthagency.com`.
+**Do not change them** without a migration plan. See
+[`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md).

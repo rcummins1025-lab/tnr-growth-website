@@ -2,291 +2,197 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Growth System Audit | ServiceMomentum by T&amp;R Growth</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Book a demo | Service Momentum</title>
     <meta
       name="description"
-      content="Start your Growth System Audit with T&amp;R Growth. Answer a short Growth System Audit about your local-service business and we’ll follow up by email. Powered by T&amp;R Growth."
+      content="Book a Service Momentum demo. See who's due in your customer book, with every lead tracked by source. Done for you, for home-service shops running 1 to 5 trucks."
     />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#171A1F" />
+    <meta name="theme-color" content="#050B1D" />
     <link rel="canonical" href="https://tnrgrowthagency.com/contact.html" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=20260907" />
-
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="styles.css?v=20261011" />
+    <!-- Reveal gate: hides .reveal blocks only while JS runs, and drops the gate
+         if js/site.js has not loaded within 2.5 s, so nothing stays hidden. -->
+    <script>
+      (function (d) {
+        d.classList.add("js");
+        setTimeout(function () {
+          if (d.getAttribute("data-site-ready") !== "1") d.classList.remove("js");
+        }, 2500);
+      })(document.documentElement);
+    </script>
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ServiceMomentum" />
-    <meta property="og:title" content="Growth System Audit | ServiceMomentum" />
-    <meta property="og:description" content="A short Growth System Audit for established local-service businesses. Powered by T&amp;R Growth." />
+    <meta property="og:site_name" content="Service Momentum" />
+    <meta property="og:title" content="Book a demo | Service Momentum" />
+    <meta property="og:description" content="Want to see who's due in your book right now? Book a short demo." />
     <meta property="og:url" content="https://tnrgrowthagency.com/contact.html" />
-    <!-- PNG, not SVG: crawlers do not render SVG share images. -->
     <meta property="og:image" content="https://tnrgrowthagency.com/assets/og-image.png" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ServiceMomentum: a connected customer-growth system. Powered by T&amp;R Growth." />
+    <meta property="og:image:alt" content="Service Momentum. Your past customers are calling someone else." />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <a class="skip-link" href="#audit-form">Skip to the audit</a>
+    <a class="skip-link" href="#main">Skip to main content</a>
 
-    <div class="wizard">
-      <!-- Thin progress bar across the very top of the page -->
-      <div class="wz-progress">
-        <div class="wz-progress-fill progress-fill"></div>
-      </div>
-
-      <!-- Minimal bar. The standard site navigation is intentionally absent
-           while the audit is running; the logo is the way back out. -->
-      <div class="wz-bar">
-        <a class="nav-brand" href="index.html" aria-label="ServiceMomentum home">
-          <span class="wordmark"><img class="brand-mark" src="assets/mark.svg" width="38" height="38" alt="" aria-hidden="true" /><span class="brand-name" data-brand="product">ServiceMomentum</span></span>
-          <span class="brand-sub">by T&amp;R Growth</span>
+    <header class="site-header">
+      <div class="wrap nav">
+        <a class="brand" href="index.html" aria-label="Service Momentum home">
+          <span class="logo-tile"><img src="assets/sm-logo.svg" width="26" height="11" alt="" /></span>
+          <span class="brand-text">Service Momentum</span>
         </a>
-        <span class="wz-count progress-label" role="status" aria-live="polite">Question 1 of 8</span>
+        <ul class="nav-links">
+          <li><a href="index.html#how">How it works</a></li>
+          <li><a href="index.html#product">What you get</a></li>
+          <li><a href="index.html#videos">Video</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+        </ul>
+        <a class="btn btn-primary btn-sm" href="#demo-form">Book a demo</a>
       </div>
+    </header>
 
-      <main class="wz-main" id="main">
-        <header class="audit-intro">
-          <h1>Growth System Audit</h1>
-          <p>Eight guided steps. Ryan reviews your answers and replies by email.</p>
-        </header>
-        <noscript>
-          <div class="noscript-note">
-            This audit is a short step-by-step questionnaire that needs
-            JavaScript. With JavaScript disabled, please email your business
-            name, service area, team size, and biggest problem to
-            <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>
-            and we&rsquo;ll take it from there.
-          </div>
-        </noscript>
-
-        <form id="audit-form" class="audit-form" novalidate aria-label="Growth System Audit">
-          <fieldset class="wz-step form-step" data-step="1">
-            <p class="wz-eyebrow">Question 1 of 8</p>
-            <h2 class="wz-q" id="industry-q" tabindex="-1">What type of service business do you operate?</h2>
-            <p class="wz-hint">Choose an answer to continue. With a keyboard, select an option, then press Continue.</p>
-            <div class="wz-tiles" data-cols="3" role="radiogroup" aria-labelledby="industry-q" data-required-group="industry">
-              <label class="wz-tile"><input type="radio" name="industry" value="HVAC / Heat Pump" required /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">HVAC / Heat Pump</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="industry" value="Plumbing" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Plumbing</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="industry" value="Electrical" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Electrical</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="industry" value="Cleaning" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Cleaning</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="industry" value="Landscaping" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Landscaping</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="industry" value="Other" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Other</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-            </div>
-            <div class="form-error" role="alert" aria-live="polite"></div>
-          </fieldset>
-          <fieldset class="wz-step form-step" data-step="2" hidden>
-            <p class="wz-eyebrow">Question 2 of 8</p>
-            <h2 class="wz-q" id="team_size-q" tabindex="-1">How large is your current team?</h2>
-            <p class="wz-hint">Including you, and counting anyone who runs jobs.</p>
-            <div class="wz-tiles" role="radiogroup" aria-labelledby="team_size-q" data-required-group="team_size">
-              <label class="wz-tile"><input type="radio" name="team_size" value="Owner-operator" required /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Owner-operator</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="team_size" value="2 to 5 people" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">2 to 5 people</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="team_size" value="6 to 15 people" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">6 to 15 people</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="team_size" value="16+ people" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">16+ people</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-            </div>
-            <div class="form-error" role="alert" aria-live="polite"></div>
-          </fieldset>
-          <fieldset class="wz-step form-step" data-step="3" hidden>
-            <p class="wz-eyebrow">Question 3 of 8</p>
-            <h2 class="wz-q" id="past_customers-q" tabindex="-1">About how many past customers do you have?</h2>
-            <p class="wz-hint">A rough number is fine. This is the list a growth system works from.</p>
-            <div class="wz-tiles" role="radiogroup" aria-labelledby="past_customers-q" data-required-group="past_customers">
-              <label class="wz-tile"><input type="radio" name="past_customers" value="Under 100" required /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Under 100</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="past_customers" value="100 to 500" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">100 to 500</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="past_customers" value="500 to 2,000" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">500 to 2,000</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="past_customers" value="More than 2,000" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">More than 2,000</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="past_customers" value="Not sure" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Not sure</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-            </div>
-            <div class="form-error" role="alert" aria-live="polite"></div>
-          </fieldset>
-          <fieldset class="wz-step form-step" data-step="4" hidden>
-            <p class="wz-eyebrow">Question 4 of 8</p>
-            <h2 class="wz-q" id="customer_database-q" tabindex="-1">Where is customer information kept today?</h2>
-            <p class="wz-hint">Wherever you would look first to find a past customer.</p>
-            <div class="wz-tiles" role="radiogroup" aria-labelledby="customer_database-q" data-required-group="customer_database">
-              <label class="wz-tile"><input type="radio" name="customer_database" value="Service or CRM software" required /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Service or CRM software</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="customer_database" value="Spreadsheet" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Spreadsheet</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="customer_database" value="Accounting or invoice system" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Accounting or invoice system</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="customer_database" value="Phone, text, or paper" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Phone, text, or paper</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="customer_database" value="Scattered across several places" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Scattered across several places</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-            </div>
-            <div class="form-error" role="alert" aria-live="polite"></div>
-          </fieldset>
-          <fieldset class="wz-step form-step" data-step="5" hidden>
-            <p class="wz-eyebrow">Question 5 of 8</p>
-            <h2 class="wz-q" id="post_job_followup-q" tabindex="-1">What happens after a job is completed?</h2>
-            <p class="wz-hint">Choose the closest match to your current process.</p>
-            <div class="wz-tiles" role="radiogroup" aria-labelledby="post_job_followup-q" data-required-group="post_job_followup">
-              <label class="wz-tile"><input type="radio" name="post_job_followup" value="We consistently request reviews and schedule the next service" required /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">We consistently request reviews and schedule the next service</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="post_job_followup" value="We sometimes follow up manually" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">We sometimes follow up manually</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="post_job_followup" value="We follow up only when someone remembers" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">We follow up only when someone remembers</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="post_job_followup" value="Nothing consistent happens" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Nothing consistent happens</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-            </div>
-            <div class="form-error" role="alert" aria-live="polite"></div>
-          </fieldset>
-          <fieldset class="wz-step form-step" data-step="6" hidden>
-            <p class="wz-eyebrow">Question 6 of 8</p>
-            <h2 class="wz-q" id="biggest_opportunity-q" tabindex="-1">Where do you think the biggest opportunity is being lost?</h2>
-            <p class="wz-hint">Your read on this is usually the most useful answer here.</p>
-            <div class="wz-tiles" role="radiogroup" aria-labelledby="biggest_opportunity-q" data-required-group="biggest_opportunity">
-              <label class="wz-tile"><input type="radio" name="biggest_opportunity" value="Getting found online" required /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Getting found online</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="biggest_opportunity" value="Responding to and tracking leads" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Responding to and tracking leads</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="biggest_opportunity" value="Generating reviews" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Generating reviews</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="biggest_opportunity" value="Bringing past customers back" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Bringing past customers back</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="biggest_opportunity" value="Everything feels disconnected" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Everything feels disconnected</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-            </div>
-            <div class="form-error" role="alert" aria-live="polite"></div>
-          </fieldset>
-          <fieldset class="wz-step form-step" data-step="7" hidden>
-            <p class="wz-eyebrow">Question 7 of 8</p>
-            <h2 class="wz-q" id="website_status-q" tabindex="-1">How is your current website performing?</h2>
-            <p class="wz-hint">Choose the answer that best describes your site today.</p>
-            <div class="wz-tiles" role="radiogroup" aria-labelledby="website_status-q" data-required-group="website_status">
-              <label class="wz-tile"><input type="radio" name="website_status" value="It works well" required /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">It works well</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="website_status" value="It looks dated or underperforms" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">It looks dated or underperforms</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="website_status" value="It needs to be replaced" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">It needs to be replaced</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="website_status" value="We do not have one" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">We do not have one</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-              <label class="wz-tile"><input type="radio" name="website_status" value="Not sure" /><span class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="wz-tile-label">Not sure</span><span class="wz-state" aria-hidden="true">Selected</span></label>
-            </div>
-            <div class="form-error" role="alert" aria-live="polite"></div>
-          </fieldset>
-          <fieldset class="wz-step form-step" data-step="8" hidden>
-            <p class="wz-eyebrow">Last step</p>
-            <h2 class="wz-q" id="contact-q" tabindex="-1">Where should we send your follow-up?</h2>
-            <p class="wz-hint">Ryan will review your answers and reply within two business days. If there is a fit, you can discuss scope and pricing on a call.</p>
-            <div class="wz-form-grid">
-              <div class="field span-2">
-                <label for="business_name">Business name <span class="req">*</span></label>
-                <input id="business_name" name="business_name" type="text" required autocomplete="organization" />
-              </div>
-              <div class="field">
-                <label for="name">Contact name <span class="req">*</span></label>
-                <input id="name" name="name" type="text" required autocomplete="name" />
-              </div>
-              <div class="field">
-                <label for="email">Email <span class="req">*</span></label>
-                <input id="email" name="email" type="email" required autocomplete="email" />
-              </div>
-              <div class="field">
-                <label for="phone">Phone <span class="wz-optional">(optional)</span></label>
-                <input id="phone" name="phone" type="tel" autocomplete="tel" />
-              </div>
-              <div class="field">
-                <label for="service_area">Service area <span class="req">*</span></label>
-                <input id="service_area" name="service_area" type="text" required placeholder="Town, state, or region" />
-              </div>
-              <div class="field span-2">
-                <label for="notes">Anything else we should know? <span class="wz-optional">(optional)</span></label>
-                <textarea id="notes" name="notes" rows="3" placeholder="Optional. Add anything the questions above missed."></textarea>
-              </div>
-            </div>
-            <!-- SMS opt-in. Optional, never pre-checked, and separate from the
-                 required contact consent below, so agreeing to texts is never
-                 bundled with anything else. js/intake.js asks for a phone
-                 number only when this is ticked, and submits an explicit
-                 "no" when it is not. The wording is quoted on
-                 sms-consent.html; change both together. -->
-            <div class="wz-consent">
-              <label class="consent">
-                <input type="checkbox" name="sms_consent" value="yes" />
-                <span>I agree to receive text messages from T&amp;R Growth / ServiceMomentum about my inquiry at the phone number I provided. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of any purchase. See our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html#sms-terms" target="_blank" rel="noopener">Terms of Service</a>.</span>
-              </label>
-            </div>
-            <div class="wz-consent">
-              <label class="consent">
-                <input type="checkbox" name="contact_consent" value="yes" required />
-                <span>I agree that T&amp;R Growth may contact me about this inquiry using the details I provided. Consent is not a condition of any purchase.</span>
-              </label>
-              <div class="form-error" role="alert" aria-live="polite"></div>
-            </div>
-          </fieldset>
-
-          <!-- Where the visitor came from, for our own attribution only.
-               js/intake.js fills this from a ?source= parameter after
-               sanitising it, and falls back to "direct". It is a real
-               submitted field, not a spam trap, and it never renders into
-               visible HTML. No cookie, no storage, no referring URL. -->
-          <input type="hidden" id="referral-source" name="referral_source" value="direct" />
-
-          <!-- Spam trap. Invisible to people and out of the tab order; bots
-               fill it, and js/intake.js then drops the submission silently.
-               The name matches the reserved key form services also honour
-               server-side. Nothing is ever transmitted from this field. -->
-          <div class="hp" aria-hidden="true">
-            <label for="hp-gotcha">Leave this field empty</label>
-            <input id="hp-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
-          </div>
-
-          <!-- Successful submission only. This panel ships hidden and is
-               unhidden by js/intake.js ONLY after a real 2xx response from the
-               endpoint (see succeed()). A failed, timed out, blocked,
-               unconfigured, or spam-trapped submit never reaches it, so
-               nothing here can be mistaken for a confirmation that did not
-               happen.
-
-               role="status" gives the section status semantics. aria-live is
-               deliberately "off": focus moves to the heading instead, and a
-               polite live region here would read the whole panel out first and
-               then repeat the heading. ARIA allows an author aria-live value
-               to override the implicit "polite" of role="status".
-
-               The heading and the supporting line carry the no-name and
-               no-business fallback copy as static text. Personalisation only
-               ever rewrites them through textContent, never innerHTML. -->
-          <section
-            id="audit-success"
-            class="wz-done"
-            hidden
-            role="status"
-            aria-live="off"
-            aria-labelledby="audit-success-title"
-          >
-            <div class="wz-done-main">
-              <p class="wz-done-label">Audit received</p>
-              <span class="wz-done-mark" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
-              </span>
-              <h2 class="wz-done-title" id="audit-success-title" tabindex="-1">Your Growth System Audit is in.</h2>
-              <p class="wz-done-lede">Ryan will personally review your answers and reply by email within two business days.</p>
-            </div>
-
-            <div class="wz-done-aside">
-              <h3 class="wz-done-next-title">What happens next</h3>
-              <!-- list-style is removed for the numbered badges, so role="list"
-                   keeps the list semantics browsers drop when it is. -->
-              <ol class="wz-done-steps" role="list">
-                <li>Ryan reviews how your business handles leads, completed jobs and past customers.</li>
-                <li>You receive a direct email with the most important gaps he sees.</li>
-                <li>If it looks like a fit, the next step is a short call to discuss the implementation.</li>
-              </ol>
-              <p class="wz-done-reassure">No automated recommendation. No generic score. A real person reviews your request.</p>
-              <div class="wz-done-actions">
-                <a class="btn btn-primary btn-lg" href="index.html">Return to website</a>
-                <p class="wz-done-contact">Need to add context? Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>.</p>
-              </div>
-            </div>
-          </section>
-
-          <div class="wz-nav form-nav">
-            <button type="button" class="btn btn-ghost btn-back" id="btn-back" hidden>Back</button>
-            <button type="button" class="btn btn-primary btn-lg" id="btn-next" hidden>Continue</button>
-            <button type="submit" class="btn btn-gold btn-lg" id="btn-submit" hidden>Submit audit</button>
-          </div>
-
-          <div id="form-status" class="form-status info" role="status" aria-live="polite" hidden></div>
-        </form>
-      </main>
-
-      <footer class="wz-foot">
-        <div>
-          <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="sms-consent.html">SMS Consent</a>
+    <main id="main" class="cta">
+      <div class="wrap cta-grid demo-page">
+        <div class="cta-copy page-hero">
+          <p class="eyebrow">Book a demo</p>
+          <h1>Want to see who&rsquo;s due in your book right now?</h1>
+          <p>Tell us a little about your shop. We&rsquo;ll set up a short demo and show you what the Command Center looks like with your customers in it.</p>
+          <ul class="cta-list">
+            <li>We load your customer book</li>
+            <li>We connect your calendar and tracking number</li>
+            <li>We run it for you every month</li>
+          </ul>
         </div>
-        <div>&copy; 2026 T&amp;R Growth LLC &middot; <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a></div>
-      </footer>
-    </div>
+          <div class="form-card">
+            <form id="demo-form" method="post" novalidate>
+              <h3>Book a demo</h3>
+              <p class="form-intro">Takes about a minute. We reply by email within two business days.</p>
+              <noscript><p class="form-status err">This form needs JavaScript. Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a> and we&rsquo;ll set up your demo.</p></noscript>
+              <div class="fields">
+                <div class="field">
+                  <label for="name">Your name</label>
+                  <input id="name" name="name" type="text" required autocomplete="name" />
+                </div>
+                <div class="field">
+                  <label for="business_name">Business name</label>
+                  <input id="business_name" name="business_name" type="text" required autocomplete="organization" />
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" required autocomplete="email" />
+                </div>
+                <div class="field">
+                  <label for="phone">Mobile phone <span class="opt">(optional)</span></label>
+                  <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+                </div>
+                <div class="field">
+                  <label for="trade">What do you do?</label>
+                  <select id="trade" name="trade" required>
+                    <option value="">Choose one</option>
+                    <option>HVAC</option>
+                    <option>Mini-split</option>
+                    <option>Heating</option>
+                    <option>Plumbing</option>
+                    <option>Other home service</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="trucks">How many trucks?</label>
+                  <select id="trucks" name="trucks" required>
+                    <option value="">Choose one</option>
+                    <option>1</option>
+                    <option>2 to 3</option>
+                    <option>4 to 5</option>
+                    <option>6 or more</option>
+                  </select>
+                </div>
+                <div class="field field-wide">
+                  <label for="notes">Anything we should know? <span class="opt">(optional)</span></label>
+                  <textarea id="notes" name="notes" rows="3" placeholder="Roughly how many past customers you have, where you keep them, a good time to talk."></textarea>
+                </div>
+              </div>
 
+              <!-- SMS opt-in. Optional, never pre-checked, and separate from the
+                   required contact consent below. js/demo-form.js asks for a
+                   phone number only when this is ticked and submits an explicit
+                   "no" when it is not. The wording is quoted word for word on
+                   sms-consent.html for the A2P registration; change both together. -->
+              <div class="consents">
+                <label class="consent">
+                  <input type="checkbox" name="sms_consent" value="yes" />
+                  <span>I agree to receive text messages from T&amp;R Growth / ServiceMomentum about my inquiry at the phone number I provided. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of any purchase. See our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html#sms-terms" target="_blank" rel="noopener">Terms of Service</a>.</span>
+                </label>
+                <label class="consent">
+                  <input type="checkbox" name="contact_consent" value="yes" required />
+                  <span>I agree that T&amp;R Growth may contact me about this inquiry using the details I provided. Consent is not a condition of any purchase.</span>
+                </label>
+              </div>
+
+              <!-- Where the visitor came from (?source=...), sanitised by
+                   js/demo-form.js. Falls back to "direct". Never rendered. -->
+              <input type="hidden" id="referral-source" name="referral_source" value="direct" />
+              <!-- Spam trap. Invisible and out of the tab order. Bots fill it,
+                   and js/demo-form.js then drops the submission silently. -->
+              <div class="hp" aria-hidden="true">
+                <label for="hp-gotcha">Leave this empty</label>
+                <input id="hp-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="form-actions">
+                <p class="form-error" id="form-error" role="alert"></p>
+                <button class="btn btn-primary" type="submit" id="demo-submit">Book my demo</button>
+                <p class="form-status" id="form-status" role="status" hidden></p>
+              </div>
+            </form>
+
+            <!-- Shown ONLY after a real 2xx response from the form service. -->
+            <div class="form-success" id="demo-success" hidden>
+              <span class="check-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>
+              <h3 id="demo-success-title" tabindex="-1">Got it. We&rsquo;ll be in touch.</h3>
+              <p>We&rsquo;ll reply by email within two business days to set up your demo.</p>
+            </div>
+          </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="index.html" aria-label="Service Momentum home">
+              <span class="logo-tile"><img src="assets/sm-logo.svg" width="26" height="11" alt="" /></span>
+              <span>Service Momentum</span>
+            </a>
+            <p>We install and run the Command Center for home-service businesses with repeat customers. Done for you.</p>
+            <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a>
+          </div>
+          <nav class="footer-col" aria-labelledby="foot-site">
+            <h2 id="foot-site">Site</h2>
+            <ul>
+              <li><a href="index.html#how">How it works</a></li>
+              <li><a href="index.html#product">What you get</a></li>
+              <li><a href="index.html#faq">FAQ</a></li>
+              <li><a href="contact.html">Book a demo</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-labelledby="foot-legal">
+            <h2 id="foot-legal">Legal</h2>
+            <ul>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+              <li><a href="terms.html">Terms of Service</a></li>
+              <li><a href="sms-consent.html">SMS Consent</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-legal">
+          <span>Service Momentum is operated by T&amp;R Growth LLC. &copy; 2026. United States.</span>
+          <span>We text only people who opt in. See <a href="sms-consent.html">SMS Consent</a>.</span>
+        </div>
+      </div>
+    </footer>
     <script src="js/site-config.js"></script>
-    <script src="js/intake.js"></script>
+    <script src="js/demo-form.js" defer></script>
+    <script src="js/site.js" defer></script>
   </body>
 </html>
