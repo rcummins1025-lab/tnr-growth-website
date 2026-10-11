@@ -251,42 +251,49 @@ for (const f of [...htmlFiles, "js/demo-form.js", "js/site.js", "styles.css", "b
     ? fail(`${f}: names the pilot client. No client names until approved in writing.`)
     : ok(`${f}: no pilot client name`);
 }
-// Fake product data lives only between the sample markers, and every mock
-// app surface says it is sample data.
-const sampleStart = idx.indexOf("<!-- sample:start");
-const sampleEnd = idx.indexOf("<!-- sample:end -->");
-sampleStart > 0 && sampleEnd > sampleStart
-  ? ok("index: product visuals are fenced by sample:start / sample:end")
-  : fail("index: sample markers missing around the product visuals");
-const sampleBlock = idx.slice(sampleStart, sampleEnd);
-const apps = sampleBlock.split('class="app"').length - 1;
-const labels = sampleBlock.split('<span class="sample">Sample data</span>').length - 1;
-apps > 0 && apps === labels
-  ? ok(`index: all ${apps} product visuals are labelled "Sample data"`)
-  : fail(`index: ${apps} product visual(s) but ${labels} "Sample data" label(s)`);
-const outsideSample = plainText(idx.slice(0, sampleStart) + idx.slice(sampleEnd));
+// Fake product data lives only between example markers. Every mock app
+// surface is filled in (no dashes, no "Sample", no empty states) and carries a
+// small "Example data" note.
+const exampleBlocks = [...idx.matchAll(/<!-- example:start -->([\s\S]*?)<!-- example:end -->/g)].map((m) => m[1]);
+const appCount = (idx.match(/class="app[ "]/g) || []).length;
+const fencedApps = exampleBlocks.reduce((n, b) => n + (b.match(/class="app[ "]/g) || []).length, 0);
+appCount > 0 && appCount === fencedApps
+  ? ok(`index: all ${appCount} product mock-ups sit inside example:start / example:end`)
+  : fail(`index: ${appCount} mock-up(s) but ${fencedApps} inside example markers`);
+const notes = exampleBlocks.reduce((n, b) => n + (b.match(/class="ex-note"[^>]*>Example data</g) || []).length, 0);
+notes === appCount
+  ? ok(`index: every mock-up carries an "Example data" note (${notes})`)
+  : fail(`index: ${appCount} mock-up(s) but ${notes} "Example data" note(s)`);
+const exampleText = plainText(exampleBlocks.join(" "));
+/—|&mdash;|–\s|\bN\/A\b|\bTBD\b|lorem/i.test(exampleBlocks.join(" ") + exampleText)
+  ? fail("index: a mock-up shows a dash or placeholder instead of a value")
+  : ok("index: mock-ups show real-looking values, no dashes or placeholders");
+/\bsample\b/i.test(plainText(idx))
+  ? fail('index: the word "Sample" is on the page. Use the "Example data" note instead.')
+  : ok('index: no "Sample" labels on the page');
+const outsideExamples = plainText(idx.replace(/<!-- example:start -->[\s\S]*?<!-- example:end -->/g, " "));
 const invented = [
   [/\b\d+(\.\d+)?\s*%/g, "a percentage figure"],
   [/\$\s?\d/g, "a dollar figure"],
   [/\b\d+(\.\d+)?\s*(star|stars)\b/gi, "a star rating"],
   [/\b\d[\d,]*\s+(reviews|customers served|jobs booked|leads generated)\b/gi, "a fabricated count"]
-].filter(([re]) => re.test(outsideSample));
+].filter(([re]) => re.test(outsideExamples));
 invented.length === 0
-  ? ok("index: no figures, ratings or dollar amounts outside the labelled sample visuals")
-  : fail(`index: contains ${invented.map(([, n]) => n).join(", ")} outside the sample visuals`);
-const proof = (idx.match(/<section[^>]*id="proof"[\s\S]*?<\/section>/) || [""])[0];
-proof && !/\d/.test(plainText(proof))
-  ? ok("index: case study is a placeholder with no names or numbers")
-  : fail("index: the case-study placeholder must not carry numbers until approved");
+  ? ok("index: no figures, ratings or dollar amounts outside the example mock-ups")
+  : fail(`index: contains ${invented.map(([, n]) => n).join(", ")} outside the example mock-ups`);
+!/id="proof"/.test(idx)
+  ? ok("index: no case-study placeholder on the page (added only with written approval)")
+  : fail("index: a case-study section is on the page; it needs the owner's written OK and real content");
 
-console.log("\n== Homepage: the eight sections, in order ==");
+console.log("\n== Homepage: the sections, in order ==");
 const SECTIONS = [
   ['class="hero"', "Hero"],
   ['id="problem"', "The problem"],
-  ['id="how"', "How it works"],
-  ['id="product"', "What you get"],
-  ['id="videos"', "Videos"],
-  ['id="proof"', "Proof"],
+  ['id="between-jobs"', "How it works between jobs"],
+  ['id="leads"', "Lead tracking"],
+  ['id="book-money"', "Customer book and money"],
+  ['id="done-for-you"', "Done for you"],
+  ['id="video"', "Video"],
   ['id="faq"', "FAQ"],
   ['id="book"', "Final call to action"]
 ];
@@ -469,19 +476,25 @@ const contrast = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 const PAIRS = [
-  ["body text on deep navy", "sm-text", "sm-navy-deep", 4.5],
-  ["muted text on deep navy", "sm-mute", "sm-navy-deep", 4.5],
-  ["muted text on card navy", "sm-mute", "sm-navy-lift", 4.5],
-  ["blue accent text on deep navy", "sm-blue", "sm-navy-deep", 4.5],
+  ["body text on white", "sm-text", "sm-white", 4.5],
+  ["secondary text on white", "sm-text-2", "sm-white", 4.5],
+  ["secondary text on steel", "sm-text-2", "sm-steel", 4.5],
+  ["link blue on white", "sm-blue-ink", "sm-white", 4.5],
+  ["text on navy", "sm-on-dark", "sm-navy", 4.5],
+  ["muted text on navy", "sm-on-dark-2", "sm-navy", 4.5],
+  ["muted text on deep navy (footer)", "sm-on-dark-2", "sm-navy-deep", 4.5],
+  ["blue accent on navy (large type)", "sm-blue", "sm-navy", 3],
   ["button text on button blue", "sm-white", "sm-blue-strong", 4.5],
   ["button text on pressed blue", "sm-white", "sm-blue-press", 4.5],
-  ["ink on paper (form, mock app)", "sm-ink", "sm-paper", 4.5],
+  ["ink on paper (mock-ups)", "sm-ink", "sm-paper", 4.5],
   ["muted ink on paper", "sm-ink-mute", "sm-paper", 4.5],
   ["muted ink on white", "sm-ink-mute", "sm-white", 4.5],
   ["due pill", "sm-due-ink", "sm-due-bg", 4.5],
   ["booked pill", "sm-booked-ink", "sm-booked-bg", 4.5],
   ["done pill", "sm-done-ink", "sm-done-bg", 4.5],
-  ["focus ring on deep navy", "focus", "sm-navy-deep", 3]
+  ["call-back pill", "sm-alert-ink", "sm-alert-bg", 4.5],
+  ["focus ring on white", "focus", "sm-white", 3],
+  ["focus ring on navy", "focus-on-dark", "sm-navy", 3]
 ];
 for (const [label, fg, bg, min] of PAIRS) {
   const a = hexOf(fg);

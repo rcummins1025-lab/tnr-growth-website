@@ -39,6 +39,15 @@ Colours: S `#2C5A9F`, M `#3285FC`. On dark backgrounds the logo sits on a white
 rounded tile, the same way the ads show it. The product name beside it is HTML
 text. Don't recolour, stretch or rebuild it.
 
+## Look and feel
+
+A trade brand, not a startup template. White and steel-gray grounds with navy
+ink, two navy bands for contrast, heavy tight headlines, uppercase labels in
+ruled boxes, and hard 2px rules instead of glows, gradients and icon cards.
+Each section uses a different layout. The product mock-ups are the stars:
+big, detailed, and full of believable example data. Real scenes come from
+stills of the multi-truck ad (`media/scenes/`).
+
 ## Colour
 
 From the ads' Remotion theme (`theme.ts`). Every value is a `--sm-*` token at
@@ -46,29 +55,37 @@ the top of `styles.css`; nothing below that block may hard-code a hex.
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `--sm-navy-deep` | `#050B1D` | Page background |
-| `--sm-navy` | `#0A1430` | Section lift, cards |
-| `--sm-navy-lift` | `#13224A` | Card highlight |
-| `--sm-blue` | `#3B8CFF` | The one accent: highlighted words, eyebrows, bars |
-| `--sm-blue-strong` | `#1F6FEB` | Button fill (white text passes 4.5:1) |
-| `--sm-text` / `--sm-mute` | `#F3F6FC` / `#A9B4CC` | Text on navy |
-| `--sm-paper` / `--sm-ink` | `#F6F8FC` / `#0E1A36` | Product mock-ups and the form |
+| `--sm-white` / `--sm-steel` | `#FFFFFF` / `#E9EDF3` | Page grounds |
+| `--sm-navy` | `#0A1430` | Ink, rules, dark bands |
+| `--sm-navy-deep` | `#050B1D` | Footer |
+| `--sm-blue-strong` | `#1F6FEB` | Buttons and highlighted words on white |
+| `--sm-blue` | `#3B8CFF` | Highlighted words on navy |
+| `--sm-text` / `--sm-text-2` | `#0A1430` / `#3C4A66` | Text on white |
+| `--sm-paper` / `--sm-ink` | `#F6F8FC` / `#0E1A36` | Product mock-ups |
 
 Retired, and blocked by the validator: the Forge palette (charcoal `#171A1F`,
 orange `#D9653B`, canvas `#F4F0E6`) and the earlier navy/gold palette.
 
 ## Type
 
-System UI stack: SF Pro on Apple devices (what the ads use), Inter where
-installed, then Segoe UI / Roboto. No web-font download. Headlines are heavy
-(800) with tight tracking; one or two words per headline go blue, like the ads.
+System UI stack: SF Pro on Apple devices (what the ads use), then Segoe UI /
+Roboto. No web-font download (the privacy policy says only the host sees
+visitors' IPs, so fonts are not loaded from Google). Headlines are 900 weight
+with tight tracking; one or two words per headline go blue, like the ads. A
+self-hosted condensed face (for example Barlow Condensed, SIL OFL) would push
+the trade feel further; it needs the font files added to the repo.
 
 ## Copy rules
 
 - Simple words. One idea per section.
 - No pricing anywhere.
-- No invented statistics. Product mock-ups use fake data and are labelled
-  "Sample data"; the validator checks every one.
+- No invented statistics in the copy. Numbers live only inside the product
+  mock-ups.
+- Mock-ups are never blank: no dashes, no "Sample" labels, no empty states.
+  Fill every screen with made-up names and realistic numbers so it looks like
+  a busy shop, and put a small "Example data" note at the bottom of each one.
+  The validator checks all of this.
 - No client names, quotes or numbers until the owner approves them in writing.
+  The case-study section stays off the page until then.
 - Don't promise automatic texting of a client's customers. The owner reviews
   the drafted text and taps send.

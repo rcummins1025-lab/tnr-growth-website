@@ -19,11 +19,12 @@ GitHub Pages settings, HTTPS, Formspree, Google Workspace or Twilio.
       different fields (`trade`, `trucks`) and the subject line
       "Service Momentum: Demo request: …". Confirm the first real one lands in
       the dashboard and in hello@tnrgrowthagency.com.
-- [ ] **Case study.** The proof section is a placeholder with no names or
-      numbers. Add a real one only with the owner's written OK.
-- [ ] **Hero video ending.** The main video ends on "DM 'show me'" (an
-      Instagram ask). Fine to ship; a website cut ending on "Book a demo" is a
-      quick Remotion re-render if you want one.
+- [ ] **Case study.** There is no case-study section on the page. Add one
+      (there's a marked slot in `index.html`) only with real numbers and the
+      owner's written OK.
+- [ ] **Video.** The site uses the website cut of the multi-truck ad, which
+      ends on "More jobs from the customers you already have." The Instagram
+      version still ends on "DM 'show me'" and is unchanged.
 
 ## Go live
 
