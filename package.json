@@ -2,7 +2,7 @@
   "name": "servicemomentum-site",
   "version": "0.1.0",
   "private": true,
-  "description": "Static marketing site for ServiceMomentum (a working product name), designed and operated by T&R Growth LLC. Deploys as static files from the repo root via GitHub Pages.",
+  "description": "Static marketing site for Service Momentum. Deploys as static files from the repo root via GitHub Pages.",
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.mjs",

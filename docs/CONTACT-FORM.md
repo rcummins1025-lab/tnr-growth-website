@@ -1,9 +1,11 @@
-# Contact / intake form integration
+# Demo request form integration
 
-The **Growth System Audit** (`contact.html`) is an eight-screen guided wizard —
-one question per screen — for prospective founding clients. It is progressively enhanced JavaScript
-(`js/intake.js`), self-contained, with **no third-party libraries, no analytics,
-and no tracking**.
+The **Book a demo** form appears on the home page (`index.html#book`) and on
+`contact.html`. It is one short screen: name, business name, email, optional
+mobile phone, trade, truck count, optional notes, and two consent boxes. The
+logic lives in `js/demo-form.js`, self-contained, with **no third-party
+libraries, no analytics, and no tracking**. (It replaced the eight-screen
+Growth System Audit wizard and `js/intake.js` on 2026-10-11.)
 
 ## How submission works
 
@@ -13,11 +15,11 @@ The form **only** submits to `window.TNR_CONFIG.formEndpoint` (set in
 | `formEndpoint` | What happens on submit |
 | --- | --- |
 | `"https://…"` (**current**) | The form POSTs the answers (encoded per `formEndpointMode`) and shows the **real** success or error returned by the endpoint. |
-| `""` (empty) | The form validates every step, then shows an **honest “not connected yet”** message and points the visitor to email. **Nothing is transmitted. Success is never faked.** This is the fallback behaviour, not the current state. |
+| `""` (empty) | The form validates the fields, then shows an **honest “not connected yet”** message and points the visitor to email. **Nothing is transmitted. Success is never faked.** This is the fallback behaviour, not the current state. |
 ### `formEndpointMode`
 
 `formEndpointMode` selects how the body is encoded. It is **implemented** in
-`js/intake.js`; an unrecognized value falls back to `"json"` and logs a console
+`js/demo-form.js`; an unrecognized value falls back to `"json"` and logs a console
 warning. It only matters once `formEndpoint` is set, which it now is.
 
 | Mode | Request | Use for |
@@ -62,7 +64,7 @@ purpose-built agency-lead endpoint keeps the two streams cleanly isolated.
 
 ### What a submission contains
 
-The qualifying answers, plus three metadata fields. Note the naming: metadata
+The form fields, plus four metadata fields. Note the naming: metadata
 keys deliberately **do not** start with an underscore, because form services
 reserve `_`-prefixed names (`_replyto`, `_subject`, `_cc`, `_next`, `_gotcha`,
 `_format`) and quietly swallow or repurpose anything else that looks like one.
@@ -70,14 +72,15 @@ reserve `_`-prefixed names (`_replyto`, `_subject`, `_cc`, `_next`, `_gotcha`,
 | Field | Value |
 | --- | --- |
 | `meta_product` | The current working product name. |
-| `meta_source` | Derived slug, e.g. `servicemomentum-audit-form` — survives a rename. |
+| `meta_source` | Derived slug: `servicemomentum-demo-form`. |
+| `meta_page` | The page the form was sent from (`index.html` or `contact.html`). |
 | `meta_submitted_at` | ISO timestamp. |
 | `_replyto` | **formspree mode only** — the applicant's email, so replies go to them. |
-| `_subject` | **formspree mode only** — e.g. `ServiceMomentum — Growth System Audit: Acme Heating`. |
+| `_subject` | **formspree mode only** — e.g. `Service Momentum: Demo request: Acme Heating`. |
 
 ### Safeguards on the submission path
 
-These are in `js/intake.js` and are covered by `scripts/validate.mjs`:
+These are in `js/demo-form.js` and are covered by `scripts/validate.mjs`:
 
 - **Endpoint safety check.** The endpoint must be an absolute **https** URL
   (plain `http` is allowed only for `localhost`, for the mock below), and the
@@ -91,10 +94,10 @@ These are in `js/intake.js` and are covered by `scripts/validate.mjs`:
   honours `_gotcha` server-side.
 - **Timeout.** Requests abort after 20s via `AbortController`, so the button
   never stays stuck on "Sending…". The visitor is told it took too long and that
-  the application was **not** submitted.
+  the request was **not** sent.
 - **Real error messages.** On a 4xx the provider's own
   `{"errors":[{"message"}]}` body is surfaced to the visitor rather than a
-  blanket failure. Both buttons re-enable so they can retry.
+  blanket failure. The button re-enables so they can retry.
 
 ## Testing the path without wiring anything
 
@@ -115,7 +118,12 @@ no page links to it, and `scripts/validate.mjs` fails if one ever does.
 npm run mock          # serves http://localhost:8125/f/test
 ```
 
-Then set `formEndpoint` to `http://localhost:8125/f/test`, submit the form, and
+Easiest: run `npm run serve` (http://127.0.0.1:8000). That local preview points
+the demo form at its own built-in mock without touching any file, and blocks
+every outside request. Add `?qa=error` or `?qa=timeout` to the page URL to make
+the mock fail.
+
+Or set `formEndpoint` to `http://localhost:8125/f/test`, submit the form, and
 watch the terminal — it prints the encoding and every field it received, and
 warns if metadata is missing or the honeypot leaked. Every branch is reachable:
 
@@ -159,39 +167,25 @@ changes.
 
 ## Fields collected
 
-The audit is an **eight-screen guided wizard** — seven qualification questions,
-then one contact screen. This list must match `contact.html` exactly;
-`scripts/validate.mjs` fails if the two drift.
-
-**Screens 1–7 — one question each, answered with selection tiles (radio groups):**
-
-| # | Field | Question |
-| --- | --- | --- |
-| 1 | `industry` | What type of service business do you operate? |
-| 2 | `team_size` | How large is your current team? |
-| 3 | `past_customers` | About how many past customers do you have? |
-| 4 | `customer_database` | Where is customer information kept today? |
-| 5 | `post_job_followup` | What happens after a job is completed? |
-| 6 | `biggest_opportunity` | Where do you think the biggest opportunity is being lost? |
-| 7 | `website_status` | How is your current website performing? |
-
-**Screen 8 — contact details, collected last:**
+This list must match the form in `index.html` and `contact.html`;
+`scripts/validate.mjs` fails if a field goes missing.
 
 | Field | Required |
 | --- | --- |
+| `name` | yes |
 | `business_name` | yes |
-| `name` (contact name) | yes |
 | `email` | yes |
-| `phone` | **optional** |
-| `service_area` | yes |
+| `phone` | **optional** (required only while `sms_consent` is ticked) |
+| `trade` | yes: HVAC, Mini-split, Heating, Plumbing, Other home service |
+| `trucks` | yes: 1, 2 to 3, 4 to 5, 6 or more |
 | `notes` (free text) | optional |
-| `contact_consent` | yes — "Consent is not a condition of any purchase." |
 | `sms_consent` | **optional**, never pre-checked — submits `yes` or `no` |
+| `contact_consent` | yes — "Consent is not a condition of any purchase." |
 | `referral_source` | filled automatically, never shown or typed |
 
-`referral_source` records where an applicant came from. A link such as
+`referral_source` records where a visitor came from. A link such as
 `contact.html?source=referral` submits `referral`; with no `?source=` it
-submits `direct`. js/intake.js trims the value, caps it at 80 characters and
+submits `direct`. js/demo-form.js trims the value, caps it at 80 characters and
 accepts only letters, numbers, spaces, underscores, hyphens and periods,
 falling back to `direct` for anything else. It is written to a hidden input's
 `.value` and never rendered as markup. No cookie, no localStorage, no
@@ -199,28 +193,29 @@ fingerprinting, no third-party analytics, and the referring page URL is never
 read.
 
 `sms_consent` is the A2P 10DLC opt-in for inquiry follow-up texts from
-T&R Growth / ServiceMomentum. It is separate from `contact_consent`, unchecked
-by default, and the form submits without it. When it is ticked, js/intake.js
-requires a phone number (the phone field itself stays optional in the markup).
-An unticked box is submitted as an explicit `no`, so every submission is a
-consent record either way. The checkbox wording is quoted on
-`sms-consent.html` and described in `privacy.html` and `terms.html#sms-terms`;
-change all of them together. `scripts/validate.mjs` holds the required
-disclosures in place.
+T&R Growth / ServiceMomentum. **Its wording is registered with the A2P campaign
+and quoted word for word on `sms-consent.html`; `scripts/validate.mjs` fails if
+the form and that quote ever differ.** It is separate from `contact_consent`,
+unchecked by default, and the form submits without it. When it is ticked,
+js/demo-form.js requires a phone number. An unticked box is submitted as an
+explicit `no`, so every submission is a consent record either way. The wording
+is also described in `privacy.html` and `terms.html#sms-terms`; change all of
+them together, and update the A2P registration first.
 
 **Added automatically at submit time:** `meta_product`, `meta_source`,
-`meta_submitted_at`, plus `_replyto` and `_subject` in `formspree` mode.
+`meta_page`, `meta_submitted_at`, plus `_replyto` and `_subject` in `formspree`
+mode.
 
 **Never transmitted:** `_gotcha` — the spam trap. Its value is stripped from the
 payload, and a filled trap stops the submission silently.
 
 ## Accessibility
 
-Labels are associated with every control; the step heading receives focus **when
-the visitor presses Continue or Back**, but *not* on initial page load (nothing
-steals focus from the page heading when the page opens); errors use
-`role="alert"`/`aria-live`; the status region uses `role="status"`. A
-`<noscript>` block tells non-JS visitors to email instead.
+Every control has a visible label. On a failed check the first problem field
+gets focus and the message appears in a `role="alert"` region; sending status
+uses `role="status"`. After a real 2xx response the confirmation heading gets
+focus. The form posts (never GETs, so nothing lands in a URL) and a
+`<noscript>` note tells visitors without JavaScript to email instead.
 
 ## What this form does NOT do
 
