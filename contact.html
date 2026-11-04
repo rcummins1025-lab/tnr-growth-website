@@ -66,50 +66,49 @@
         </div>
           <div class="form-card">
             <form id="demo-form" method="post" novalidate>
-              <h3>Book a demo</h3>
-              <p class="form-intro">Takes about a minute. We reply by email within two business days.</p>
+              <h3>Get your personalized demo</h3>
+              <p class="form-intro">Five quick questions. We reply by email within two business days with a demo built for your kind of shop.</p>
               <noscript><p class="form-status err">This form needs JavaScript. Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a> and we&rsquo;ll set up your demo.</p></noscript>
               <div class="fields">
                 <div class="field">
-                  <label for="name">Your name</label>
-                  <input id="name" name="name" type="text" required autocomplete="name" />
+                  <label for="trade">1. What kind of shop?</label>
+                  <select id="trade" name="trade" required>
+                    <option value="">Choose one</option>
+                    <option>Cleaning</option>
+                    <option>Pest control</option>
+                    <option>Lawn care</option>
+                    <option>Pool service</option>
+                    <option>HVAC / mini-split</option>
+                    <option>Other home service</option>
+                  </select>
                 </div>
                 <div class="field">
-                  <label for="business_name">Business name</label>
+                  <label for="business_name">2. Business name</label>
                   <input id="business_name" name="business_name" type="text" required autocomplete="organization" />
                 </div>
                 <div class="field">
-                  <label for="email">Email</label>
+                  <label for="city">3. City or town</label>
+                  <input id="city" name="city" type="text" required autocomplete="address-level2" />
+                </div>
+                <div class="field">
+                  <label for="past_customers">4. About how many past customers?</label>
+                  <select id="past_customers" name="past_customers" required>
+                    <option value="">Choose one</option>
+                    <option>Under 250</option>
+                    <option>250 to 500</option>
+                    <option>500 to 1,000</option>
+                    <option>1,000 to 2,000</option>
+                    <option>2,000+</option>
+                    <option>Not sure</option>
+                  </select>
+                </div>
+                <div class="field field-wide">
+                  <label for="email">5. Email for your demo</label>
                   <input id="email" name="email" type="email" required autocomplete="email" />
                 </div>
                 <div class="field">
                   <label for="phone">Mobile phone <span class="opt">(optional)</span></label>
                   <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
-                </div>
-                <div class="field">
-                  <label for="trade">What do you do?</label>
-                  <select id="trade" name="trade" required>
-                    <option value="">Choose one</option>
-                    <option>HVAC</option>
-                    <option>Mini-split</option>
-                    <option>Heating</option>
-                    <option>Plumbing</option>
-                    <option>Other home service</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="trucks">How many trucks?</label>
-                  <select id="trucks" name="trucks" required>
-                    <option value="">Choose one</option>
-                    <option>1</option>
-                    <option>2 to 3</option>
-                    <option>4 to 5</option>
-                    <option>6 or more</option>
-                  </select>
-                </div>
-                <div class="field field-wide">
-                  <label for="notes">Anything we should know? <span class="opt">(optional)</span></label>
-                  <textarea id="notes" name="notes" rows="3" placeholder="Roughly how many past customers you have, where you keep them, a good time to talk."></textarea>
                 </div>
               </div>
 
@@ -141,7 +140,7 @@
 
               <div class="form-actions">
                 <p class="form-error" id="form-error" role="alert"></p>
-                <button class="btn btn-primary" type="submit" id="demo-submit">Book my demo</button>
+                <button class="btn btn-primary" type="submit" id="demo-submit">Get my demo</button>
                 <p class="form-status" id="form-status" role="status" hidden></p>
               </div>
             </form>

@@ -386,7 +386,7 @@ FORM_PAGES.includes("index.html") && FORM_PAGES.includes("contact.html")
   : fail(`demo form pages: ${FORM_PAGES.join(", ")} (expected index.html and contact.html)`);
 for (const f of FORM_PAGES) {
   const h = read(f);
-  ["name", "business_name", "email", "phone", "trade", "trucks", "notes", "sms_consent", "contact_consent"].every((n) =>
+  ["trade", "business_name", "city", "past_customers", "email", "phone", "sms_consent", "contact_consent"].every((n) =>
     new RegExp(`name="${n}"`).test(h)
   )
     ? ok(`${f}: all demo form fields present`)

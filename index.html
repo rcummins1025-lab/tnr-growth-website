@@ -6,7 +6,7 @@
     <title>Service Momentum | Your past customers are calling someone else</title>
     <meta
       name="description"
-      content="Service Momentum sets up and runs the Command Center for HVAC, mini-split, heating and plumbing shops: your customer book, every lead tracked to its source, and a daily list of who's due with the text already written."
+      content="Service Momentum sets up and runs the Command Center for cleaning, pest control, lawn, pool and HVAC shops: we bring past customers back automatically with reminders, maintenance plans, review asks and win-back texts."
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#FFFFFF" />
@@ -108,9 +108,9 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="wrap hero-grid">
           <div class="hero-copy">
-            <p class="label">HVAC &middot; Mini-split &middot; Heating &middot; Plumbing</p>
+            <p class="label">Cleaning &middot; Pest control &middot; Lawn &middot; Pool &middot; HVAC</p>
             <h1 id="hero-title" class="display h-xl">Your past customers are calling <span class="blue">someone else.</span></h1>
-            <p class="lede">Your phone should ring from people you already did work for. We load your customer book, track every lead, and hand you a list of who&rsquo;s due with the text already written.</p>
+            <p class="lede">Your best next job is a customer you already served. We bring them back automatically: reminders when they&rsquo;re due, maintenance plans, review asks and win-back texts, done for you.</p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="#book">Book a demo</a>
               <a class="play-link" href="#video"><span class="disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z" /></svg></span>Watch the 30-second ad</a>
@@ -425,6 +425,24 @@
       <!-- CASE STUDY SLOT: add a real case study here only with the owner's
            written OK. Until then this section stays out of the page. -->
 
+      <!-- NICHES: who repeat-customer follow-up is built for. -->
+      <section class="section" id="niches" aria-labelledby="niches-title">
+        <div class="wrap">
+          <div class="copy-stack">
+            <p class="label">Who it&rsquo;s for</p>
+            <h2 id="niches-title" class="display h-lg">If your customers need you again, we bring them back.</h2>
+            <p class="lede">Reminders, maintenance plans, review asks and win-back texts, run for you every month.</p>
+          </div>
+          <div class="faq">
+            <details class="niche" id="cleaning"><summary class="niche-q">Cleaning</summary><div><p>Recurring cleans slip when nobody follows up. We line up who&rsquo;s due for their next clean, remind past customers before the season, and ask happy customers for a review.</p></div></details>
+            <details class="niche" id="pest-control"><summary class="niche-q">Pest control</summary><div><p>Quarterly and seasonal treatments are repeat work by nature. We flag who&rsquo;s due, push one-off customers toward a plan, and reach out to anyone who lapsed.</p></div></details>
+            <details class="niche" id="lawn-care"><summary class="niche-q">Lawn care</summary><div><p>Every spring your book should refill itself. We text last season&rsquo;s customers before the rush, offer the next service, and win back the ones who went quiet.</p></div></details>
+            <details class="niche" id="pool-service"><summary class="niche-q">Pool service</summary><div><p>Openings, closings and weekly service come back every year. We remind past customers ahead of each season so the calendar fills before the first warm week.</p></div></details>
+            <details class="niche" id="hvac"><summary class="niche-q">HVAC and mini-split</summary><div><p>Tune-ups and yearly cleanings are due on a schedule. We built this first for a mini-split cleaning shop in Maine: every customer sorted by when they&rsquo;re due, with the text already written.</p></div></details>
+          </div>
+        </div>
+      </section>
+
       <!-- 8. FAQ -->
       <section class="section steel" id="faq" aria-labelledby="faq-title">
         <div class="wrap faq-grid">
@@ -468,50 +486,49 @@
           </div>
           <div class="form-card">
             <form id="demo-form" method="post" novalidate>
-              <h3>Book a demo</h3>
-              <p class="form-intro">Takes about a minute. We reply by email within two business days.</p>
+              <h3>Get your personalized demo</h3>
+              <p class="form-intro">Five quick questions. We reply by email within two business days with a demo built for your kind of shop.</p>
               <noscript><p class="form-status err">This form needs JavaScript. Email <a href="mailto:hello@tnrgrowthagency.com">hello@tnrgrowthagency.com</a> and we&rsquo;ll set up your demo.</p></noscript>
               <div class="fields">
                 <div class="field">
-                  <label for="name">Your name</label>
-                  <input id="name" name="name" type="text" required autocomplete="name" />
+                  <label for="trade">1. What kind of shop?</label>
+                  <select id="trade" name="trade" required>
+                    <option value="">Choose one</option>
+                    <option>Cleaning</option>
+                    <option>Pest control</option>
+                    <option>Lawn care</option>
+                    <option>Pool service</option>
+                    <option>HVAC / mini-split</option>
+                    <option>Other home service</option>
+                  </select>
                 </div>
                 <div class="field">
-                  <label for="business_name">Business name</label>
+                  <label for="business_name">2. Business name</label>
                   <input id="business_name" name="business_name" type="text" required autocomplete="organization" />
                 </div>
                 <div class="field">
-                  <label for="email">Email</label>
+                  <label for="city">3. City or town</label>
+                  <input id="city" name="city" type="text" required autocomplete="address-level2" />
+                </div>
+                <div class="field">
+                  <label for="past_customers">4. About how many past customers?</label>
+                  <select id="past_customers" name="past_customers" required>
+                    <option value="">Choose one</option>
+                    <option>Under 250</option>
+                    <option>250 to 500</option>
+                    <option>500 to 1,000</option>
+                    <option>1,000 to 2,000</option>
+                    <option>2,000+</option>
+                    <option>Not sure</option>
+                  </select>
+                </div>
+                <div class="field field-wide">
+                  <label for="email">5. Email for your demo</label>
                   <input id="email" name="email" type="email" required autocomplete="email" />
                 </div>
                 <div class="field">
                   <label for="phone">Mobile phone <span class="opt">(optional)</span></label>
                   <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
-                </div>
-                <div class="field">
-                  <label for="trade">What do you do?</label>
-                  <select id="trade" name="trade" required>
-                    <option value="">Choose one</option>
-                    <option>HVAC</option>
-                    <option>Mini-split</option>
-                    <option>Heating</option>
-                    <option>Plumbing</option>
-                    <option>Other home service</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="trucks">How many trucks?</label>
-                  <select id="trucks" name="trucks" required>
-                    <option value="">Choose one</option>
-                    <option>1</option>
-                    <option>2 to 3</option>
-                    <option>4 to 5</option>
-                    <option>6 or more</option>
-                  </select>
-                </div>
-                <div class="field field-wide">
-                  <label for="notes">Anything we should know? <span class="opt">(optional)</span></label>
-                  <textarea id="notes" name="notes" rows="3" placeholder="Roughly how many past customers you have, where you keep them, a good time to talk."></textarea>
                 </div>
               </div>
 
@@ -543,7 +560,7 @@
 
               <div class="form-actions">
                 <p class="form-error" id="form-error" role="alert"></p>
-                <button class="btn btn-primary" type="submit" id="demo-submit">Book my demo</button>
+                <button class="btn btn-primary" type="submit" id="demo-submit">Get my demo</button>
                 <p class="form-status" id="form-status" role="status" hidden></p>
               </div>
             </form>

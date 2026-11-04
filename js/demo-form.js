@@ -13,7 +13,7 @@
   var cfg = window.TNR_CONFIG || {};
   var HONEYPOT = "_gotcha";
   var REQUEST_TIMEOUT_MS = 20000;
-  var SUBMIT_IDLE_LABEL = "Book my demo";
+  var SUBMIT_IDLE_LABEL = "Get my demo";
 
   var submitBtn = document.getElementById("demo-submit");
   var status = document.getElementById("form-status");
@@ -102,11 +102,11 @@
   }
 
   var LABELS = {
-    name: "Please add your name.",
+    city: "Please add your city or town.",
+    past_customers: "Please choose about how many past customers you have.",
     business_name: "Please add your business name.",
     email: "Please add an email we can reply to.",
     trade: "Please choose what you do.",
-    trucks: "Please choose how many trucks you run.",
     contact_consent: "Please tick the box so we can contact you about your demo."
   };
 
