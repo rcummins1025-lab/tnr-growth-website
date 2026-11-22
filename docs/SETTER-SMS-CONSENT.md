@@ -27,7 +27,7 @@ be suspended.
    (Service Momentum), and ends with "Reply STOP to opt out." For example:
 
    > Hi Dana, Ryan at Service Momentum (T&R Growth LLC). Here's the demo link
-   > you asked for on our call: https://tnrgrowthagency.com/... Reply STOP to
+   > you asked for on our call: https://servicemomentumsystems.com/... Reply STOP to
    > opt out.
 
 ## No, STOP and HELP

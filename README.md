@@ -4,9 +4,9 @@ Marketing website for **Service Momentum**, a done-for-you agency that installs
 and runs the Command Center for home-service businesses with repeat customers
 (HVAC, mini-split, heating, plumbing and similar; owner-run shops with 1 to 5
 trucks). Service Momentum is operated by **T&R Growth LLC**, which is named only
-on the legal pages, in the A2P SMS consent wording, and in the footer fine print.
+on the legal pages, in the A2P SMS consent wording, and as `legalName` in the JSON-LD.
 
-- **Domain:** https://tnrgrowthagency.com (`CNAME` = `tnrgrowthagency.com`, unchanged)
+- **Domain:** https://servicemomentumsystems.com (`CNAME` = `servicemomentumsystems.com`). tnrgrowthagency.com forwards here.
 - **Email:** hello@tnrgrowthagency.com
 - **Headline:** _Your past customers are calling someone else._
 
@@ -20,7 +20,7 @@ analytics, no cookies. The `package.json` scripts are dev tooling only.
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | Home page: hero (Today mock-up + video loop), problem (ad stills), between jobs, lead tracking, customer book and money, done for you, video, FAQ, Book a demo form |
+| `index.html` | Home page: hero (Today mock-up + video loop), problem (ad stills), between jobs, leads, customer book and money, done for you, video, FAQ, Book a demo form |
 | `contact.html` | Book a demo page (same form; old links and `?source=` links keep working) |
 | `privacy.html` / `terms.html` / `sms-consent.html` | Legal pages. A2P SMS wording preserved |
 | `styles.css` | All styles. Every colour is a `--sm-*` token in the `:root` block at the top |
@@ -91,8 +91,9 @@ Nothing here deploys automatically from a branch. Merging to `main` publishes.
 
 1. Review the PR. Run `npm run validate`.
 2. Merge to `main`. GitHub Pages rebuilds in a minute or two.
-3. Check https://tnrgrowthagency.com on a phone and a laptop.
+3. Check https://servicemomentumsystems.com on a phone and a laptop.
 
-Custom domain, DNS and HTTPS are already configured for `tnrgrowthagency.com`.
-**Do not change them** without a migration plan. See
+The custom domain is `servicemomentumsystems.com`. Its DNS points at GitHub Pages
+and `tnrgrowthagency.com` forwards to it. **Do not change DNS** without a plan,
+and never touch the email records on `tnrgrowthagency.com`. See
 [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md).

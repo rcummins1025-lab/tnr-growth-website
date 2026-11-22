@@ -156,11 +156,26 @@ const excludedRefs = htmlFiles.filter((file) =>
 excludedRefs.length === 0
   ? ok("pages: production HTML does not depend on excluded paths")
   : fail(`pages: production HTML references excluded paths in ${excludedRefs.join(", ")}`);
-existsSync(join(root, "CNAME")) && read("CNAME").trim() === "tnrgrowthagency.com"
-  ? ok("CNAME unchanged (tnrgrowthagency.com)")
+const SITE = "https://servicemomentumsystems.com";
+existsSync(join(root, "CNAME")) && read("CNAME").trim() === "servicemomentumsystems.com"
+  ? ok("CNAME is servicemomentumsystems.com")
   : fail("CNAME changed or missing. The domain must not change without approval.");
+// The old domain stays only as the email address (hello@tnrgrowthagency.com).
+for (const f of [...htmlFiles, "sitemap.xml", "robots.txt", "brand.config.json"]) {
+  const t = read(f).replace(/hello@tnrgrowthagency\.com/g, "");
+  /tnrgrowthagency\.com/i.test(t)
+    ? fail(`${f}: still points at tnrgrowthagency.com (only the email address may)`)
+    : ok(`${f}: URLs use ${SITE}`);
+}
+for (const f of htmlFiles) {
+  const canon = (read(f).match(/rel="canonical" href="([^"]+)"/) || [])[1] || "";
+  canon.startsWith(SITE + "/") ? ok(`${f}: canonical on ${SITE}`) : fail(`${f}: canonical ${canon} is not on ${SITE}`);
+}
+read("robots.txt").includes(`Sitemap: ${SITE}/sitemap.xml`)
+  ? ok("robots.txt points at the sitemap on the main domain")
+  : fail("robots.txt sitemap line is not on the main domain");
 existsSync(join(root, "robots.txt")) ? ok("robots.txt present") : fail("robots.txt missing");
-/<urlset/.test(read("sitemap.xml")) && /tnrgrowthagency\.com\//.test(read("sitemap.xml"))
+/<urlset/.test(read("sitemap.xml")) && /servicemomentumsystems\.com\//.test(read("sitemap.xml"))
   ? ok("sitemap.xml valid + has canonical URLs")
   : fail("sitemap.xml malformed");
 
@@ -175,17 +190,14 @@ for (const f of htmlFiles) {
     ? ok(`${f}: SM logo in the header, with intrinsic size`)
     : fail(`${f}: SM logo missing from the header lockup`);
   /href="favicon\.svg"/.test(h) ? ok(`${f}: favicon linked`) : fail(`${f}: favicon link missing`);
-  // Chrome (head meta, header, footer) must not carry the old brand. The legal
-  // operator line in the footer is the one approved mention.
+  // Chrome (head meta, header, footer) must not carry the old brand. The
+  // legal name stays only in the schema legalName and on the legal pages' body.
   // Legal pages may name the operator in their meta description; their title,
   // header and footer are still checked.
   let head = (h.match(/<head>[\s\S]*?<\/head>/) || [""])[0].replace(/"legalName": "T\\u0026R Growth LLC",/, "");
   if (LEGAL_PAGES.includes(f)) head = head.replace(/<meta\s+name="description"[\s\S]*?\/>/, "");
   const header = (h.match(/<header[\s\S]*?<\/header>/) || [""])[0];
-  const footer = (h.match(/<footer[\s\S]*?<\/footer>/) || [""])[0].replace(
-    "Service Momentum is operated by T&amp;R Growth LLC.",
-    ""
-  );
+  const footer = (h.match(/<footer[\s\S]*?<\/footer>/) || [""])[0];
   const chrome = (head + header + footer).replace(/tnrgrowthagency\.com/g, "");
   /T&amp;R|T\\u0026R|TNR|T&R/i.test(chrome)
     ? fail(`${f}: T&R/TNR branding in the page head, header or footer`)
@@ -262,7 +274,7 @@ for (const f of MARKETING_PAGES) {
     [/\bsetup fee\b|\bper month\b|\/mo\b/i, "a fee term"]
   ].filter(([re]) => re.test(text));
   pricing.length === 0 ? ok(`${f}: no pricing`) : fail(`${f}: pricing language: ${pricing.map(([, n]) => n).join(", ")}`);
-  const banned = ["guarantee", "rank first", "generated $", "in revenue", "return on investment", "tracking number", "call tracking"];
+  const banned = ["guarantee", "rank first", "generated $", "in revenue", "return on investment", "tracking", "attribution", "which ad", "meta said", "nothing to learn"];
   const hit = banned.filter((p) => text.toLowerCase().includes(p));
   hit.length === 0 ? ok(`${f}: no banned claims`) : fail(`${f}: banned phrase(s): ${hit.join(", ")}`);
   /aggregateRating|reviewRating|ratingValue|reviewCount/i.test(h)
@@ -315,7 +327,7 @@ const SECTIONS = [
   ['class="hero"', "Hero"],
   ['id="problem"', "The problem"],
   ['id="between-jobs"', "How it works between jobs"],
-  ['id="leads"', "Lead tracking"],
+  ['id="leads"', "Leads"],
   ['id="book-money"', "Customer book and money"],
   ['id="done-for-you"', "Done for you"],
   ['id="pricing"', "Pricing"],
