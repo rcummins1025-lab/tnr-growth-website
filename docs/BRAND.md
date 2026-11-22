@@ -78,7 +78,10 @@ the trade feel further; it needs the font files added to the repo.
 ## Copy rules
 
 - Simple words. One idea per section.
-- No pricing anywhere.
+- Prices appear only in the Pricing section on the home page (fenced with
+  `pricing:start` / `pricing:end`). No guarantees, promised job counts or ROI
+  numbers anywhere, including there.
+- No tracking numbers or call tracking.
 - No invented statistics in the copy. Numbers live only inside the product
   mock-ups.
 - Mock-ups are never blank: no dashes, no "Sample" labels, no empty states.

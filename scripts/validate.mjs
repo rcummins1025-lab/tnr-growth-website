@@ -5,7 +5,8 @@
  *
  * Verifies structure, links, escaping, JSON-LD, the brand (SM logo, ads
  * palette, no TNR branding outside the legal operator lines), honest copy
- * (no pricing, no invented stats, sample data labelled, no client names),
+ * (prices only in the fenced Pricing section, no guarantees or ROI claims,
+ * no invented stats, sample data labelled, no client names, no call tracking),
  * the demo form's submission safeguards and A2P consent wording, video
  * budgets and accessibility, and the GitHub Pages surface.
  * Exits non-zero if anything fails.
@@ -226,10 +227,32 @@ for (const f of LOGO_ASSETS) {
     : fail(`${f}: logo colours drifted (${rogue.join(", ") || "missing S or M colour"})`);
 }
 
-console.log("\n== Honest copy: no pricing, no invented stats, no client names ==");
+console.log("\n== Honest copy: prices only in Pricing, no invented stats, no client names ==");
+// Prices may appear only between <!-- pricing:start --> and <!-- pricing:end -->
+// on the home page. Everything outside that fence is held to "no pricing".
+const PRICING_FENCE = /<!-- pricing:start -->[\s\S]*?<!-- pricing:end -->/g;
 for (const f of MARKETING_PAGES) {
   const h = read(f);
-  const text = plainText(h);
+  const fences = (h.match(PRICING_FENCE) || []).length;
+  f === "index.html"
+    ? fences === 1
+      ? ok(`${f}: one fenced Pricing section`)
+      : fail(`${f}: expected one pricing:start / pricing:end fence, found ${fences}`)
+    : fences === 0
+      ? ok(`${f}: no pricing section`)
+      : fail(`${f}: pricing belongs only on the home page`);
+  const fenced = plainText((h.match(PRICING_FENCE) || []).join(" "));
+  const promises = [
+    [/\bguarantee/i, "a guarantee"],
+    [/\bROI\b|return on investment|pays for itself in/i, "an ROI claim"],
+    [/\b\d+(\.\d+)?\s*%/, "a percentage"],
+    [/\b\d+\+?\s+(jobs|customers|bookings|calls|leads)\b/i, "a promised job or customer count"]
+  ].filter(([re]) => re.test(fenced));
+  promises.length === 0
+    ? ok(`${f}: Pricing makes no guarantee, ROI or job-count promise`)
+    : fail(`${f}: Pricing promises ${promises.map(([, n]) => n).join(", ")}`);
+  // The nav and footer may link to the Pricing section by name.
+  const text = plainText(h.replace(PRICING_FENCE, " ").replace(/<a href="(index\.html)?#pricing">Pricing<\/a>/g, " "));
   /\bsmall\b/i.test(text)
     ? fail(`${f}: says "small". Describe shops by trucks, never as small.`)
     : ok(`${f}: never calls a shop "small"`);
@@ -239,7 +262,7 @@ for (const f of MARKETING_PAGES) {
     [/\bsetup fee\b|\bper month\b|\/mo\b/i, "a fee term"]
   ].filter(([re]) => re.test(text));
   pricing.length === 0 ? ok(`${f}: no pricing`) : fail(`${f}: pricing language: ${pricing.map(([, n]) => n).join(", ")}`);
-  const banned = ["we guarantee", "guaranteed leads", "guaranteed results", "guaranteed revenue", "rank first", "generated $", "in revenue"];
+  const banned = ["guarantee", "rank first", "generated $", "in revenue", "return on investment", "tracking number", "call tracking"];
   const hit = banned.filter((p) => text.toLowerCase().includes(p));
   hit.length === 0 ? ok(`${f}: no banned claims`) : fail(`${f}: banned phrase(s): ${hit.join(", ")}`);
   /aggregateRating|reviewRating|ratingValue|reviewCount/i.test(h)
@@ -271,7 +294,9 @@ const exampleText = plainText(exampleBlocks.join(" "));
 /\bsample\b/i.test(plainText(idx))
   ? fail('index: the word "Sample" is on the page. Use the "Example data" note instead.')
   : ok('index: no "Sample" labels on the page');
-const outsideExamples = plainText(idx.replace(/<!-- example:start -->[\s\S]*?<!-- example:end -->/g, " "));
+const outsideExamples = plainText(
+  idx.replace(/<!-- example:start -->[\s\S]*?<!-- example:end -->/g, " ").replace(PRICING_FENCE, " ")
+);
 const invented = [
   [/\b\d+(\.\d+)?\s*%/g, "a percentage figure"],
   [/\$\s?\d/g, "a dollar figure"],
@@ -293,6 +318,7 @@ const SECTIONS = [
   ['id="leads"', "Lead tracking"],
   ['id="book-money"', "Customer book and money"],
   ['id="done-for-you"', "Done for you"],
+  ['id="pricing"', "Pricing"],
   ['id="video"', "Video"],
   ['id="faq"', "FAQ"],
   ['id="book"', "Final call to action"]

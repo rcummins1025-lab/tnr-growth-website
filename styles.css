@@ -442,3 +442,23 @@ p { margin: 0; }
   .js .reveal { transform: none; transition: none; }
   .btn { transition: none; }
 }
+
+/* ---------- Pricing: three plans on hard 2px rules ---------- */
+.plans { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+@media (min-width: 900px) { .plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: stretch; } }
+.plan { position: relative; display: grid; gap: 14px; align-content: start; background: var(--sm-white); border: var(--rule); border-radius: 8px; padding: 26px 24px 28px; }
+.plan-top { box-shadow: inset 0 0 0 2px var(--sm-blue-strong); border-color: var(--sm-blue-strong); }
+.plan-flag { justify-self: start; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; line-height: 1; padding: 6px 9px; background: var(--sm-blue-strong); color: var(--sm-white); border-radius: 3px; }
+.plan-name { font-size: 24px; font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; color: var(--sm-navy); }
+.plan-price { font-size: 16px; font-weight: 700; color: var(--sm-text-2); border-bottom: 1px solid var(--sm-hair); padding-bottom: 16px; }
+.plan-price b { font-family: var(--font-display); font-size: 44px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: var(--sm-navy); font-variant-numeric: tabular-nums; }
+.plan-price span { display: block; margin-top: 6px; font-size: 20px; font-weight: 800; color: var(--sm-navy); }
+.plan-desc { color: var(--sm-text-2); }
+.plans-note { margin-top: 24px; font-size: 19px; font-weight: 800; letter-spacing: -0.01em; color: var(--sm-navy); }
+.also { margin-top: 28px; display: grid; gap: 12px; border-top: var(--rule); padding-top: 18px; }
+@media (min-width: 760px) { .also { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 24px; } }
+.also-label { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--sm-navy); }
+.also ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 17px; font-weight: 800; color: var(--sm-navy); }
+.also li { display: inline-flex; align-items: center; gap: 8px; }
+.also li::before { content: ""; width: 12px; height: 2px; background: var(--sm-navy); }
+.plans-cta { margin-top: 28px; }

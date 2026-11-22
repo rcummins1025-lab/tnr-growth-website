@@ -55,7 +55,7 @@ npm run validate
 ```
 
 Covers structure, links, JSON-LD, the brand (SM logo, ads palette, no TNR
-branding outside the legal operator lines), honest copy (no pricing, no
+branding outside the legal operator lines), honest copy (prices only in the Pricing section, no guarantees or ROI, no call tracking, no
 "small", no invented stats outside the mock-ups, every mock-up filled in and
 noted "Example data", no client names), the demo
 form's safeguards and A2P consent wording, video size budgets and autoplay
