@@ -5,12 +5,12 @@
 | Name | Where it appears |
 | --- | --- |
 | **Service Momentum** | Everywhere a visitor looks: titles, header, copy, share card. |
-| **T&R Growth LLC** | Only as the legal operator: the Privacy, Terms and SMS Consent pages, the two consent checkboxes (A2P-registered wording), the footer fine print ("Service Momentum is operated by T&R Growth LLC"), and `legalName` in the JSON-LD. |
+| **T&R Growth LLC** | Only as the legal operator: the Privacy, Terms and SMS Consent pages, the two consent checkboxes (A2P-registered wording), and `legalName` in the JSON-LD. Not in the footer. |
 
 `scripts/validate.mjs` fails if T&R/TNR branding shows up anywhere else.
 
-The domain (`tnrgrowthagency.com`) and email (`hello@tnrgrowthagency.com`) are
-unchanged. Moving them is a planned change; see `LAUNCH-CHECKLIST.md`.
+The site lives on `servicemomentumsystems.com`; `tnrgrowthagency.com` forwards
+to it. The email stays `hello@tnrgrowthagency.com` for now.
 
 ## Who we talk to
 
@@ -78,7 +78,10 @@ the trade feel further; it needs the font files added to the repo.
 ## Copy rules
 
 - Simple words. One idea per section.
-- No pricing anywhere.
+- Prices appear only in the Pricing section on the home page (fenced with
+  `pricing:start` / `pricing:end`). No guarantees, promised job counts or ROI
+  numbers anywhere, including there.
+- No tracking numbers or call tracking.
 - No invented statistics in the copy. Numbers live only inside the product
   mock-ups.
 - Mock-ups are never blank: no dashes, no "Sample" labels, no empty states.

@@ -35,7 +35,7 @@
     if (window.console && console.warn) console.warn("site-config: " + msg);
   }
 
-  /* Referral attribution: one sanitised ?source= value, "direct" otherwise.
+  /* Referral source: one sanitised ?source= value, "direct" otherwise.
    * No cookie, no storage, no referring URL. Assigned as a value, never markup. */
   function referralSource() {
     var raw = "";

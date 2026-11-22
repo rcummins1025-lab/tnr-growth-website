@@ -30,19 +30,26 @@ GitHub Pages settings, HTTPS, Formspree, Google Workspace or Twilio.
 
 1. Merge the PR into `main`.
 2. GitHub Pages rebuilds automatically (a minute or two).
-3. Check https://tnrgrowthagency.com and the share card (paste the URL into a
+3. Check https://servicemomentumsystems.com and the share card (paste the URL into a
    text or Slack to see `assets/og-image.png`).
 
 Rollback: revert the merge commit on `main`; Pages rebuilds the old site.
 
-## Later: a Service Momentum domain (needs your OK)
+## Main domain: servicemomentumsystems.com
 
-The site still lives on `tnrgrowthagency.com` and emails go to
-hello@tnrgrowthagency.com. Moving to a Service Momentum domain means: buying
-the domain, pointing its DNS at GitHub Pages, changing `CNAME`, updating every
-canonical URL, `sitemap.xml`, `og:url`, `brand.config.json`, the email address,
-and the A2P registration's website field, and redirecting the old domain. Do it
-as one planned change, not piecemeal.
+`CNAME`, canonical URLs, `og:url`, `sitemap.xml`, `robots.txt`,
+`brand.config.json` and the JSON-LD use https://servicemomentumsystems.com.
+The email stays hello@tnrgrowthagency.com. Order matters:
+
+1. Point servicemomentumsystems.com at GitHub Pages (A/AAAA records, www CNAME)
+   before merging, so the new custom domain resolves.
+2. Merge. Confirm Settings > Pages shows servicemomentumsystems.com, then turn
+   on Enforce HTTPS once the certificate is issued.
+3. Forward tnrgrowthagency.com and www to https://servicemomentumsystems.com
+   (301). Leave every email and verification record on tnrgrowthagency.com alone.
+4. If Formspree's domain restriction is on, add servicemomentumsystems.com.
+5. Update the website / opt-in URLs on the A2P campaign if they name
+   tnrgrowthagency.com.
 
 ## SEO notes
 

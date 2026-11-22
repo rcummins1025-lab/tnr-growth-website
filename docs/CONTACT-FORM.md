@@ -47,7 +47,7 @@ formEndpointMode: "formspree"
 - **Further live submissions require explicit approval.** Use the local mock for
   all other testing.
 - Formspree's **domain restriction is intentionally still off** — turn it on
-  (`tnrgrowthagency.com`) only after dashboard receipt and email delivery are
+  (`servicemomentumsystems.com`) only after dashboard receipt and email delivery are
   confirmed, or it will reject localhost tests.
 
 ## Choosing an endpoint (the "environment variable")
@@ -157,7 +157,7 @@ changes.
    the address in Formspree if a confirmation email is waiting.
 6. Check that **Reply** goes to the applicant (`_replyto`) and the subject line
    is useful.
-7. **Then** enable Formspree's domain restriction for `tnrgrowthagency.com`.
+7. **Then** enable Formspree's domain restriction for `servicemomentumsystems.com`.
    Not before — it would reject localhost tests.
 8. Re-check `privacy.html` against the processor's actual data handling — it
    discloses "a reputable third-party form-processing service".
